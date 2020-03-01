@@ -17,6 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" > </activity>
+        <activity android:name=".AddClassesActivity" > </activity>
+        <activity android:name=".CourseInfoActivity" > </activity>
+        <activity android:name=".ProfileActivity" > </activity>
+        <activity android:name=".RequirementsActivity" > </activity>
+        <activity android:name=".SignUpActivity" > </activity>
     </application>
 
 </manifest>
