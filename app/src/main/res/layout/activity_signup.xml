@@ -1,6 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/spin_year"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/spin_season"
+        app:layout_constraintStart_toEndOf="@+id/spin_season"
+        app:layout_constraintTop_toTopOf="@+id/spin_season"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <Spinner
+        android:id="@+id/spin_season"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/_grad_year"
+        app:layout_constraintStart_toStartOf="@+id/name_sign_up"
+        app:layout_constraintTop_toTopOf="@+id/_grad_year" />
+
+
+    <TextView
+        android:id="@+id/_sign_up"
+        android:layout_width="130dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:text="Sign Up"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Name:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/_sign_up"
+        app:layout_constraintVertical_bias="0.13" />
+
+    <TextView
+        android:id="@+id/_grad_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Grad Year:"
+        app:layout_constraintStart_toStartOf="@+id/_name"
+        app:layout_constraintTop_toBottomOf="@+id/_name" />
+
+    <TextView
+        android:id="@+id/_school"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="School:"
+        app:layout_constraintStart_toStartOf="@+id/_grad_year"
+        app:layout_constraintTop_toBottomOf="@+id/_grad_year" />
+
+    <TextView
+        android:id="@+id/_major"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Major:"
+        app:layout_constraintStart_toStartOf="@+id/_school"
+        app:layout_constraintTop_toBottomOf="@+id/_school" />
+
+    <TextView
+        android:id="@+id/_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Email:"
+        app:layout_constraintStart_toStartOf="@+id/_major"
+        app:layout_constraintTop_toBottomOf="@+id/_major" />
+
+    <Button
+        android:id="@+id/sign_up_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="Sign Up and Add Classes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/_pwd" />
+
+    <EditText
+        android:id="@+id/name_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/_name"
+        app:layout_constraintTop_toTopOf="@+id/_name" />
+
+    <EditText
+        android:id="@+id/school_sign_in"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/_school"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/name_sign_up"
+        app:layout_constraintTop_toTopOf="@+id/_school" />
+
+    <EditText
+        android:id="@+id/major_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/_major"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/school_sign_in"
+        app:layout_constraintTop_toTopOf="@+id/_major" />
+
+    <EditText
+        android:id="@+id/email_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="@+id/_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/major_sign_up"
+        app:layout_constraintTop_toTopOf="@+id/_email" />
+
+    <TextView
+        android:id="@+id/_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Password:"
+        app:layout_constraintStart_toStartOf="@+id/_email"
+        app:layout_constraintTop_toBottomOf="@+id/_email" />
+
+    <EditText
+        android:id="@+id/pwd_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="@+id/_pwd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/email_sign_up"
+        app:layout_constraintTop_toTopOf="@+id/_pwd" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
