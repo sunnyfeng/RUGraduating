@@ -17,14 +17,14 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_classes_text_display" />
+        app:layout_constraintTop_toBottomOf="@+id/major_display" />
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
     <TextView
-        android:id="@+id/filter_classes_text_display"
+        android:id="@+id/major_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -36,23 +36,23 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <Spinner
-        android:id="@+id/major_spinner"
+        android:id="@+id/major_spinner_main"
         android:layout_width="0dp"
         android:layout_height="26dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/filter_classes_text_display"
+        app:layout_constraintBottom_toBottomOf="@+id/major_display"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/filter_classes_text_display"
-        app:layout_constraintTop_toTopOf="@+id/filter_classes_text_display" />
+        app:layout_constraintStart_toEndOf="@+id/major_display"
+        app:layout_constraintTop_toTopOf="@+id/major_display" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/classes_recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/add_classes_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Add all"
+        android:text="Done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">RUGraduating</string>
+    <string name="add_program">Add program</string>
+    <string name="your_planned_courses">Your planned courses</string>
+    <string name="your_current_programs">Your current programs</string>
 
     <string-array name="major_array">
         <item>Electrical Engineering</item>
