@@ -7,7 +7,7 @@
 
     <Spinner
         android:id="@+id/spin_year"
-        android:layout_width="100dp"
+        android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:spinnerMode="dropdown"
@@ -18,7 +18,7 @@
 
     <Spinner
         android:id="@+id/spin_season"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/_grad_year"
@@ -109,7 +109,7 @@
         app:layout_constraintStart_toEndOf="@+id/_name"
         app:layout_constraintTop_toTopOf="@+id/_name" />
 
-    <EditText
+    <Spinner
         android:id="@+id/school_sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
         app:layout_constraintStart_toStartOf="@+id/name_sign_up"
         app:layout_constraintTop_toTopOf="@+id/_school" />
 
-    <EditText
+    <Spinner
         android:id="@+id/major_sign_up"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
