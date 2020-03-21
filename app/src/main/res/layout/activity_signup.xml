@@ -110,7 +110,7 @@
         app:layout_constraintTop_toTopOf="@+id/_name" />
 
     <Spinner
-        android:id="@+id/school_sign_in"
+        android:id="@+id/spin_school"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -122,7 +122,7 @@
         app:layout_constraintTop_toTopOf="@+id/_school" />
 
     <Spinner
-        android:id="@+id/major_sign_up"
+        android:id="@+id/spin_major"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -130,7 +130,7 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/_major"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/school_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/spin_school"
         app:layout_constraintTop_toTopOf="@+id/_major" />
 
     <EditText
@@ -142,7 +142,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="@+id/_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/major_sign_up"
+        app:layout_constraintStart_toStartOf="@+id/spin_major"
         app:layout_constraintTop_toTopOf="@+id/_email" />
 
     <TextView
