@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
             // else, load intent, send login credentials?
-            Intent profile_page = new Intent(this, ProfileActivity.class);
-            startActivity(profile_page);
+            Intent main_page = new Intent(this, MainActivity.class);
+            startActivity(main_page);
 
         }
     }
