@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -15,6 +16,14 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: add splash page logo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Toolbar with title and options menu
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("RU Graduating");
+        }
+        toolbar.setSubtitle("Welcome!");
     }
 
     public boolean login_check_populated(){
@@ -54,5 +63,14 @@ public class LoginActivity extends AppCompatActivity {
         // send straight to sign up page
         Intent signup_page = new Intent(this, SignUpActivity.class);
         startActivity(signup_page);
+    }
+
+    // Don't allow back press after logging out
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

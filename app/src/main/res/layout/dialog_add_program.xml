@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/_dialog_dept" />
 
     <Spinner
-        android:id="@+id/dialog_spin_dept_add_plan"
+        android:id="@+id/dialog_spin_dept_add_program"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
@@ -50,16 +50,16 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Spinner
-        android:id="@+id/dialog_spin_course_add_plan"
+        android:id="@+id/dialog_spin_course_add_program"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/_dialog_program"
-        app:layout_constraintStart_toStartOf="@+id/dialog_spin_dept_add_plan"
+        app:layout_constraintStart_toStartOf="@+id/dialog_spin_dept_add_program"
         app:layout_constraintTop_toTopOf="@+id/_dialog_program" />
 
     <Button
-        android:id="@+id/dialog_cancel_add_plan"
+        android:id="@+id/dialog_cancel_add_program"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -69,15 +69,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/dialog_ok_add_plan"
+        android:id="@+id/dialog_ok_add_program"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="204dp"
         android:layout_marginEnd="10dp"
         android:text="OK"
-        app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_add_plan"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_add_program"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dialog_cancel_add_plan"
-        app:layout_constraintTop_toTopOf="@+id/dialog_cancel_add_plan" />
+        app:layout_constraintStart_toEndOf="@+id/dialog_cancel_add_program"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cancel_add_program" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

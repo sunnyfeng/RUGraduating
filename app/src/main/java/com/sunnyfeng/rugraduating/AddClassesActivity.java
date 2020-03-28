@@ -32,7 +32,7 @@ public class AddClassesActivity extends AppCompatActivity implements AdapterView
         toolbar.inflateMenu(R.menu.options_menu);
 
         // Drop down menu for majors
-        Spinner spinner = findViewById(R.id.major_spinner_main);
+        Spinner spinner = findViewById(R.id.major_spinner_add);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.major_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -45,7 +45,7 @@ public class AddClassesActivity extends AppCompatActivity implements AdapterView
         Button addClassesButton = findViewById(R.id.add_classes_button);
         addClassesButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // TODO: add selected classes to DB
+                //TODO: maybe go back to profile if it came from profile
                 Intent intent = new Intent(AddClassesActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -63,20 +63,22 @@ public class AddClassesActivity extends AppCompatActivity implements AdapterView
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
-        // TODO: add intents to go to the activities/dialogs
         switch (item.getItemId()) {
             case R.id.add_program_item:
-                // do your code
+                AddProgramDialog dialogProgram = new AddProgramDialog(this);
+                dialogProgram.show();
                 return true;
             case R.id.add_to_plan_item:
-                // do your code
+                AddToPlanDialog dialogPlan = new AddToPlanDialog(this);
+                dialogPlan.show();
                 return true;
             case R.id.logout_item:
-                // do your code
+                Intent intent_logout = new Intent(this, LoginActivity.class);
+                startActivity(intent_logout);
                 return true;
             case R.id.profile_item:
-                Intent intent = new Intent(this, ProfileActivity.class);
-                startActivity(intent);
+                Intent intent_profile = new Intent(this, ProfileActivity.class);
+                startActivity(intent_profile);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
