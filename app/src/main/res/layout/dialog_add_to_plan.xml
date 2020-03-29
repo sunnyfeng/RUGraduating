@@ -25,7 +25,7 @@
         android:id="@+id/_dialog_dept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:text="Department:"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,9 +42,9 @@
 
     <Spinner
         android:id="@+id/dialog_spin_dept_add_course"
-        android:layout_width="100dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
+        android:layout_marginStart="42dp"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/_dialog_dept"
         app:layout_constraintStart_toEndOf="@+id/_dialog_dept"
@@ -53,7 +53,7 @@
 
     <Spinner
         android:id="@+id/dialog_spin_course_add_course"
-        android:layout_width="100dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/_dialog_course"
@@ -72,13 +72,13 @@
 
     <Button
         android:id="@+id/dialog_ok_add_course"
-        android:layout_width="88dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="204dp"
         android:layout_marginEnd="10dp"
         android:text="OK"
         app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_add_course"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/dialog_cancel_add_course"
         app:layout_constraintTop_toTopOf="@+id/dialog_cancel_add_course" />
 
