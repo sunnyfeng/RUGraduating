@@ -31,26 +31,16 @@
 
 
     <TextView
-        android:id="@+id/_sign_up"
-        android:layout_width="130dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
-        android:text="Sign Up"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
         android:text="Name:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/_sign_up"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/_grad_year"
