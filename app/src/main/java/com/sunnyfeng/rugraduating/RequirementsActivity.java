@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,8 +29,18 @@ public class RequirementsActivity extends AppCompatActivity {
         toolbar.setSubtitle("Requirements");
         toolbar.inflateMenu(R.menu.options_menu);
 
+        // Get requirement
+        Intent intent = getIntent();
+        Requirement requirement = (Requirement) intent.getSerializableExtra(MainActivity.REQUIREMENT_INTENT_KEY);
+        TextView reqName = findViewById(R.id.requirement_name);
+        reqName.setText(requirement.title);
+        ProgressBar progBar = findViewById(R.id.progressBar);
+        progBar.setMax(requirement.totalRequired);
+        progBar.setProgress(requirement.alreadyCompleted);
+
+
         // Set up button
-        Button backToMainButton = findViewById(R.id.back_to_main_course);
+        Button backToMainButton = findViewById(R.id.back_to_main_req);
         backToMainButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(RequirementsActivity.this, MainActivity.class);

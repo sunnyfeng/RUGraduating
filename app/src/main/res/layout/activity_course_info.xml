@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/toolbar"
@@ -65,13 +64,14 @@
 
     <TextView
         android:id="@+id/class_description_display"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="381dp"
+        android:layout_height="62dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:maxLines = "3"
+        android:maxLines="3"
         android:scrollbars="vertical"
+        android:isScrollContainer="true"
         android:text="Engineering software."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,8 +89,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/equivalencies_recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="141dp"
+        android:layout_width="379dp"
+        android:layout_height="63dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -110,8 +110,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prereq_recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="131dp"
+        android:layout_width="377dp"
+        android:layout_height="111dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -152,11 +152,11 @@
         app:layout_constraintTop_toTopOf="@+id/class_code_display" />
 
     <TextView
-        android:id="@+id/credit_num"
+        android:id="@+id/credit_num_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="3"
+        android:text="three"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/credits_display"
         app:layout_constraintEnd_toEndOf="parent"

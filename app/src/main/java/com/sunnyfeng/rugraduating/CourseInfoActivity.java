@@ -7,16 +7,44 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CourseInfoActivity extends AppCompatActivity {
+
+    private RecyclerView prereqRecyclerView;
+    private RecyclerView.Adapter prereqAdapter;
+    private RecyclerView.LayoutManager prereqLayoutManager;
+
+    private RecyclerView equivRecyclerView;
+    private RecyclerView.Adapter equivAdapter;
+    private RecyclerView.LayoutManager equivLayoutManager;
+
+    private Course currentCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_info);
+
+        Intent intent = getIntent();
+        Course course = (Course) intent.getSerializableExtra(MainActivity.COURSE_INTENT_KEY);
+        currentCourse = course;
+
+        TextView className = findViewById(R.id.class_name);
+        className.setText(course.title);
+        TextView classCode = findViewById(R.id.class_code);
+        classCode.setText(course.code);
+        TextView classCredit = findViewById(R.id.credit_num_display);
+        classCredit.setText(String.valueOf(course.numCredits));
+        TextView description = findViewById(R.id.class_description_display);
+        description.setText(course.description);
+
+        setUpRecyclerViews();
 
         // Toolbar with title
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -35,6 +63,24 @@ public class CourseInfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void setUpRecyclerViews() {
+        // Set up prereq recycler view
+        prereqLayoutManager = new LinearLayoutManager(this);
+        prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
+        prereqRecyclerView.setHasFixedSize(true);
+        prereqRecyclerView.setLayoutManager(prereqLayoutManager);
+        prereqAdapter = new MainActivity_SuggestedCoursesRV_Adapter(currentCourse.getPrereqs());
+        prereqRecyclerView.setAdapter(prereqAdapter);
+
+        // Set up equiv recycler view
+        equivLayoutManager = new LinearLayoutManager(this);
+        equivRecyclerView = findViewById(R.id.equivalencies_recyclerView);
+        equivRecyclerView.setHasFixedSize(true);
+        equivRecyclerView.setLayoutManager(equivLayoutManager);
+        equivAdapter = new MainActivity_SuggestedCoursesRV_Adapter(currentCourse.getEquivs());
+        equivRecyclerView.setAdapter(equivAdapter);
     }
 
     // Inflate options menu

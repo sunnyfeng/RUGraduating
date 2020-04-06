@@ -1,6 +1,8 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +17,15 @@ public class MainActivity_ReqsRV_Adapter extends RecyclerView.Adapter<MainActivi
     private ArrayList<Requirement> requirements;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
+        private Context context;
+        private View itemView;
         private TextView titleView;
         private ProgressBar progressBar;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
+            context = itemView.getContext();
             titleView = itemView.findViewById(R.id.req_title);
             progressBar = itemView.findViewById(R.id.req_progressBar);
         }
@@ -41,11 +47,22 @@ public class MainActivity_ReqsRV_Adapter extends RecyclerView.Adapter<MainActivi
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        Requirement curReq = requirements.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        final Requirement curReq = requirements.get(position);
         holder.titleView.setText(curReq.title);
         holder.progressBar.setMax(curReq.totalRequired);
         holder.progressBar.setProgress(curReq.alreadyCompleted);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(holder.context, RequirementsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(MainActivity.REQUIREMENT_INTENT_KEY, curReq);
+                intent.putExtras(bundle);
+                holder.context.startActivity(intent);
+            }
+        });
     }
 
     @Override

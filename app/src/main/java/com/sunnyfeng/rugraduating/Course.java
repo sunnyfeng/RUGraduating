@@ -10,6 +10,7 @@ public class Course implements Serializable {
     int numCredits;
     String description;
     private ArrayList<Course> prereqs;
+    private ArrayList<Course> equivs;
 
 
     /**
@@ -26,6 +27,7 @@ public class Course implements Serializable {
         this.numCredits = numCredits;
         this.description = description;
         prereqs = new ArrayList<>();
+        equivs = new ArrayList<>();
     }
 
     public void addPrereq(Course prereq) {
@@ -34,6 +36,14 @@ public class Course implements Serializable {
 
     public ArrayList<Course> getPrereqs() {
         return prereqs;
+    }
+
+    public void addEquiv(Course equiv) {
+        equivs.add(equiv);
+    }
+
+    public ArrayList<Course> getEquivs() {
+        return equivs;
     }
 
 }

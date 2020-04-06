@@ -1,6 +1,7 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,16 @@ public class MainActivity_SuggestedCoursesRV_Adapter extends
         RecyclerView.Adapter<MainActivity_SuggestedCoursesRV_Adapter.MyViewHolder> {
     private ArrayList<Course> courses;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+        private Context context;
+        private View itemView;
         private TextView titleView;
         private TextView codeView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            this.context = itemView.getContext();
+            this.itemView = itemView;
             titleView = itemView.findViewById(R.id.course_title);
             codeView = itemView.findViewById(R.id.course_code);
         }
@@ -48,12 +49,18 @@ public class MainActivity_SuggestedCoursesRV_Adapter extends
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        Course curCourse = courses.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        final Course curCourse = courses.get(position);
         holder.titleView.setText(curCourse.title);
         holder.codeView.setText(curCourse.code);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(holder.context, CourseInfoActivity.class);
+                intent.putExtra(MainActivity.COURSE_INTENT_KEY, curCourse);
+                holder.context.startActivity(intent);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
