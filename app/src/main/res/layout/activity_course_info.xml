@@ -70,6 +70,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:maxLines = "3"
+        android:scrollbars="vertical"
         android:text="Engineering software."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +152,7 @@
         app:layout_constraintTop_toTopOf="@+id/class_code_display" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/credit_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

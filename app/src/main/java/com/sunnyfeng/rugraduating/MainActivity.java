@@ -15,8 +15,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private RecyclerView requirementsRecyclerView;
+    private RecyclerView.Adapter requirementsAdapter;
+    private RecyclerView.LayoutManager requirementLayoutManager;
+
+    private RecyclerView suggestedRecyclerView;
+    private RecyclerView.Adapter suggestedAdapter;
+    private RecyclerView.LayoutManager suggestedLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +68,39 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
+
+        setUpRecyclerViews();
+    }
+
+    private void setUpRecyclerViews() {
+        // Set up requirements recycler view
+        ArrayList<Requirement> reqsTest = new ArrayList<>();
+        reqsTest.add(new Requirement("ECE Tech Electives", false, 5, 2));
+        reqsTest.add(new Requirement("SOE General Electives", false, 10, 3));
+
+        requirementLayoutManager = new LinearLayoutManager(this);
+        requirementsRecyclerView = findViewById(R.id.requirements_recyclerView);
+        requirementsRecyclerView.setHasFixedSize(true);
+        requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
+        requirementsAdapter = new MainActivity_ReqsRV_Adapter(reqsTest);
+        requirementsRecyclerView.setAdapter(requirementsAdapter);
+
+        // Set up suggested courses recycler view
+        ArrayList<Course> suggestedTest = new ArrayList<>();
+        suggestedTest.add(new Course("Wireless Revolution", "14:332:301", 3,
+                "This \"flipped\" undergraduate course provides a broad view of how new technologies, economic forces, political constraints, and competitive warfare have created and shaped the \"wireless revolution\" in the last 50 years.  It offers a view inside the world of corporate management-- how strategies were created and why many have failed—and gives students a chance to develop their own strategic skills by solving real-world problems.  The course includes a historical overview of communications and communication systems, basics of wireless technology, technology and politics of cellular, basics of corporate finance, economics of cellular systems and spectrum auctions, case studies in wireless business strategy, the strategic implications of unregulated spectrum, a comparison of 3G, 4G, 5G and WiFi, IoT and the wireless future. Students are required to interact during the lectures in a flipped classroom setting—necessitating pre-lecture preparation, in-class attendance and participation."));
+        Course prob = new Course("Probability and Random Processes", "14:332:226", 3,
+                "Probability and its axioms, conditional probability, independence, counting, random variables and distributions, functions of random variables, expectations, order statistics, central limit theorem, confidence intervals, hypothesis testing, estimation of random variables. Random processes and their characterization, autocorrelation function.");
+        prob.addPrereq(new Course("Multivariable Calculus", "01:640:251", 4, "Analytic geometry of three dimensions, partial derivatives, optimization techniques, multiple integrals, vectors in Euclidean space, and vector analysis."));
+        suggestedTest.add(prob);
+
+        suggestedLayoutManager = new LinearLayoutManager(this);
+        suggestedRecyclerView = findViewById(R.id.suggested_recyclerView);
+        suggestedRecyclerView.setHasFixedSize(true);
+        suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
+        suggestedAdapter = new MainActivity_SuggestedCoursesRV_Adapter(suggestedTest);
+        suggestedRecyclerView.setAdapter(suggestedAdapter);
+
     }
 
     // Inflate options menu
