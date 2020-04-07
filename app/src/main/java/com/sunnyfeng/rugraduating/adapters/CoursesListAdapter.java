@@ -1,4 +1,4 @@
-package com.sunnyfeng.rugraduating;
+package com.sunnyfeng.rugraduating.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +9,15 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sunnyfeng.rugraduating.Course;
+import com.sunnyfeng.rugraduating.CourseInfoActivity;
+import com.sunnyfeng.rugraduating.MainActivity;
+import com.sunnyfeng.rugraduating.R;
+
 import java.util.ArrayList;
 
-public class MainActivity_SuggestedCoursesRV_Adapter extends
-        RecyclerView.Adapter<MainActivity_SuggestedCoursesRV_Adapter.MyViewHolder> {
+public class CoursesListAdapter extends
+        RecyclerView.Adapter<CoursesListAdapter.MyViewHolder> {
     private ArrayList<Course> courses;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -31,14 +36,14 @@ public class MainActivity_SuggestedCoursesRV_Adapter extends
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MainActivity_SuggestedCoursesRV_Adapter(ArrayList<Course> courses) {
+    public CoursesListAdapter(ArrayList<Course> courses) {
         this.courses = courses;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MainActivity_SuggestedCoursesRV_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                       int viewType) {
+    public CoursesListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                              int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 

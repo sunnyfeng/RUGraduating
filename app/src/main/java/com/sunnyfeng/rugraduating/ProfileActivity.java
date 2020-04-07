@@ -8,6 +8,9 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
+import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+
 public class ProfileActivity extends AppCompatActivity {
 
     @Override

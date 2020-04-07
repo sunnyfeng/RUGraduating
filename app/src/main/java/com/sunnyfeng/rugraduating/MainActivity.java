@@ -18,6 +18,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
+import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
+import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         requirementsRecyclerView = findViewById(R.id.requirements_recyclerView);
         requirementsRecyclerView.setHasFixedSize(true);
         requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
-        requirementsAdapter = new MainActivity_ReqsRV_Adapter(reqsTest);
+        requirementsAdapter = new RequirementsListAdapter(reqsTest);
         requirementsRecyclerView.setAdapter(requirementsAdapter);
 
         // Set up suggested courses recycler view
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         suggestedRecyclerView = findViewById(R.id.suggested_recyclerView);
         suggestedRecyclerView.setHasFixedSize(true);
         suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
-        suggestedAdapter = new MainActivity_SuggestedCoursesRV_Adapter(suggestedTest);
+        suggestedAdapter = new CoursesListAdapter(suggestedTest);
         suggestedRecyclerView.setAdapter(suggestedAdapter);
 
     }

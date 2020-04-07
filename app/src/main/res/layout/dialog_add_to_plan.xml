@@ -1,86 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_add_course"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="wrap_content"
+    android:minWidth="400dp"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/_dialog_add_course"
+        android:id="@+id/dialog_add_course_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="20dp"
-
-        android:layout_marginTop="20dp"
-
-        android:text="Add Course to Join"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Add Course to Plan"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/_dialog_dept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Department:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/_dialog_add_course" />
-
-    <TextView
         android:id="@+id/_dialog_course"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Course:"
-        app:layout_constraintStart_toStartOf="@+id/_dialog_dept"
-        app:layout_constraintTop_toBottomOf="@+id/_dialog_dept" />
-
-    <Spinner
-        android:id="@+id/dialog_spin_dept_add_course"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@+id/_dialog_dept"
-        app:layout_constraintStart_toEndOf="@+id/_dialog_dept"
-        app:layout_constraintTop_toTopOf="@+id/_dialog_dept"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_add_course_string" />
 
     <Spinner
         android:id="@+id/dialog_spin_course_add_course"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
+        android:layout_width="275dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/_dialog_course"
-        app:layout_constraintStart_toStartOf="@+id/dialog_spin_dept_add_course"
+        app:layout_constraintStart_toEndOf="@+id/_dialog_course"
         app:layout_constraintTop_toTopOf="@+id/_dialog_course" />
 
     <Button
         android:id="@+id/dialog_cancel_add_course"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text="CANCEL"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/_dialog_course" />
 
     <Button
         android:id="@+id/dialog_ok_add_course"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="16dp"
         android:text="OK"
         app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_add_course"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/dialog_cancel_add_course"
-        app:layout_constraintTop_toTopOf="@+id/dialog_cancel_add_course" />
+        app:layout_constraintTop_toTopOf="@+id/dialog_cancel_add_course"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

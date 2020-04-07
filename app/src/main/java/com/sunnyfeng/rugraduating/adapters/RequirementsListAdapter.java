@@ -1,4 +1,4 @@
-package com.sunnyfeng.rugraduating;
+package com.sunnyfeng.rugraduating.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,14 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sunnyfeng.rugraduating.MainActivity;
+import com.sunnyfeng.rugraduating.R;
+import com.sunnyfeng.rugraduating.Requirement;
+import com.sunnyfeng.rugraduating.RequirementsActivity;
+
 import java.util.ArrayList;
 
-public class MainActivity_ReqsRV_Adapter extends RecyclerView.Adapter<MainActivity_ReqsRV_Adapter.MyViewHolder> {
+public class RequirementsListAdapter extends RecyclerView.Adapter<RequirementsListAdapter.MyViewHolder> {
     private ArrayList<Requirement> requirements;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -31,13 +36,13 @@ public class MainActivity_ReqsRV_Adapter extends RecyclerView.Adapter<MainActivi
         }
     }
 
-    public MainActivity_ReqsRV_Adapter(ArrayList<Requirement> requirements) {
+    public RequirementsListAdapter(ArrayList<Requirement> requirements) {
         this.requirements = requirements;
     }
 
     @Override
-    public MainActivity_ReqsRV_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+    public RequirementsListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                   int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 

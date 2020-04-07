@@ -10,4 +10,10 @@
         <item>Mechanical Engineering</item>
         <item>Computer Science</item>
     </string-array>
+
+    <string-array name="class_array">
+        <item>14:332:301 Wireless Revolution</item>
+        <item>14:332:226 Probability and Random Processes</item>
+        <item>01:640:251 Multivariable Calculus</item>
+    </string-array>
 </resources>

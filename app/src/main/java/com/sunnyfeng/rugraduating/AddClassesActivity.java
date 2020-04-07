@@ -15,6 +15,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
+import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+
 public class AddClassesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @Override
@@ -38,8 +41,6 @@ public class AddClassesActivity extends AppCompatActivity implements AdapterView
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-
-        // TODO: implement RecyclerView with course list items
 
         // Set up button
         Button addClassesButton = findViewById(R.id.add_classes_button);

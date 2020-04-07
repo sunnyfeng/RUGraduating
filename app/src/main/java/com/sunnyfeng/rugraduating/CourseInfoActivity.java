@@ -2,6 +2,7 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
+import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
 public class CourseInfoActivity extends AppCompatActivity {
 
@@ -43,6 +48,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         classCredit.setText(String.valueOf(course.numCredits));
         TextView description = findViewById(R.id.class_description_display);
         description.setText(course.description);
+        description.setMovementMethod(new ScrollingMovementMethod()); //make scrollable
 
         setUpRecyclerViews();
 
@@ -71,7 +77,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
         prereqRecyclerView.setHasFixedSize(true);
         prereqRecyclerView.setLayoutManager(prereqLayoutManager);
-        prereqAdapter = new MainActivity_SuggestedCoursesRV_Adapter(currentCourse.getPrereqs());
+        prereqAdapter = new CoursesListAdapter(currentCourse.getPrereqs());
         prereqRecyclerView.setAdapter(prereqAdapter);
 
         // Set up equiv recycler view
@@ -79,7 +85,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         equivRecyclerView = findViewById(R.id.equivalencies_recyclerView);
         equivRecyclerView.setHasFixedSize(true);
         equivRecyclerView.setLayoutManager(equivLayoutManager);
-        equivAdapter = new MainActivity_SuggestedCoursesRV_Adapter(currentCourse.getEquivs());
+        equivAdapter = new CoursesListAdapter(currentCourse.getEquivs());
         equivRecyclerView.setAdapter(equivAdapter);
     }
 

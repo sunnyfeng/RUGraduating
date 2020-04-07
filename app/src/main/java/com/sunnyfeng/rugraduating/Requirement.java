@@ -7,10 +7,10 @@ import java.util.ArrayList;
  * Holds requirement information.
  */
 public class Requirement implements Serializable {
-    String title;
-    boolean isCredits;
-    int totalRequired;
-    int alreadyCompleted;
+    public String title;
+    public boolean isCredits;
+    public int totalRequired;
+    public int alreadyCompleted;
     ArrayList<Course> coursesTaken;
 
     /**

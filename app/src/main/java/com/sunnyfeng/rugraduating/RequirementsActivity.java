@@ -13,6 +13,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
+import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+
 public class RequirementsActivity extends AppCompatActivity {
 
     @Override

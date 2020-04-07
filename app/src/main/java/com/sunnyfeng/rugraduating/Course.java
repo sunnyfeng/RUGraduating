@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 public class Course implements Serializable {
 
-    String title;
-    String code;
-    int numCredits;
-    String description;
+    public String title;
+    public String code;
+    public int numCredits;
+    public String description;
     private ArrayList<Course> prereqs;
     private ArrayList<Course> equivs;
 
