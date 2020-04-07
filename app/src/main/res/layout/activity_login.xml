@@ -12,13 +12,13 @@
 
     <ImageView
         android:id="@+id/splash"
-        android:layout_width="0dp"
-        android:layout_height="315dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginTop="16dp"
+        android:src="@drawable/grad_icon_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:srcCompat="@tools:sample/avatars[3]" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sign_in_constraint"
@@ -33,7 +33,7 @@
             android:id="@+id/email_addr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
@@ -60,8 +60,7 @@
             android:layout_marginTop="16dp"
             android:onClick="login"
             android:text="Login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/pwd"
             app:layout_constraintTop_toBottomOf="@+id/pwd" />
 
         <Button
@@ -71,8 +70,7 @@
             android:layout_marginTop="16dp"
             android:onClick="sign_up"
             android:text="Sign Up"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login" />
+            app:layout_constraintEnd_toEndOf="@+id/pwd"
+            app:layout_constraintTop_toBottomOf="@+id/pwd" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

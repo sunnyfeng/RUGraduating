@@ -3,7 +3,10 @@ package com.sunnyfeng.rugraduating;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +27,11 @@ public class LoginActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("RU Graduating");
         }
         toolbar.setSubtitle("Welcome!");
+
+        // fade in logo
+        ImageView logo = findViewById(R.id.splash);
+        Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        logo.startAnimation(myFadeInAnimation);
     }
 
     public boolean login_check_populated(){

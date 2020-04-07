@@ -12,11 +12,26 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
+import java.util.ArrayList;
+
 public class RequirementsActivity extends AppCompatActivity {
+
+    private RecyclerView completedRecyclerView;
+    private RecyclerView.Adapter completedAdapter;
+    private RecyclerView.LayoutManager completedLayoutManager;
+
+    private RecyclerView fulfillRecyclerView;
+    private RecyclerView.Adapter fulfillAdapter;
+    private RecyclerView.LayoutManager fulfillLayoutManager;
+
+    private Requirement currentReq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +50,27 @@ public class RequirementsActivity extends AppCompatActivity {
         // Get requirement
         Intent intent = getIntent();
         Requirement requirement = (Requirement) intent.getSerializableExtra(MainActivity.REQUIREMENT_INTENT_KEY);
+        currentReq = requirement;
         TextView reqName = findViewById(R.id.requirement_name);
         reqName.setText(requirement.title);
         ProgressBar progBar = findViewById(R.id.progressBar);
         progBar.setMax(requirement.totalRequired);
         progBar.setProgress(requirement.alreadyCompleted);
 
+        TextView completedNum = findViewById(R.id.completed_courses_credits);
+        int completed = currentReq.alreadyCompleted;
+        TextView remainingNum = findViewById(R.id.remaining_classes_credits);
+        int remaining = currentReq.totalRequired - completed;
+
+        if (currentReq.isCredits) {
+            completedNum.setText(completed + " credits");
+            remainingNum.setText(remaining + " credits");
+        } else {
+            completedNum.setText(completed + " courses");
+            remainingNum.setText(remaining + " courses");
+        }
+
+        setUpRecyclerViews();
 
         // Set up button
         Button backToMainButton = findViewById(R.id.back_to_main_req);
@@ -50,6 +80,29 @@ public class RequirementsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void setUpRecyclerViews() {
+        // Set up completed recycler view
+        completedLayoutManager = new LinearLayoutManager(this);
+        completedRecyclerView = findViewById(R.id.completed_courses_recyclerView);
+        completedRecyclerView.setHasFixedSize(true);
+        completedRecyclerView.setLayoutManager(completedLayoutManager);
+        completedAdapter = new CoursesListAdapter(currentReq.getCoursesTaken());
+        completedRecyclerView.setAdapter(completedAdapter);
+
+        // Set up fulfill recycler view
+        fulfillLayoutManager = new LinearLayoutManager(this);
+        fulfillRecyclerView = findViewById(R.id.remaining_recyclerView);
+        fulfillRecyclerView.setHasFixedSize(true);
+        fulfillRecyclerView.setLayoutManager(fulfillLayoutManager);
+        fulfillAdapter = new CoursesListAdapter(getAllCoursesThatSatisfy(currentReq));
+        fulfillRecyclerView.setAdapter(fulfillAdapter);
+    }
+
+    private ArrayList<Course> getAllCoursesThatSatisfy(Requirement req) {
+        // TODO: get all classes that can fulfill this requirement
+        return new ArrayList<>();
     }
 
     // Inflate options menu
