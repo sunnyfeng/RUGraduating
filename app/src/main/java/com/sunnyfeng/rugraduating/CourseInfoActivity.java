@@ -40,15 +40,17 @@ public class CourseInfoActivity extends AppCompatActivity {
         Course course = (Course) intent.getSerializableExtra(MainActivity.COURSE_INTENT_KEY);
         currentCourse = course;
 
+
         TextView className = findViewById(R.id.class_name);
-        className.setText(course.title);
+        className.setText(course.getName());
         TextView classCode = findViewById(R.id.class_code);
-        classCode.setText(course.code);
+        classCode.setText(course.get_id());
         TextView classCredit = findViewById(R.id.credit_num_display);
-        classCredit.setText(String.valueOf(course.numCredits));
+        classCredit.setText(String.valueOf(course.getCredits()));
         TextView description = findViewById(R.id.class_description_display);
-        description.setText(course.description);
+        description.setText(course.getDescription());
         description.setMovementMethod(new ScrollingMovementMethod()); //make scrollable
+
 
         setUpRecyclerViews();
 
@@ -77,7 +79,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
         prereqRecyclerView.setHasFixedSize(true);
         prereqRecyclerView.setLayoutManager(prereqLayoutManager);
-        prereqAdapter = new CoursesListAdapter(currentCourse.getPrereqs());
+       // prereqAdapter = new CoursesListAdapter(currentCourse.getPrereqs());
         prereqRecyclerView.setAdapter(prereqAdapter);
 
         // Set up equiv recycler view
@@ -85,7 +87,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         equivRecyclerView = findViewById(R.id.equivalencies_recyclerView);
         equivRecyclerView.setHasFixedSize(true);
         equivRecyclerView.setLayoutManager(equivLayoutManager);
-        equivAdapter = new CoursesListAdapter(currentCourse.getEquivs());
+        //equivAdapter = new CoursesListAdapter(currentCourse.getEquivs());
         equivRecyclerView.setAdapter(equivAdapter);
     }
 

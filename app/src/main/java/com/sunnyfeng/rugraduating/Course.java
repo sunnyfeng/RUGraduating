@@ -1,49 +1,92 @@
 package com.sunnyfeng.rugraduating;
 
+
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Course implements Serializable {
 
-    public String title;
-    public String code;
-    public int numCredits;
-    public String description;
-    private ArrayList<Course> prereqs;
-    private ArrayList<Course> equivs;
+    private String _id;
+    private String name;
+    private Integer credits;
+    private String department;
+    private String school;
+    private String description;
+    private String[] prereqs;
+    private String[] coreqs;
 
-
-    /**
-     * @param title name of course
-     * @param code code of course
-     * @param numCredits number of credits for course
-     * @param description description of course
-     */
-    public Course(String title, String code, int numCredits, String description)
-    {
-
-        this.title = title;
-        this.code = code;
-        this.numCredits = numCredits;
+    public Course(String _id, String name, Integer credits, String department, String school, String description, String[] prereqs, String[] coreqs) {
+        this._id = _id;
+        this.name = name;
+        this.credits = credits;
+        this.department = department;
+        this.school = school;
         this.description = description;
-        prereqs = new ArrayList<>();
-        equivs = new ArrayList<>();
+        this.prereqs = prereqs;
+        this.coreqs = coreqs;
     }
 
-    public void addPrereq(Course prereq) {
-        prereqs.add(prereq);
+    public String get_id() {
+        return _id;
     }
 
-    public ArrayList<Course> getPrereqs() {
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCredits() {
+        return credits.intValue();
+    }
+
+    public void setCredits(int credits) {
+        this.credits = new Integer(credits);
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String[] getPrereqs() {
         return prereqs;
     }
 
-    public void addEquiv(Course equiv) {
-        equivs.add(equiv);
+    public void setPrereqs(String[] prereqs) {
+        this.prereqs = prereqs;
     }
 
-    public ArrayList<Course> getEquivs() {
-        return equivs;
+    public String[] getCoreqs() {
+        return coreqs;
+    }
+
+    public void setCoreqs(String[] coreqs) {
+        this.coreqs = coreqs;
     }
 
 }

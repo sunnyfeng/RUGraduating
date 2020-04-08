@@ -22,6 +22,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
@@ -90,10 +92,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Set up requirements recycler view
         ArrayList<Requirement> reqsTest = new ArrayList<>();
         Requirement eceTech = new Requirement("ECE Tech Electives", false, 5, 2);
-        eceTech.addCourseTaken(getPrinCommCourse());
+        //eceTech.addCourseTaken(getPrinCommCourse());
         reqsTest.add(eceTech);
         Requirement soeGen = new Requirement("SOE General Electives", false, 10, 3);
-        soeGen.addCourseTaken(getMultiVarCalcCourse());
+        //soeGen.addCourseTaken(getMultiVarCalcCourse());
         reqsTest.add(soeGen);
 
         requirementLayoutManager = new LinearLayoutManager(this);
@@ -115,24 +117,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String param1 = "webhook";
-        String param2 = "test";
-        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/webhook0?arg1="+param1+"&arg2="+param2;
+        String netID = "AmanyTest";
+        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
-                    // TODO: implement serialization? to be able to unpack all course data more simply
                     //get values from json
-                    String val1 = "null";
-                    String val2 = "null";
                     try{
-                        val1 = response.getString("val1");
-                        val2 = response.getString("val2");
+                        int i = 0;
+                        int responseLength = response.length();
+                        String classString;
+                        //build courses with values
+                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();;
+                        while(i < responseLength){
+                            classString = response.getString(String.valueOf(i++));
+                            suggestedTest.add(gson.fromJson(classString, Course.class));
+                        }
                     } catch(Exception e){
-                        System.out.println("failed to unpack JSON");
+                        System.out.println(e.toString());
                     }
-                    //build courses with values
-                    suggestedTest.add(getCourse(val1, val2));
                     //update view with new adapter
                     suggestedAdapter = new CoursesListAdapter(suggestedTest);
                     suggestedRecyclerView.setAdapter(suggestedAdapter);
@@ -145,8 +148,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         queue.add(jsonObjectRequest);
     }
 
-    private Course getCourse(String name, String code) {
-        Course prinComm = new Course(name, code, 3,
+    /*
+    private Course getCourse(String code) {
+        Course prinComm = new Course("Test Course", code, 3,
                 "This \"test\" is an example of how we can get values from a webhook set up on MongoDB Stitch.");
         prinComm.addPrereq(getProbCourse());
         return prinComm;
@@ -170,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Course course = new Course("Multivariable Calculus", "01:640:251", 4, "Analytic geometry of three dimensions, partial derivatives, optimization techniques, multiple integrals, vectors in Euclidean space, and vector analysis.");
         return course;
     }
+    */
 
     // Inflate options menu
     @Override

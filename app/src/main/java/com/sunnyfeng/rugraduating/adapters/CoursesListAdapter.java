@@ -56,8 +56,8 @@ public class CoursesListAdapter extends
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Course curCourse = courses.get(position);
-        holder.titleView.setText(curCourse.title);
-        holder.codeView.setText(curCourse.code);
+        holder.titleView.setText(curCourse.getName());
+        holder.codeView.setText(curCourse.get_id());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
