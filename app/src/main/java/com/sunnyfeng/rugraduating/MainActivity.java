@@ -18,6 +18,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
@@ -101,9 +105,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Set up suggested courses recycler view
         ArrayList<Course> suggestedTest = new ArrayList<>();
-        suggestedTest.add(getPrinCommCourse());
-        suggestedTest.add(getProbCourse());
-
         suggestedLayoutManager = new LinearLayoutManager(this);
         suggestedRecyclerView = findViewById(R.id.suggested_recyclerView);
         suggestedRecyclerView.setHasFixedSize(true);
@@ -111,6 +112,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         suggestedAdapter = new CoursesListAdapter(suggestedTest);
         suggestedRecyclerView.setAdapter(suggestedAdapter);
 
+        //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String param1 = "webhook";
+        String param2 = "test";
+        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/webhook0?arg1="+param1+"&arg2="+param2;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    // TODO: implement serialization? to be able to unpack all course data more simply
+                    //get values from json
+                    String val1 = "null";
+                    String val2 = "null";
+                    try{
+                        val1 = response.getString("val1");
+                        val2 = response.getString("val2");
+                    } catch(Exception e){
+                        System.out.println("failed to unpack JSON");
+                    }
+                    //build courses with values
+                    suggestedTest.add(getCourse(val1, val2));
+                    //update view with new adapter
+                    suggestedAdapter = new CoursesListAdapter(suggestedTest);
+                    suggestedRecyclerView.setAdapter(suggestedAdapter);
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println(error);
+                });
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
+    }
+
+    private Course getCourse(String name, String code) {
+        Course prinComm = new Course(name, code, 3,
+                "This \"test\" is an example of how we can get values from a webhook set up on MongoDB Stitch.");
+        prinComm.addPrereq(getProbCourse());
+        return prinComm;
     }
 
     private Course getPrinCommCourse() {
