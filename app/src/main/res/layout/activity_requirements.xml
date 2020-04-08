@@ -90,10 +90,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/remaining_recyclerView"
-        android:layout_width="381dp"
-        android:layout_height="216dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -103,9 +103,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/completed_courses_recyclerView"
         android:layout_width="0dp"
-        android:layout_height="179dp"
+        android:layout_height="200dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

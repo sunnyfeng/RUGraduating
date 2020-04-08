@@ -14,7 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.adapters.CourseCodeListAdapter;
+import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
+import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -74,7 +75,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
         prereqRecyclerView.setHasFixedSize(true);
         prereqRecyclerView.setLayoutManager(prereqLayoutManager);
-        prereqAdapter = new CourseCodeListAdapter(currentCourse.getPrereqs()); //TODO: save prereqs as Course objects maybe ?
+        prereqAdapter = new StringListAdapter(currentCourse.getPrereqs()); //TODO: save prereqs as Course objects maybe ?
         prereqRecyclerView.setAdapter(prereqAdapter);
 
         // Set up coreq recycler view
@@ -82,7 +83,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         coreqRecyclerView = findViewById(R.id.coreq_recyclerView);
         coreqRecyclerView.setHasFixedSize(true);
         coreqRecyclerView.setLayoutManager(coreqLayoutManager);
-        coreqAdapter = new CourseCodeListAdapter(currentCourse.getCoreqs());//TODO: save coreqs as Course objects maybe ?
+        coreqAdapter = new StringListAdapter(currentCourse.getCoreqs());//TODO: save coreqs as Course objects maybe ?
         coreqRecyclerView.setAdapter(coreqAdapter);
     }
 
@@ -98,6 +99,10 @@ public class CourseInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
+            case R.id.add_class_item:
+                AddCourseDialog dialogClass = new AddCourseDialog(this);
+                dialogClass.show();
+                return true;
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
@@ -108,6 +113,8 @@ public class CourseInfoActivity extends AppCompatActivity {
                 return true;
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
+                // don't allow back press to re-enter
+                intent_logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent_logout);
                 return true;
             case R.id.profile_item:

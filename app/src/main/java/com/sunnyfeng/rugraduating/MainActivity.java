@@ -27,6 +27,7 @@ import com.google.gson.GsonBuilder;
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
 import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
+import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -147,34 +148,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         queue.add(jsonObjectRequest);
     }
 
-    /*
-    private Course getCourse(String code) {
-        Course prinComm = new Course("Test Course", code, 3,
-                "This \"test\" is an example of how we can get values from a webhook set up on MongoDB Stitch.");
-        prinComm.addPrereq(getProbCourse());
-        return prinComm;
-    }
-
-    private Course getPrinCommCourse() {
-        Course prinComm = new Course("Wireless Revolution", "14:332:301", 3,
-                "This \"flipped\" undergraduate course provides a broad view of how new technologies, economic forces, political constraints, and competitive warfare have created and shaped the \"wireless revolution\" in the last 50 years.  It offers a view inside the world of corporate management-- how strategies were created and why many have failed—and gives students a chance to develop their own strategic skills by solving real-world problems.  The course includes a historical overview of communications and communication systems, basics of wireless technology, technology and politics of cellular, basics of corporate finance, economics of cellular systems and spectrum auctions, case studies in wireless business strategy, the strategic implications of unregulated spectrum, a comparison of 3G, 4G, 5G and WiFi, IoT and the wireless future. Students are required to interact during the lectures in a flipped classroom setting—necessitating pre-lecture preparation, in-class attendance and participation.");
-        prinComm.addPrereq(getProbCourse());
-        return prinComm;
-    }
-
-    private Course getProbCourse() {
-        Course prob = new Course("Probability and Random Processes", "14:332:226", 3,
-                "Probability and its axioms, conditional probability, independence, counting, random variables and distributions, functions of random variables, expectations, order statistics, central limit theorem, confidence intervals, hypothesis testing, estimation of random variables. Random processes and their characterization, autocorrelation function.");
-        prob.addPrereq(new Course("Multivariable Calculus", "01:640:251", 4, "Analytic geometry of three dimensions, partial derivatives, optimization techniques, multiple integrals, vectors in Euclidean space, and vector analysis."));
-        return prob;
-    }
-
-    private Course getMultiVarCalcCourse() {
-        Course course = new Course("Multivariable Calculus", "01:640:251", 4, "Analytic geometry of three dimensions, partial derivatives, optimization techniques, multiple integrals, vectors in Euclidean space, and vector analysis.");
-        return course;
-    }
-    */
-
     // Inflate options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -187,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
+            case R.id.add_class_item:
+                AddCourseDialog dialogClass = new AddCourseDialog(this);
+                dialogClass.show();
+                return true;
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
@@ -197,6 +174,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 return true;
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
+                // don't allow back press to re-enter
+                intent_logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent_logout);
                 return true;
             case R.id.profile_item:

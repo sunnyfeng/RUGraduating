@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.R;
 
-public class CourseCodeListAdapter extends
-        RecyclerView.Adapter<CourseCodeListAdapter.MyViewHolder> {
-    private String[] courseCodes;
+public class StringListAdapter extends
+        RecyclerView.Adapter<StringListAdapter.MyViewHolder> {
+    private String[] strings;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private Context context;
@@ -23,32 +23,32 @@ public class CourseCodeListAdapter extends
             super(itemView);
             this.context = itemView.getContext();
             this.itemView = itemView;
-            displayView = itemView.findViewById(R.id.course_code_display);
+            displayView = itemView.findViewById(R.id.string_display);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CourseCodeListAdapter(String[] courseCodes) {
-        this.courseCodes = courseCodes;
+    public StringListAdapter(String[] strings) {
+        this.strings = strings;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public CourseCodeListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public StringListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                               int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View view = inflater.inflate(R.layout.course_code_list_item, parent, false);
+        View view = inflater.inflate(R.layout.string_display_item, parent, false);
         return new MyViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final String courseCode = courseCodes[position];
-        holder.displayView.setText(courseCode);
+        final String string = strings[position];
+        holder.displayView.setText(string);
         //TODO: maybe then search for this object and then pass it to course info
 //        holder.itemView.setOnClickListener(view -> {
 //            Intent intent = new Intent(holder.context, CourseInfoActivity.class);
@@ -60,6 +60,6 @@ public class CourseCodeListAdapter extends
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return courseCodes.length;
+        return strings.length;
     }
 }

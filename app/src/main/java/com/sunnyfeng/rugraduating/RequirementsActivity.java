@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -114,6 +115,10 @@ public class RequirementsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
+            case R.id.add_class_item:
+                AddCourseDialog dialogClass = new AddCourseDialog(this);
+                dialogClass.show();
+                return true;
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
@@ -124,6 +129,8 @@ public class RequirementsActivity extends AppCompatActivity {
                 return true;
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
+                // don't allow back press to re-enter
+                intent_logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent_logout);
                 return true;
             case R.id.profile_item:
