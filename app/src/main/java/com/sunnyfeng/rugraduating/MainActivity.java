@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         suggestedRecyclerView.setAdapter(suggestedAdapter);
 
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
-        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String netID = "AmanyTest";
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     System.out.println(error);
                 });
 
-        // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
     }
 
