@@ -2,12 +2,12 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -27,35 +27,27 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar.setSubtitle("Your Profile");
 
         // Set up buttons
-        Button modifyClassesButton = findViewById(R.id.modify_classes_button);
-        modifyClassesButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, AddClassesActivity.class);
-                startActivity(intent);
-            }
+        Button addClassesButton = findViewById(R.id.add_classes_button);
+        addClassesButton.setOnClickListener(v -> {
+            AddCourseDialog dialogCourse = new AddCourseDialog(ProfileActivity.this);
+            dialogCourse.show();
         });
         Button addProgramButton = findViewById(R.id.add_program_button);
-        addProgramButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AddProgramDialog dialogProgram = new AddProgramDialog(ProfileActivity.this);
-                dialogProgram.show();
-            }
+        addProgramButton.setOnClickListener(v -> {
+            AddProgramDialog dialogProgram = new AddProgramDialog(ProfileActivity.this);
+            dialogProgram.show();
         });
         Button addToPlanButton = findViewById(R.id.add_to_plan_button);
-        addToPlanButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AddToPlanDialog dialogPlan = new AddToPlanDialog(ProfileActivity.this);
-                dialogPlan.show();
-            }
+        addToPlanButton.setOnClickListener(v -> {
+            AddToPlanDialog dialogPlan = new AddToPlanDialog(ProfileActivity.this);
+            dialogPlan.show();
         });
 
         // Set up button
         Button backToMainButton = findViewById(R.id.back_to_main_profile);
-        backToMainButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        backToMainButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
         // TODO: Add many button listeners

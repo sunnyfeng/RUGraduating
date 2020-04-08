@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,11 +73,9 @@ public class RequirementsActivity extends AppCompatActivity {
 
         // Set up button
         Button backToMainButton = findViewById(R.id.back_to_main_req);
-        backToMainButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(RequirementsActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        backToMainButton.setOnClickListener(v -> {
+            Intent intent1 = new Intent(RequirementsActivity.this, MainActivity.class);
+            startActivity(intent1);
         });
     }
 

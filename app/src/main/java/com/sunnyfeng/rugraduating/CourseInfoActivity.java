@@ -6,7 +6,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,7 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.adapters.CourseCodeListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -25,9 +24,9 @@ public class CourseInfoActivity extends AppCompatActivity {
     private RecyclerView.Adapter prereqAdapter;
     private RecyclerView.LayoutManager prereqLayoutManager;
 
-    private RecyclerView equivRecyclerView;
-    private RecyclerView.Adapter equivAdapter;
-    private RecyclerView.LayoutManager equivLayoutManager;
+    private RecyclerView coreqRecyclerView;
+    private RecyclerView.Adapter coreqAdapter;
+    private RecyclerView.LayoutManager coreqLayoutManager;
 
     private Course currentCourse;
 
@@ -40,7 +39,6 @@ public class CourseInfoActivity extends AppCompatActivity {
         Course course = (Course) intent.getSerializableExtra(MainActivity.COURSE_INTENT_KEY);
         currentCourse = course;
 
-
         TextView className = findViewById(R.id.class_name);
         className.setText(course.getName());
         TextView classCode = findViewById(R.id.class_code);
@@ -50,7 +48,6 @@ public class CourseInfoActivity extends AppCompatActivity {
         TextView description = findViewById(R.id.class_description_display);
         description.setText(course.getDescription());
         description.setMovementMethod(new ScrollingMovementMethod()); //make scrollable
-
 
         setUpRecyclerViews();
 
@@ -65,11 +62,9 @@ public class CourseInfoActivity extends AppCompatActivity {
 
         // Set up button
         Button backToMainButton = findViewById(R.id.back_to_main_course);
-        backToMainButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(CourseInfoActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        backToMainButton.setOnClickListener(v -> {
+            Intent intent1 = new Intent(CourseInfoActivity.this, MainActivity.class);
+            startActivity(intent1);
         });
     }
 
@@ -79,16 +74,16 @@ public class CourseInfoActivity extends AppCompatActivity {
         prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
         prereqRecyclerView.setHasFixedSize(true);
         prereqRecyclerView.setLayoutManager(prereqLayoutManager);
-       // prereqAdapter = new CoursesListAdapter(currentCourse.getPrereqs());
+        prereqAdapter = new CourseCodeListAdapter(currentCourse.getPrereqs()); //TODO: save prereqs as Course objects maybe ?
         prereqRecyclerView.setAdapter(prereqAdapter);
 
-        // Set up equiv recycler view
-        equivLayoutManager = new LinearLayoutManager(this);
-        equivRecyclerView = findViewById(R.id.equivalencies_recyclerView);
-        equivRecyclerView.setHasFixedSize(true);
-        equivRecyclerView.setLayoutManager(equivLayoutManager);
-        //equivAdapter = new CoursesListAdapter(currentCourse.getEquivs());
-        equivRecyclerView.setAdapter(equivAdapter);
+        // Set up coreq recycler view
+        coreqLayoutManager = new LinearLayoutManager(this);
+        coreqRecyclerView = findViewById(R.id.coreq_recyclerView);
+        coreqRecyclerView.setHasFixedSize(true);
+        coreqRecyclerView.setLayoutManager(coreqLayoutManager);
+        coreqAdapter = new CourseCodeListAdapter(currentCourse.getCoreqs());//TODO: save coreqs as Course objects maybe ?
+        coreqRecyclerView.setAdapter(coreqAdapter);
     }
 
     // Inflate options menu

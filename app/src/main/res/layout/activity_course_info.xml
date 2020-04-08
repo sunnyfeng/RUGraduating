@@ -78,17 +78,17 @@
         app:layout_constraintTop_toBottomOf="@+id/description_display" />
 
     <TextView
-        android:id="@+id/equivalent_display"
+        android:id="@+id/coreq_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Equivalencies"
+        android:text="Corequisites"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/class_description_display" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/equivalencies_recyclerView"
+        android:id="@+id/coreq_recyclerView"
         android:layout_width="379dp"
         android:layout_height="51dp"
         android:layout_marginStart="16dp"
@@ -96,7 +96,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/equivalent_display" />
+        app:layout_constraintTop_toBottomOf="@+id/coreq_display" />
 
     <TextView
         android:id="@+id/prereq_display"
@@ -106,7 +106,7 @@
         android:layout_marginTop="16dp"
         android:text="Prerequisites"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/equivalencies_recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/coreq_recyclerView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prereq_recyclerView"

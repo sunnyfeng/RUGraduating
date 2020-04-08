@@ -1,4 +1,4 @@
-package com.sunnyfeng.rugraduating;
+package com.sunnyfeng.rugraduating.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

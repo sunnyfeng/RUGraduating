@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_add_class"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="400dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/_dialog_add_class_string"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Add Course"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/_dialog_course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Enter Code:"
+        app:layout_constraintBottom_toBottomOf="@+id/course_code_editText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/course_code_editText" />
+
+
+    <Button
+        android:id="@+id/dialog_cancel_add_course"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="CANCEL"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/course_code_editText" />
+
+    <Button
+        android:id="@+id/dialog_ok_add_course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="OK"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_add_course"
+        app:layout_constraintStart_toEndOf="@+id/dialog_cancel_add_course"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cancel_add_course"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/course_code_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="14:332:221"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/_dialog_course"
+        app:layout_constraintTop_toBottomOf="@+id/_dialog_add_class_string" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

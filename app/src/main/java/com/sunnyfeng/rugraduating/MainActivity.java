@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
@@ -211,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         String itemSelected = parent.getItemAtPosition(pos).toString();
         // TODO: on item selected, filter progress by major
-        Toast.makeText(this,itemSelected + " selected.", Toast.LENGTH_SHORT).show();
     }
 
     // Handle major spinner item not selected

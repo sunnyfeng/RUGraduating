@@ -14,7 +14,9 @@ public class Course implements Serializable {
     private String[] prereqs;
     private String[] coreqs;
 
-    public Course(String _id, String name, Integer credits, String department, String school, String description, String[] prereqs, String[] coreqs) {
+    public Course(String _id, String name, Integer credits, String department, String school,
+                  String description, String[] prereqs, String[] coreqs) {
+                                    //TODO: Make these course objects
         this._id = _id;
         this.name = name;
         this.credits = credits;
