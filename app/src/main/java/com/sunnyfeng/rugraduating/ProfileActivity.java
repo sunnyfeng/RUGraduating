@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
-import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
-import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
+import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -47,8 +46,8 @@ public class ProfileActivity extends AppCompatActivity {
         // Set up buttons
         Button addClassesButton = findViewById(R.id.add_classes_button);
         addClassesButton.setOnClickListener(v -> {
-            AddCourseDialog dialogCourse = new AddCourseDialog(ProfileActivity.this);
-            dialogCourse.show();
+            Intent intent = new Intent(ProfileActivity.this, AddClassesActivity.class);
+            startActivity(intent);
         });
         Button addProgramButton = findViewById(R.id.add_program_button);
         addProgramButton.setOnClickListener(v -> {
@@ -90,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
         programsRecyclerView = findViewById(R.id.programs_recyclerView);
         programsRecyclerView.setHasFixedSize(true);
         programsRecyclerView.setLayoutManager(programsLayoutManager);
-        programsAdapter = new StringListAdapter(programs);
+        programsAdapter = new StringArrayAdapter(programs);
         programsRecyclerView.setAdapter(programsAdapter);
 
         // Set up plan recycler view

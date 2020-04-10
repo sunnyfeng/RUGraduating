@@ -10,41 +10,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Select the courses that you have taken so far"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/major_display" />
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
-
-    <TextView
-        android:id="@+id/major_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Filter by major"
+        android:text="Add Courses"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <Spinner
-        android:id="@+id/major_spinner_add"
-        android:layout_width="0dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/major_display"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/major_display"
-        app:layout_constraintTop_toTopOf="@+id/major_display" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/classes_recyclerView"
@@ -53,20 +28,66 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_classes_button"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/submit_classes_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/classes_taken_text_display" />
+        app:layout_constraintTop_toBottomOf="@+id/add_class_edit_text" />
 
     <Button
-        android:id="@+id/add_classes_button"
+        android:id="@+id/submit_classes_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Done"
+        android:text="Submit Classes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/add_class_edit_text"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Code (01:640:250)"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/classes_taken_text_display" />
+
+    <Button
+        android:id="@+id/add_class_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="add"
+        app:layout_constraintBottom_toBottomOf="@+id/add_class_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/add_class_edit_text" />
+
+    <Button
+        android:id="@+id/cancel_add_classes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Cancel without saving"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/grade_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Grade (B+)"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/add_class_edit_text"
+        app:layout_constraintEnd_toStartOf="@+id/add_class_button"
+        app:layout_constraintStart_toEndOf="@+id/add_class_edit_text"
+        app:layout_constraintTop_toTopOf="@+id/add_class_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

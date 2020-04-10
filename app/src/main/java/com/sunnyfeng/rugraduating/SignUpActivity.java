@@ -135,8 +135,7 @@ public class SignUpActivity extends AppCompatActivity {
         if(signup_check_populated()){
             // TODO:create the user (add to database), new intent to add classes
 
-
-            Intent mainIntent = new Intent(this, MainActivity.class);
+            Intent mainIntent = new Intent(this, AddClassesActivity.class);
             startActivity(mainIntent);
         }
         // otherwise, do nothing. all unentered fields highlighted

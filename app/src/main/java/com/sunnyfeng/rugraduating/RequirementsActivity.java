@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
-import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -115,10 +114,6 @@ public class RequirementsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
-            case R.id.add_class_item:
-                AddCourseDialog dialogClass = new AddCourseDialog(this);
-                dialogClass.show();
-                return true;
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();

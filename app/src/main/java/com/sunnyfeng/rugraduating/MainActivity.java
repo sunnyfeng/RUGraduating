@@ -27,7 +27,6 @@ import com.google.gson.GsonBuilder;
 import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
 import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
-import com.sunnyfeng.rugraduating.dialogs.AddCourseDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
@@ -160,10 +159,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
-            case R.id.add_class_item:
-                AddCourseDialog dialogClass = new AddCourseDialog(this);
-                dialogClass.show();
-                return true;
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
