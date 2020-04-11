@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             User mUser = ((User)getApplicationContext());
             mUser.setNetID(account.getEmail().split("@",2)[0]);
 
+            //check here if user is in database to decide whether to sign-up or login
             //temporary just go to main page
             Intent main_page = new Intent(this, MainActivity.class);
             startActivity(main_page);
