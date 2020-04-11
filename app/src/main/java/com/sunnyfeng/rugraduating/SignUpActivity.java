@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -12,10 +14,19 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity{
+
+    // Store registration credentials and pass to database for first-time users
+    private String user_name = "";
+    private String netID = "";
+    private String school = "";
+    private String major = "";
+    private String user_email = "";
+    private String user_pwd = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,69 +41,60 @@ public class SignUpActivity extends AppCompatActivity {
         }
         toolbar.setSubtitle("Sign Up");
 
-        // populate spin_year
-        ArrayList<String> years = new ArrayList<String>();
-        years.add("");
-        int this_year = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = this_year - 3; i <= this_year + 4; i++) {
-            years.add(Integer.toString(i));
-        }
-        ArrayAdapter<String> years_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, years);
-
-        Spinner spin_year = (Spinner)findViewById(R.id.spin_year);
-        spin_year.setAdapter(years_adapter);
-        spin_year.setSelection(0);
-
-        // populate seasons
-        ArrayList<String> seasons = new ArrayList<String>();
-        seasons.add("");
-        seasons.add("Fall");
-        seasons.add("Winter");
-        seasons.add("Spring");
-        seasons.add("Summer");
-        ArrayAdapter<String> seasons_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, seasons);
-
-        Spinner spin_season = (Spinner) findViewById(R.id.spin_season);
-        spin_season.setAdapter(seasons_adapter);
-        spin_season.setSelection(0);
-
         //TODO: populate school and major spinners with database values
+        ArrayList<String> schools = new ArrayList<String>();
+        schools.add("");
+        // TODO: INSERT QUERY TO GET SCHOOLS HERE, REPLACE PLACEHOLDER
+        schools.add("TEST SCHOOL");
+
+        ArrayAdapter<String> school_adapter  =  new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, schools);
+        Spinner school_spin = (Spinner) findViewById(R.id.spin_school);
+        school_spin.setAdapter(school_adapter);
+
+        ArrayList<String> majors = new ArrayList<String>();
+        majors.add("");
+
+        ArrayAdapter<String> major_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, majors);
+        Spinner major_spin = (Spinner) findViewById(R.id.spin_major);
+        major_spin.setAdapter(major_adapter);
+
+        school_spin.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+                        majors.clear();
+                        majors.add("");
+                        String selected_school = school_spin.getSelectedItem().toString();
+                        if(selected_school.length() > 0){
+                            // TODO: INSERT QUERY TO GET MAJORS UNDER SCHOOL HERE, REPLACE PLACEHOLDER
+                            majors.add("TEST MAJOR");
+                        }
+                        major_adapter.notifyDataSetChanged();
+                    }
+                    public void onNothingSelected(AdapterView<?> parent){}
+                }
+        );
+
     }
 
     public boolean signup_check_populated(){
         boolean complete = true;
 
         EditText name_textbox = (EditText)findViewById(R.id.name_sign_up);
-        String user_name = name_textbox.getText().toString();
+        user_name = name_textbox.getText().toString();
         if(user_name.length() == 0){
             complete = false;
             name_textbox.setError("Please enter your name");
         }
 
-        Spinner seasons_spin = (Spinner)findViewById(R.id.spin_season);
-        String season = seasons_spin.getSelectedItem().toString();
-        if(season.length() == 0){
+        EditText netid_textbox = (EditText)findViewById(R.id.netid_sign_up);
+        netID = netid_textbox.getText().toString();
+        if(netID.length() == 0){
             complete = false;
-
-            TextView errorText = (TextView)seasons_spin.getSelectedView();
-            errorText.setError("");
-            errorText.setTextColor(Color.RED);//just to highlight that this is an error
-
+            netid_textbox.setError("Please enter your name");
         }
 
-        Spinner year_spin = (Spinner)findViewById(R.id.spin_year);
-        String year = year_spin.getSelectedItem().toString();
-        if(year.length() == 0){
-            complete = false;
-
-            TextView errorText = (TextView)year_spin.getSelectedView();
-            errorText.setError("");
-            errorText.setTextColor(Color.RED);//just to highlight that this is an error
-
-        }
-        /*
         Spinner school_spin = (Spinner)findViewById(R.id.spin_school);
-        String school = school_spin.getSelectedItem().toString();
+        school = school_spin.getSelectedItem().toString();
         if(school.length() == 0){
             complete = false;
 
@@ -103,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         Spinner major_spin = (Spinner)findViewById(R.id.spin_major);
-        String major = major_spin.getSelectedItem().toString();
+        major = major_spin.getSelectedItem().toString();
         if(major.length() == 0){
             complete = false;
 
@@ -112,16 +114,16 @@ public class SignUpActivity extends AppCompatActivity {
             errorText.setTextColor(Color.RED);//just to highlight that this is an error
 
         }
-        */
+
         EditText email_textbox = (EditText)findViewById(R.id.email_sign_up);
-        String user_email = email_textbox.getText().toString();
+        user_email = email_textbox.getText().toString();
         if(user_email.length() == 0){
             complete = false;
             email_textbox.setError("Please enter your email");
         }
 
         EditText pwd_textbox = (EditText)findViewById(R.id.pwd_sign_up);
-        String user_pwd = pwd_textbox.getText().toString();
+        user_pwd = pwd_textbox.getText().toString();
         if(user_pwd.length() == 0){
             complete = false;
             pwd_textbox.setError("Please enter your password");
@@ -133,7 +135,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void create_user(View view){
         // check all fields are populated
         if(signup_check_populated()){
-            // TODO:create the user (add to database), new intent to add classes
+            // TODO: create the user (add to database), new intent to add classes
 
             Intent mainIntent = new Intent(this, AddClassesActivity.class);
             startActivity(mainIntent);

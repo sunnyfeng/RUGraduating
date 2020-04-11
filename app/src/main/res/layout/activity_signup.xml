@@ -9,27 +9,6 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <Spinner
-        android:id="@+id/spin_year"
-        android:layout_width="105dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@+id/spin_season"
-        app:layout_constraintStart_toEndOf="@+id/spin_season"
-        app:layout_constraintTop_toTopOf="@+id/spin_season"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <Spinner
-        android:id="@+id/spin_season"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@+id/_grad_year"
-        app:layout_constraintStart_toStartOf="@+id/name_sign_up"
-        app:layout_constraintTop_toTopOf="@+id/_grad_year" />
-
-
     <TextView
         android:id="@+id/_name"
         android:layout_width="wrap_content"
@@ -41,11 +20,11 @@
         app:layout_constraintTop_toBottomOf="@+id/sign_up_title_display" />
 
     <TextView
-        android:id="@+id/_grad_year"
+        android:id="@+id/_net_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Grad Year:"
+        android:text="netID:"
         app:layout_constraintStart_toStartOf="@+id/_name"
         app:layout_constraintTop_toBottomOf="@+id/_name" />
 
@@ -55,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="School:"
-        app:layout_constraintStart_toStartOf="@+id/_grad_year"
-        app:layout_constraintTop_toBottomOf="@+id/_grad_year" />
+        app:layout_constraintStart_toStartOf="@+id/_net_id"
+        app:layout_constraintTop_toBottomOf="@+id/_net_id" />
 
     <TextView
         android:id="@+id/_major"
@@ -101,6 +80,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/_name"
         app:layout_constraintTop_toTopOf="@+id/_name" />
+
+    <EditText
+        android:id="@+id/netid_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/_net_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/name_sign_up"
+        app:layout_constraintTop_toTopOf="@+id/_net_id" />
 
     <Spinner
         android:id="@+id/spin_school"
