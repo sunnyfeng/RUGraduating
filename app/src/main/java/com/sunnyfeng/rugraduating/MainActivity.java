@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -18,14 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
-import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
@@ -43,9 +35,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private RecyclerView.Adapter requirementsAdapter;
     private RecyclerView.LayoutManager requirementLayoutManager;
 
-    private RecyclerView suggestedRecyclerView;
-    private RecyclerView.Adapter suggestedAdapter;
-    private RecyclerView.LayoutManager suggestedLayoutManager;
+//    private RecyclerView suggestedRecyclerView;
+//    private RecyclerView.Adapter suggestedAdapter;
+//    private RecyclerView.LayoutManager suggestedLayoutManager;
 
 
     @Override
@@ -72,18 +64,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Switch for withPlan
         Switch sw = findViewById(R.id.withPlanSwitch);
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean withPlan) {
-                if (withPlan) {
-                    // The toggle is enabled
-                    // TODO: add function with plan
-                    Toast.makeText(MainActivity.this, "Including plan.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // The toggle is disabled
-                    // TODO: add function without plan
-                    Toast.makeText(MainActivity.this, "Not including plan.", Toast.LENGTH_SHORT).show();
-                }
+        sw.setOnCheckedChangeListener((buttonView, withPlan) -> {
+            if (withPlan) {
+                // The toggle is enabled
+                // TODO: add function with plan
+                Toast.makeText(MainActivity.this, "Including plan.", Toast.LENGTH_SHORT).show();
+            } else {
+                // The toggle is disabled
+                // TODO: add function without plan
+                Toast.makeText(MainActivity.this, "Not including plan.", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        // Go to suggested courses button
+        Button suggestedButton = findViewById(R.id.go_to_suggested_button);
+        suggestedButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SuggestedCoursesActivity.class);
+            startActivity(intent);
         });
 
         setUpRecyclerViews();
@@ -105,46 +102,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
         requirementsAdapter = new RequirementsListAdapter(reqsTest);
         requirementsRecyclerView.setAdapter(requirementsAdapter);
+//
+//        // Set up suggested courses recycler view
+//        ArrayList<Course> suggestedTest = new ArrayList<>();
+//        suggestedLayoutManager = new LinearLayoutManager(this);
+//        suggestedRecyclerView = findViewById(R.id.suggested_recyclerView);
+//        suggestedRecyclerView.setHasFixedSize(true);
+//        suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
+//        suggestedAdapter = new CoursesListAdapter(suggestedTest);
+//        suggestedRecyclerView.setAdapter(suggestedAdapter);
 
-        // Set up suggested courses recycler view
-        ArrayList<Course> suggestedTest = new ArrayList<>();
-        suggestedLayoutManager = new LinearLayoutManager(this);
-        suggestedRecyclerView = findViewById(R.id.suggested_recyclerView);
-        suggestedRecyclerView.setHasFixedSize(true);
-        suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
-        suggestedAdapter = new CoursesListAdapter(suggestedTest);
-        suggestedRecyclerView.setAdapter(suggestedAdapter);
-
-        //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String netID = "AmanyTest";
-        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, null, response -> {
-                    //get values from json
-                    try{
-                        int i = 0;
-                        int responseLength = response.length();
-                        String classString;
-                        //build courses with values
-                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();;
-                        while(i < responseLength){
-                            classString = response.getString(String.valueOf(i++));
-                            suggestedTest.add(gson.fromJson(classString, Course.class));
-                        }
-                    } catch(Exception e){
-                        System.out.println(e.toString());
-                    }
-                    //update view with new adapter
-                    suggestedAdapter = new CoursesListAdapter(suggestedTest);
-                    suggestedRecyclerView.setAdapter(suggestedAdapter);
-                }, error -> {
-                    // TODO: Handle error
-                    System.out.println(error);
-                });
-
-        queue.add(jsonObjectRequest);
     }
 
     // Inflate options menu
