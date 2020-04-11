@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String netID = "AmanyTest";
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
 
+        User mUser = ((User)getApplicationContext());
+        String test = mUser.getNetID();
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
                     //get values from json
