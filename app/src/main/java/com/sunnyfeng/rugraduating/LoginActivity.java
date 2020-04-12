@@ -20,6 +20,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     GoogleSignInClient sClient = null;
     int RC_SIGN_IN = 72;
@@ -116,7 +118,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(account != null){
             User mUser = ((User)getApplicationContext());
             mUser.setNetID(account.getEmail().split("@",2)[0]);
-
+            mUser.setEmail(account.getEmail());
+            String[] toCapitalize = account.getDisplayName().toLowerCase().split(" ");
+            mUser.setFirstName(String.valueOf(toCapitalize[0].charAt(0)).toUpperCase() + toCapitalize[0].substring(1));
+            mUser.setLastName(String.valueOf(toCapitalize[1].charAt(0)).toUpperCase() + toCapitalize[1].substring(1));
             //check here if user is in database to decide whether to sign-up or login
             //temporary just go to main page
             Intent main_page = new Intent(this, MainActivity.class);
