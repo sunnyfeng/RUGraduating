@@ -13,6 +13,7 @@ import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.Course;
 
 import java.util.ArrayList;
 

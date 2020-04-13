@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.Course;
 
 public class CourseInfoActivity extends AppCompatActivity {
 

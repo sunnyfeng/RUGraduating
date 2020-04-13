@@ -1,4 +1,4 @@
-package com.sunnyfeng.rugraduating;
+package com.sunnyfeng.rugraduating.objects;
 
 import android.app.Application;
 

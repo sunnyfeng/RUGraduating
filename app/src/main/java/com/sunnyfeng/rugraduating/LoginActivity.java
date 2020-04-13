@@ -19,8 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-
-import java.util.regex.Pattern;
+import com.sunnyfeng.rugraduating.objects.User;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     GoogleSignInClient sClient = null;

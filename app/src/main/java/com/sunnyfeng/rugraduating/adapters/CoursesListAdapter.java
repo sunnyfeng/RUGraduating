@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.Course;
+import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.CourseInfoActivity;
 import com.sunnyfeng.rugraduating.MainActivity;
 import com.sunnyfeng.rugraduating.R;

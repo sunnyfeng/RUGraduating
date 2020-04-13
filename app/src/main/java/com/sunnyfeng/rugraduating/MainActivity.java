@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.Requirement;
 
 import java.util.ArrayList;
 

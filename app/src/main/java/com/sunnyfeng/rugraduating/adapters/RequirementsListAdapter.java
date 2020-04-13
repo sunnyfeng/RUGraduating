@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.MainActivity;
 import com.sunnyfeng.rugraduating.R;
-import com.sunnyfeng.rugraduating.Requirement;
+import com.sunnyfeng.rugraduating.objects.Requirement;
 import com.sunnyfeng.rugraduating.RequirementsActivity;
 
 import java.util.ArrayList;

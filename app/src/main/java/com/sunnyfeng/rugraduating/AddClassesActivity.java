@@ -69,9 +69,8 @@ public class AddClassesActivity extends AppCompatActivity {
         // Submit classes button
         Button submitButton = findViewById(R.id.submit_classes_button);
         submitButton.setOnClickListener(v -> {
-            //TODO: insert the list of classes from the recycler view
-            // go back to the page before
-            super.onBackPressed();
+            //TODO: insert new classes into database
+            super.onBackPressed(); // go back to previous activity
         });
 
         // Cancel classes button
