@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -102,16 +103,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
         requirementsAdapter = new RequirementsListAdapter(reqsTest);
         requirementsRecyclerView.setAdapter(requirementsAdapter);
-//
-//        // Set up suggested courses recycler view
-//        ArrayList<Course> suggestedTest = new ArrayList<>();
-//        suggestedLayoutManager = new LinearLayoutManager(this);
-//        suggestedRecyclerView = findViewById(R.id.suggested_recyclerView);
-//        suggestedRecyclerView.setHasFixedSize(true);
-//        suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
-//        suggestedAdapter = new CoursesListAdapter(suggestedTest);
-//        suggestedRecyclerView.setAdapter(suggestedAdapter);
 
+        // Progress bar
+        int totalRequirements = 10;
+        int completedRequirements = 3;
+        ProgressBar progressBar = findViewById(R.id.overall_progress_bar);
+        progressBar.setProgress(completedRequirements);
+        progressBar.setMax(totalRequirements);
     }
 
     // Inflate options menu
