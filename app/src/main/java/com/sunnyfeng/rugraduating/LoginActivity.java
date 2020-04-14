@@ -123,48 +123,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mUser.setLastName(String.valueOf(toCapitalize[1].charAt(0)).toUpperCase() + toCapitalize[1].substring(1));
             //check here if user is in database to decide whether to sign-up or login
             //temporary just go to main page
-            Intent main_page = new Intent(this, MainActivity.class);
-            startActivity(main_page);
+            boolean user_in_db = false; //TODO: replace with backend query to verify user is in database
+            if(user_in_db){
+                Intent main_page = new Intent(this, MainActivity.class);
+                startActivity(main_page);
+            }
+
+            Intent signup_page = new Intent(this, SignUpActivity.class);
+            startActivity(signup_page);
         }
-    }
-
-    public boolean login_check_populated(){
-        boolean complete = true;
-
-        EditText email_textbox = (EditText) findViewById(R.id.email_addr);
-        String user_email = email_textbox.getText().toString();
-        if(user_email.length() == 0){
-            complete = false;
-            email_textbox.setError("Please enter your email");
-        }
-
-        EditText pwd_textbox = (EditText) findViewById(R.id.pwd);
-        String user_pwd = pwd_textbox.getText().toString();
-        if(user_pwd.length() == 0){
-            complete = false;
-            pwd_textbox.setError("Please enter your password");
-        }
-        return complete;
-    }
-
-    public void login(View view){
-        if(login_check_populated()) {
-
-            //TODO: check database if user exists
-            // if doesn't exist, return
-
-
-            // else, load intent, send login credentials?
-            Intent main_page = new Intent(this, MainActivity.class);
-            startActivity(main_page);
-
-        }
-    }
-
-    public void sign_up(View view){
-        // send straight to sign up page
-        Intent signup_page = new Intent(this, SignUpActivity.class);
-        startActivity(signup_page);
     }
 
     // Don't allow back press after logging out
