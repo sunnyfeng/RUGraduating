@@ -51,10 +51,10 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("RU Graduating");
         }
-        toolbar.setSubtitle("Suggested Classes");
+        toolbar.setSubtitle("Suggested Courses");
         toolbar.inflateMenu(R.menu.options_menu);
 
-        //TODO: get these from database
+        //TODO: get these options from DB
         String[] levelArray = {"No Selection", "0", "1", "2"};
         String[] programArray = {"No Selection", "Computer Engineering", "Computer Science"};
         String[] reqArray = {"No Selection", "Technical Electives", "Computer Electives"};
@@ -86,7 +86,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         // Refresh button
         Button refreshButton = findViewById(R.id.refresh_suggested_button);
         refreshButton.setOnClickListener(v -> {
-            //TODO: refresh courses based on spinner choices
+            //TODO: On refresh, do query for suggested courses with the spinner parameters
         });
 
         // Back button
@@ -112,7 +112,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         String netID = "AmanyTest";
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
 
-        //TODO: this isnt returning anything
+        //TODO: this isnt returning anything right now, fix? Also put this into profile activity when getting all classes
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
                     //get values from json
@@ -181,7 +181,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch(adapterView.getId()) {
-            //TODO: filter based on selection
+            //TODO: filter options based on the selections above
             case R.id.level_spinner:
                 break;
             case R.id.program_spinner:

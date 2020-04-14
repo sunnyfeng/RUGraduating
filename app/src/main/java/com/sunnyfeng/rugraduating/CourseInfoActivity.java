@@ -61,11 +61,11 @@ public class CourseInfoActivity extends AppCompatActivity {
         toolbar.setSubtitle("Course Information");
         toolbar.inflateMenu(R.menu.options_menu);
 
-        // Set up button
+        // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_course);
         backToMainButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(CourseInfoActivity.this, MainActivity.class);
-            startActivity(intent1);
+            Intent intentMain = new Intent(CourseInfoActivity.this, MainActivity.class);
+            startActivity(intentMain);
         });
     }
 
@@ -75,7 +75,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
         prereqRecyclerView.setHasFixedSize(true);
         prereqRecyclerView.setLayoutManager(prereqLayoutManager);
-        //TODO: save prereqs as Course objects
+        //TODO: save prereqs as Course objects and use CourseItemListAdapter instead
         prereqAdapter = new StringArrayAdapter(currentCourse.getPrereqs());
         prereqRecyclerView.setAdapter(prereqAdapter);
 
@@ -84,7 +84,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         coreqRecyclerView = findViewById(R.id.coreq_recyclerView);
         coreqRecyclerView.setHasFixedSize(true);
         coreqRecyclerView.setLayoutManager(coreqLayoutManager);
-        //TODO: save coreqs as Course objects
+        //TODO: save coreqas as Course objects and use CourseItemListAdapter instead
         coreqAdapter = new StringArrayAdapter(currentCourse.getCoreqs());
         coreqRecyclerView.setAdapter(coreqAdapter);
     }

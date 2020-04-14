@@ -1,6 +1,5 @@
 package com.sunnyfeng.rugraduating.objects;
 
-
 import java.io.Serializable;
 
 public class Course implements Serializable, CourseItem {
@@ -16,7 +15,7 @@ public class Course implements Serializable, CourseItem {
 
     public Course(String _id, String name, Integer credits, String department, String school,
                   String description, String[] prereqs, String[] coreqs) {
-                                    //TODO: Make these course objects
+                                    //TODO: Make these string arrays into course objects
         this._id = _id;
         this.name = name;
         this.credits = credits;
@@ -102,7 +101,7 @@ public class Course implements Serializable, CourseItem {
     }
 
     @Override
-    public String getCode() {
+    public String getSubtitle() {
         return _id;
     }
 

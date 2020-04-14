@@ -46,7 +46,7 @@ public class AddClassesActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.options_menu);
 
 
-        // add class classes button
+        // add classes button
         Button addClassButton = findViewById(R.id.add_class_button);
         addClassButton.setOnClickListener(v -> {
             EditText codeEditText = findViewById(R.id.add_class_edit_text);
@@ -54,7 +54,7 @@ public class AddClassesActivity extends AppCompatActivity {
             EditText gradeEditText = findViewById(R.id.grade_edit_text);
             String grade = gradeEditText.getText().toString();
 
-            //TODO: add some error checking here, maybe not adding if it's already in there
+            //TODO: add some error checking here (such as not adding if it's already in there)
             if (code.length() > 0 && grade.length() > 0) {
                 codes.add(code + ": " + grade);
                 codesAdapter.notifyDataSetChanged();

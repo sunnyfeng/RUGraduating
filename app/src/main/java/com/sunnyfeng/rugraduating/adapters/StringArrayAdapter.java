@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.R;
 
+//TODO: This should only be used by showing program and other strings, all courses should be using
+// CourseItemListAdapter
 public class StringArrayAdapter extends
         RecyclerView.Adapter<StringArrayAdapter.MyViewHolder> {
     private String[] strings;
@@ -49,12 +51,6 @@ public class StringArrayAdapter extends
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final String string = strings[position];
         holder.displayView.setText(string);
-        //TODO: maybe then search for this object and then pass it to course info ? what do we do on click
-//        holder.itemView.setOnClickListener(view -> {
-//            Intent intent = new Intent(holder.context, CourseInfoActivity.class);
-//            intent.putExtra(MainActivity.COURSE_INTENT_KEY, curCourse);
-//            holder.context.startActivity(intent);
-//        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

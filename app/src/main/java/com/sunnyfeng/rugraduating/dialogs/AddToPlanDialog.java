@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import com.sunnyfeng.rugraduating.R;
 
+//TODO: make this another activity that resembles addClassesActivity
 public class AddToPlanDialog extends Dialog implements android.view.View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private Activity activity;
@@ -34,6 +35,7 @@ public class AddToPlanDialog extends Dialog implements android.view.View.OnClick
 
         // Drop down menu for majors
         Spinner spinner = findViewById(R.id.dialog_spin_course_add_course);
+        //TODO: get majors from database instead of using placeholder "R.array.class_array"
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(activity,
                 R.array.class_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -43,9 +45,9 @@ public class AddToPlanDialog extends Dialog implements android.view.View.OnClick
 
     @Override
     public void onClick(View v) {
-        // TODO: add functionality
         switch (v.getId()) {
             case R.id.dialog_ok_add_course:
+                // TODO: include functionality to add course to plan
                 dismiss();
                 break;
             case R.id.dialog_cancel_add_course:
@@ -59,7 +61,7 @@ public class AddToPlanDialog extends Dialog implements android.view.View.OnClick
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        //TODO: save the chosen program when it's selected
     }
 
     @Override

@@ -11,7 +11,7 @@ public class Requirement implements Serializable {
     public boolean isCredits;
     public int totalRequired;
     public int alreadyCompleted;
-    ArrayList<CourseItem> coursesTaken;
+    ArrayList<CourseItem> coursesTaken; // not in constructor because optional, may be empty
 
     /**
      * @param title name of requirement
@@ -25,6 +25,7 @@ public class Requirement implements Serializable {
         this.totalRequired = totalRequired;
         this.alreadyCompleted = alreadyCompleted;
 
+        // TODO: alreadyCompleted should equal the length of coursesTaken array
         this.coursesTaken = new ArrayList<>();
     }
 

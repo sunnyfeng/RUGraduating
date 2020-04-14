@@ -58,15 +58,12 @@ public class RequirementsListAdapter extends RecyclerView.Adapter<RequirementsLi
         holder.progressBar.setMax(curReq.totalRequired);
         holder.progressBar.setProgress(curReq.alreadyCompleted);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(holder.context, RequirementsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(MainActivity.REQUIREMENT_INTENT_KEY, curReq);
-                intent.putExtras(bundle);
-                holder.context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(holder.context, RequirementsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(MainActivity.REQUIREMENT_INTENT_KEY, curReq);
+            intent.putExtras(bundle);
+            holder.context.startActivity(intent);
         });
     }
 

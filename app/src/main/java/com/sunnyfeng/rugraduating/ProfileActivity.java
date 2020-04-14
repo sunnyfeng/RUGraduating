@@ -62,21 +62,20 @@ public class ProfileActivity extends AppCompatActivity {
             dialogPlan.show();
         });
 
-        // Set up button
+        // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_profile);
         backToMainButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent intentMain = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(intentMain);
         });
 
         setUpRecyclerViews();
     }
 
     private void setUpRecyclerViews() {
-        // Test
+        //TODO: replace with student's courses from DB
         ArrayList<CourseItem> courses = new ArrayList<>();
         courses.add(getPrinCommCourse());
-        String [] programs = {"Computer Engineering", "Computer Science"};
 
         // Set up courses recycler view
         coursesLayoutManager = new LinearLayoutManager(this);
@@ -85,6 +84,9 @@ public class ProfileActivity extends AppCompatActivity {
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
         coursesAdapter = new CourseItemListAdapter(courses);
         coursesRecyclerView.setAdapter(coursesAdapter);
+
+        //TODO: replace with student's programs from DB
+        String [] programs = {"Computer Engineering", "Computer Science"};
 
         // Set up programs recycler view
         programsLayoutManager = new LinearLayoutManager(this);
@@ -99,10 +101,11 @@ public class ProfileActivity extends AppCompatActivity {
         planRecyclerView = findViewById(R.id.planned_courses_recyclerView);
         planRecyclerView.setHasFixedSize(true);
         planRecyclerView.setLayoutManager(planLayoutManager);
-        planAdapter = new CourseItemListAdapter(courses); //TODO: add planned courses to this
+        planAdapter = new CourseItemListAdapter(courses); //TODO: include student's planned courses
         planRecyclerView.setAdapter(planAdapter);
     }
 
+    //TODO: delete this test when everything works
     private Course getPrinCommCourse() {
         Course prinComm = new Course("14:332:301", "Wireless Revolution", 3, "ECE", "SOE",
                 "This \"flipped\" undergraduate course provides a broad view of how new technologies, economic forces, political constraints, and competitive warfare have created and shaped the \"wireless revolution\" in the last 50 years.  It offers a view inside the world of corporate management-- how strategies were created and why many have failed—and gives students a chance to develop their own strategic skills by solving real-world problems.  The course includes a historical overview of communications and communication systems, basics of wireless technology, technology and politics of cellular, basics of corporate finance, economics of cellular systems and spectrum auctions, case studies in wireless business strategy, the strategic implications of unregulated spectrum, a comparison of 3G, 4G, 5G and WiFi, IoT and the wireless future. Students are required to interact during the lectures in a flipped classroom setting—necessitating pre-lecture preparation, in-class attendance and participation.",

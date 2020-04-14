@@ -7,6 +7,7 @@ public class Equivalency implements Serializable, CourseItem {
     private String _id;
     private String[] courses;
 
+    // TODO: make string array into Course objects
     public Equivalency(String _id, String[] courses) {
         this._id = _id;
         this.courses = courses;
@@ -39,7 +40,7 @@ public class Equivalency implements Serializable, CourseItem {
     }
 
     @Override
-    public String getCode() {
+    public String getSubtitle() {
         return courses.length + " courses";
     }
 }

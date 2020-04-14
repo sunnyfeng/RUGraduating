@@ -60,24 +60,24 @@ public class CourseItemListAdapter extends
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final CourseItem curCourse = courses.get(position);
-        holder.titleView.setText(curCourse.getTitle());
-        holder.codeView.setText(curCourse.getCode());
+        final CourseItem courseItem = courses.get(position);
+        holder.titleView.setText(courseItem.getTitle());
+        holder.codeView.setText(courseItem.getSubtitle());
         holder.itemView.setOnClickListener(view -> {
-            switch (curCourse.getType()){
+            switch (courseItem.getType()){
                 case CourseItem.TYPE_COURSE:
                     Intent intentCourse = new Intent(holder.context, CourseInfoActivity.class);
-                    intentCourse.putExtra(MainActivity.COURSE_INTENT_KEY, (Course) curCourse);
+                    intentCourse.putExtra(MainActivity.COURSE_INTENT_KEY, (Course) courseItem);
                     holder.context.startActivity(intentCourse);
                     break;
                 case CourseItem.TYPE_EQUIV:
                     Intent intentEquiv = new Intent(holder.context, EquivInfoActivity.class);
-                    intentEquiv.putExtra(MainActivity.EQUIV_INTENT_KEY, (Equivalency) curCourse);
+                    intentEquiv.putExtra(MainActivity.EQUIV_INTENT_KEY, (Equivalency) courseItem);
                     holder.context.startActivity(intentEquiv);
                     break;
                 case CourseItem.TYPE_REGEX:
                     Intent intentRegex = new Intent(holder.context, RegexInfoActivity.class);
-                    intentRegex.putExtra(MainActivity.REGEX_INTENT_KEY, (Regex) curCourse);
+                    intentRegex.putExtra(MainActivity.REGEX_INTENT_KEY, (Regex) courseItem);
                     holder.context.startActivity(intentRegex);
                     break;
             }

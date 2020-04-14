@@ -34,6 +34,7 @@ public class AddProgramDialog extends Dialog implements android.view.View.OnClic
 
         // Drop down menu for majors
         Spinner spinner = findViewById(R.id.dialog_spin_course_add_program);
+        //TODO: get majors from database instead of using placeholder "R.array.major_array"
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(activity,
                 R.array.major_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -44,9 +45,9 @@ public class AddProgramDialog extends Dialog implements android.view.View.OnClic
 
     @Override
     public void onClick(View v) {
-        // TODO: add functionality
         switch (v.getId()) {
             case R.id.dialog_ok_add_program:
+                // TODO: include functionality to add the selected program to the DB
                 dismiss();
                 break;
             case R.id.dialog_cancel_add_program:
@@ -60,11 +61,9 @@ public class AddProgramDialog extends Dialog implements android.view.View.OnClic
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        //TODO: save the chosen program when it's selected
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+    public void onNothingSelected(AdapterView<?> adapterView) { }
 }
