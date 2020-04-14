@@ -39,11 +39,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private RecyclerView.Adapter requirementsAdapter;
     private RecyclerView.LayoutManager requirementLayoutManager;
 
-//    private RecyclerView suggestedRecyclerView;
-//    private RecyclerView.Adapter suggestedAdapter;
-//    private RecyclerView.LayoutManager suggestedLayoutManager;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

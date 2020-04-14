@@ -58,6 +58,8 @@ public class RequirementsActivity extends AppCompatActivity {
         progBar.setMax(requirement.totalRequired);
         progBar.setProgress(requirement.alreadyCompleted);
 
+        //TODO: get from database how many student has completed and how many more they need to
+        // complete
         TextView completedNum = findViewById(R.id.completed_courses_credits);
         int completed = currentReq.alreadyCompleted;
         TextView remainingNum = findViewById(R.id.remaining_classes_credits);
@@ -76,8 +78,8 @@ public class RequirementsActivity extends AppCompatActivity {
         // Set up button
         Button backToMainButton = findViewById(R.id.back_to_main_req);
         backToMainButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(RequirementsActivity.this, MainActivity.class);
-            startActivity(intent1);
+            Intent intentMain = new Intent(RequirementsActivity.this, MainActivity.class);
+            startActivity(intentMain);
         });
     }
 
@@ -100,7 +102,7 @@ public class RequirementsActivity extends AppCompatActivity {
     }
 
     private ArrayList<CourseItem> getAllCoursesThatSatisfy(Requirement req) {
-        // TODO: get all classes that can fulfill this requirement
+        // TODO: get all classes that can fulfill this requirement from DB
         return new ArrayList<>();
     }
 

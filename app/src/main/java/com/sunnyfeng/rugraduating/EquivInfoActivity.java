@@ -49,11 +49,11 @@ public class EquivInfoActivity extends AppCompatActivity {
         toolbar.setSubtitle("Equivalency Information");
         toolbar.inflateMenu(R.menu.options_menu);
 
-        // Set up button
+        // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_equiv);
         backToMainButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(EquivInfoActivity.this, MainActivity.class);
-            startActivity(intent1);
+            Intent intentMain = new Intent(EquivInfoActivity.this, MainActivity.class);
+            startActivity(intentMain);
         });
     }
 
@@ -64,7 +64,7 @@ public class EquivInfoActivity extends AppCompatActivity {
         equivRecyclerView = findViewById(R.id.equiv_recyclerView);
         equivRecyclerView.setHasFixedSize(true);
         equivRecyclerView.setLayoutManager(equivLayoutManager);
-        //TODO: save equivs as Course objects
+        //TODO: save equivs as Course objects and use CourseItemListAdapter instead
         equivAdapter = new StringArrayAdapter(equivalency.getCourses());
         equivRecyclerView.setAdapter(equivAdapter);
     }

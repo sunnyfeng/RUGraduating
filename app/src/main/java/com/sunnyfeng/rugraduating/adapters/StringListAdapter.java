@@ -12,6 +12,8 @@ import com.sunnyfeng.rugraduating.R;
 
 import java.util.ArrayList;
 
+//TODO: This should only be used by showing program and other strings, all courses should be using
+// CourseItemListAdapter
 public class StringListAdapter extends
         RecyclerView.Adapter<StringListAdapter.MyViewHolder> {
     private ArrayList<String> strings;
@@ -51,7 +53,6 @@ public class StringListAdapter extends
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final String string = strings.get(position);
         holder.displayView.setText(string);
-        //TODO: maybe then search for this object and then pass it to course info ? what do we do on click
     }
 
     // Return the size of your dataset (invoked by the layout manager)

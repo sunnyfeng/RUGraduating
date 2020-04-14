@@ -46,14 +46,14 @@ public class RegexInfoActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("RU Graduating");
         }
-        toolbar.setSubtitle("regexalency Information");
+        toolbar.setSubtitle("Regex Information");
         toolbar.inflateMenu(R.menu.options_menu);
 
-        // Set up button
+        // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_regex);
         backToMainButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(RegexInfoActivity.this, MainActivity.class);
-            startActivity(intent1);
+            Intent intentMain = new Intent(RegexInfoActivity.this, MainActivity.class);
+            startActivity(intentMain);
         });
     }
 
@@ -63,7 +63,7 @@ public class RegexInfoActivity extends AppCompatActivity {
         regexRecyclerView = findViewById(R.id.regex_recyclerView);
         regexRecyclerView.setHasFixedSize(true);
         regexRecyclerView.setLayoutManager(regexLayoutManager);
-        //TODO: save regexs as Course objects
+        //TODO: save regexs as Course objects and use CourseItemListAdapter instead
         regexAdapter = new StringArrayAdapter(regex.getCourses());
         regexRecyclerView.setAdapter(regexAdapter);
     }
