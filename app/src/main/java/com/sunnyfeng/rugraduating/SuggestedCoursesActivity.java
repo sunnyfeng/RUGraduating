@@ -112,6 +112,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         String netID = "AmanyTest";
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
 
+        //TODO: this isnt returning anything
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
                     //get values from json
@@ -136,8 +137,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     // TODO: Handle error
                     System.out.println(error);
                 });
-        suggestedAdapter = new CourseItemListAdapter(suggestedTest);
-        suggestedRecyclerView.setAdapter(suggestedAdapter);
+        //suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+        //suggestedRecyclerView.setAdapter(suggestedAdapter);
 
         queue.add(jsonObjectRequest);
     }
