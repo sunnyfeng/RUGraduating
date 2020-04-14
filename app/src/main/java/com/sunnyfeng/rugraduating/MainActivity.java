@@ -29,8 +29,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     // intent keys
-    public static final String REQUIREMENT_INTENT_KEY = "requirements intent key";
-    public static final String COURSE_INTENT_KEY = "courses intent key";
+    public static final String REQUIREMENT_INTENT_KEY = "requirement intent key";
+    public static final String COURSE_INTENT_KEY = "course intent key";
+    public static final String EQUIV_INTENT_KEY = "equiv intent key";
+    public static final String REGEX_INTENT_KEY = "regex intent key";
 
 
     private RecyclerView requirementsRecyclerView;

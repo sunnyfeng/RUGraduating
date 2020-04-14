@@ -11,7 +11,7 @@ public class Requirement implements Serializable {
     public boolean isCredits;
     public int totalRequired;
     public int alreadyCompleted;
-    ArrayList<Course> coursesTaken;
+    ArrayList<CourseItem> coursesTaken;
 
     /**
      * @param title name of requirement
@@ -28,11 +28,11 @@ public class Requirement implements Serializable {
         this.coursesTaken = new ArrayList<>();
     }
 
-    public void addCourseTaken(Course courseTaken) {
+    public void addCourseTaken(CourseItem courseTaken) {
         coursesTaken.add(courseTaken);
     }
 
-    public ArrayList<Course> getCoursesTaken() {
+    public ArrayList<CourseItem> getCoursesTaken() {
         return coursesTaken;
     }
 }

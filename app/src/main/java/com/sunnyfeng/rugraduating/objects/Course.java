@@ -3,7 +3,7 @@ package com.sunnyfeng.rugraduating.objects;
 
 import java.io.Serializable;
 
-public class Course implements Serializable {
+public class Course implements Serializable, CourseItem {
 
     private String _id;
     private String name;
@@ -89,6 +89,21 @@ public class Course implements Serializable {
 
     public void setCoreqs(String[] coreqs) {
         this.coreqs = coreqs;
+    }
+
+    @Override
+    public int getType() {
+        return TYPE_COURSE;
+    }
+
+    @Override
+    public String getTitle() {
+        return name;
+    }
+
+    @Override
+    public String getCode() {
+        return _id;
     }
 
 }

@@ -14,10 +14,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
-import com.sunnyfeng.rugraduating.objects.Course;
+import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Requirement;
 
 import java.util.ArrayList;
@@ -87,7 +87,7 @@ public class RequirementsActivity extends AppCompatActivity {
         completedRecyclerView = findViewById(R.id.completed_courses_recyclerView);
         completedRecyclerView.setHasFixedSize(true);
         completedRecyclerView.setLayoutManager(completedLayoutManager);
-        completedAdapter = new CoursesListAdapter(currentReq.getCoursesTaken());
+        completedAdapter = new CourseItemListAdapter(currentReq.getCoursesTaken());
         completedRecyclerView.setAdapter(completedAdapter);
 
         // Set up fulfill recycler view
@@ -95,11 +95,11 @@ public class RequirementsActivity extends AppCompatActivity {
         fulfillRecyclerView = findViewById(R.id.remaining_recyclerView);
         fulfillRecyclerView.setHasFixedSize(true);
         fulfillRecyclerView.setLayoutManager(fulfillLayoutManager);
-        fulfillAdapter = new CoursesListAdapter(getAllCoursesThatSatisfy(currentReq));
+        fulfillAdapter = new CourseItemListAdapter(getAllCoursesThatSatisfy(currentReq));
         fulfillRecyclerView.setAdapter(fulfillAdapter);
     }
 
-    private ArrayList<Course> getAllCoursesThatSatisfy(Requirement req) {
+    private ArrayList<CourseItem> getAllCoursesThatSatisfy(Requirement req) {
         // TODO: get all classes that can fulfill this requirement
         return new ArrayList<>();
     }

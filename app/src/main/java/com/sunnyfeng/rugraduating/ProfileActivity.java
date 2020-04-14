@@ -9,11 +9,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
+import com.sunnyfeng.rugraduating.objects.CourseItem;
 
 import java.util.ArrayList;
 
@@ -73,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUpRecyclerViews() {
         // Test
-        ArrayList<Course> courses = new ArrayList<>();
+        ArrayList<CourseItem> courses = new ArrayList<>();
         courses.add(getPrinCommCourse());
         String [] programs = {"Computer Engineering", "Computer Science"};
 
@@ -82,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
         coursesRecyclerView = findViewById(R.id.all_classes_recyclerView);
         coursesRecyclerView.setHasFixedSize(true);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
-        coursesAdapter = new CoursesListAdapter(courses);
+        coursesAdapter = new CourseItemListAdapter(courses);
         coursesRecyclerView.setAdapter(coursesAdapter);
 
         // Set up programs recycler view
@@ -98,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
         planRecyclerView = findViewById(R.id.planned_courses_recyclerView);
         planRecyclerView.setHasFixedSize(true);
         planRecyclerView.setLayoutManager(planLayoutManager);
-        planAdapter = new CoursesListAdapter(courses); //TODO: add planned courses to this
+        planAdapter = new CourseItemListAdapter(courses); //TODO: add planned courses to this
         planRecyclerView.setAdapter(planAdapter);
     }
 

@@ -2,7 +2,6 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,38 +16,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
-import com.sunnyfeng.rugraduating.objects.Course;
+import com.sunnyfeng.rugraduating.objects.Regex;
 
-public class CourseInfoActivity extends AppCompatActivity {
+public class RegexInfoActivity extends AppCompatActivity {
 
-    private RecyclerView prereqRecyclerView;
-    private RecyclerView.Adapter prereqAdapter;
-    private RecyclerView.LayoutManager prereqLayoutManager;
+    private RecyclerView regexRecyclerView;
+    private RecyclerView.Adapter regexAdapter;
+    private RecyclerView.LayoutManager regexLayoutManager;
 
-    private RecyclerView coreqRecyclerView;
-    private RecyclerView.Adapter coreqAdapter;
-    private RecyclerView.LayoutManager coreqLayoutManager;
-
-    private Course currentCourse;
+    private Regex regex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_info);
+        setContentView(R.layout.activity_regex_info);
 
         Intent intent = getIntent();
-        Course course = (Course) intent.getSerializableExtra(MainActivity.COURSE_INTENT_KEY);
-        currentCourse = course;
+        Regex regex = (Regex) intent.getSerializableExtra(MainActivity.REGEX_INTENT_KEY);
+        this.regex = regex;
 
-        TextView className = findViewById(R.id.class_name);
-        className.setText(course.getName());
-        TextView classCode = findViewById(R.id.class_code);
-        classCode.setText(course.get_id());
-        TextView classCredit = findViewById(R.id.credit_num_display);
-        classCredit.setText(String.valueOf(course.getCredits()));
-        TextView description = findViewById(R.id.class_description_display);
-        description.setText(course.getDescription());
-        description.setMovementMethod(new ScrollingMovementMethod()); //make scrollable
+        TextView title = findViewById(R.id.regex_title);
+        title.setText(regex.getTitle());
 
         setUpRecyclerViews();
 
@@ -58,35 +46,26 @@ public class CourseInfoActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("RU Graduating");
         }
-        toolbar.setSubtitle("Course Information");
+        toolbar.setSubtitle("regexalency Information");
         toolbar.inflateMenu(R.menu.options_menu);
 
         // Set up button
-        Button backToMainButton = findViewById(R.id.back_to_main_course);
+        Button backToMainButton = findViewById(R.id.back_to_main_regex);
         backToMainButton.setOnClickListener(v -> {
-            Intent intent1 = new Intent(CourseInfoActivity.this, MainActivity.class);
+            Intent intent1 = new Intent(RegexInfoActivity.this, MainActivity.class);
             startActivity(intent1);
         });
     }
 
     private void setUpRecyclerViews() {
-        // Set up prereq recycler view
-        prereqLayoutManager = new LinearLayoutManager(this);
-        prereqRecyclerView = findViewById(R.id.prereq_recyclerView);
-        prereqRecyclerView.setHasFixedSize(true);
-        prereqRecyclerView.setLayoutManager(prereqLayoutManager);
-        //TODO: save prereqs as Course objects
-        prereqAdapter = new StringArrayAdapter(currentCourse.getPrereqs());
-        prereqRecyclerView.setAdapter(prereqAdapter);
-
-        // Set up coreq recycler view
-        coreqLayoutManager = new LinearLayoutManager(this);
-        coreqRecyclerView = findViewById(R.id.coreq_recyclerView);
-        coreqRecyclerView.setHasFixedSize(true);
-        coreqRecyclerView.setLayoutManager(coreqLayoutManager);
-        //TODO: save coreqs as Course objects
-        coreqAdapter = new StringArrayAdapter(currentCourse.getCoreqs());
-        coreqRecyclerView.setAdapter(coreqAdapter);
+        // Set up regex recycler view
+        regexLayoutManager = new LinearLayoutManager(this);
+        regexRecyclerView = findViewById(R.id.regex_recyclerView);
+        regexRecyclerView.setHasFixedSize(true);
+        regexRecyclerView.setLayoutManager(regexLayoutManager);
+        //TODO: save regexs as Course objects
+        regexAdapter = new StringArrayAdapter(regex.getCourses());
+        regexRecyclerView.setAdapter(regexAdapter);
     }
 
     // Inflate options menu
@@ -99,7 +78,7 @@ public class CourseInfoActivity extends AppCompatActivity {
     // Add actions when option in menu is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
+        Log.d(this.getLocalClassName(), "Selected Item: " + item.getTitle());
         switch (item.getItemId()) {
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);

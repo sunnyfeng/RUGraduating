@@ -1,6 +1,8 @@
 package com.sunnyfeng.rugraduating.objects;
 
-public class Equivalency {
+import java.io.Serializable;
+
+public class Equivalency implements Serializable, CourseItem {
 
     private String _id;
     private String[] courses;
@@ -24,5 +26,20 @@ public class Equivalency {
 
     public void setCourses(String[] courses) {
         this.courses = courses;
+    }
+
+    @Override
+    public int getType() {
+        return TYPE_EQUIV;
+    }
+
+    @Override
+    public String getTitle() {
+        return _id;
+    }
+
+    @Override
+    public String getCode() {
+        return courses.length + " courses";
     }
 }

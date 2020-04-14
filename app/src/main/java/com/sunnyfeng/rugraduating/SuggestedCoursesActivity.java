@@ -22,11 +22,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sunnyfeng.rugraduating.adapters.CoursesListAdapter;
+import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
+import com.sunnyfeng.rugraduating.objects.CourseItem;
+import com.sunnyfeng.rugraduating.objects.Equivalency;
 
 import java.util.ArrayList;
 
@@ -101,7 +103,9 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         suggestedRecyclerView.setHasFixedSize(true);
         suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
 
-        ArrayList<Course> suggestedTest = new ArrayList<>();
+        ArrayList<CourseItem> suggestedTest = new ArrayList<>();
+        String[] testEquivCourses = {"Course 1", "Course 2"};
+        suggestedTest.add(new Equivalency("EQUIV", testEquivCourses));
 
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -125,12 +129,15 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                         System.out.println(e.toString());
                     }
                     //update view with new adapter
-                    suggestedAdapter = new CoursesListAdapter(suggestedTest);
+                    Log.d("Suggested", suggestedTest.toString());
+                    suggestedAdapter = new CourseItemListAdapter(suggestedTest);
                     suggestedRecyclerView.setAdapter(suggestedAdapter);
                 }, error -> {
                     // TODO: Handle error
                     System.out.println(error);
                 });
+        suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+        suggestedRecyclerView.setAdapter(suggestedAdapter);
 
         queue.add(jsonObjectRequest);
     }

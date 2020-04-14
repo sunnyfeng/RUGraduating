@@ -6,4 +6,8 @@ public interface CourseItem {
     int TYPE_REGEX = 103;
 
     int getType();
+
+    String getTitle();
+
+    String getCode();
 }
