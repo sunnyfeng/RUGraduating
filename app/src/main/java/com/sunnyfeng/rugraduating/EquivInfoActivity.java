@@ -13,10 +13,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Equivalency;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EquivInfoActivity extends AppCompatActivity {
 
@@ -65,7 +70,7 @@ public class EquivInfoActivity extends AppCompatActivity {
         equivRecyclerView.setHasFixedSize(true);
         equivRecyclerView.setLayoutManager(equivLayoutManager);
         //TODO: save equivs as Course objects and use CourseItemListAdapter instead
-        equivAdapter = new StringArrayAdapter(equivalency.getCourses());
+        equivAdapter = new CourseItemListAdapter(new ArrayList<>(equivalency.getCourses()));
         equivRecyclerView.setAdapter(equivAdapter);
     }
 

@@ -1,14 +1,16 @@
 package com.sunnyfeng.rugraduating.objects;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Equivalency implements Serializable, CourseItem {
 
     private String _id;
-    private String[] courses;
+    private ArrayList<Course> courses;
 
     // TODO: make string array into Course objects
-    public Equivalency(String _id, String[] courses) {
+    public Equivalency(String _id, ArrayList<Course> courses) {
         this._id = _id;
         this.courses = courses;
     }
@@ -21,11 +23,11 @@ public class Equivalency implements Serializable, CourseItem {
         this._id = _id;
     }
 
-    public String[] getCourses() {
+    public ArrayList<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(String[] courses) {
+    public void setCourses(ArrayList<Course> courses) {
         this.courses = courses;
     }
 
@@ -41,6 +43,6 @@ public class Equivalency implements Serializable, CourseItem {
 
     @Override
     public String getSubtitle() {
-        return courses.length + " courses";
+        return courses.size() + " courses";
     }
 }

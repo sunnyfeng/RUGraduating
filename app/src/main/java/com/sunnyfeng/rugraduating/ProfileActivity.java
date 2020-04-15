@@ -2,6 +2,7 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +10,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
+import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
@@ -17,6 +25,7 @@ import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -75,7 +84,6 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUpRecyclerViews() {
         //TODO: replace with student's courses from DB
         ArrayList<CourseItem> courses = new ArrayList<>();
-        courses.add(getPrinCommCourse());
 
         // Set up courses recycler view
         coursesLayoutManager = new LinearLayoutManager(this);
@@ -84,6 +92,39 @@ public class ProfileActivity extends AppCompatActivity {
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
         coursesAdapter = new CourseItemListAdapter(courses);
         coursesRecyclerView.setAdapter(coursesAdapter);
+
+        //a user's taken courses are always just courses, no need to add processing for equiv. or regex here
+        //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String netID = "AmanyTest";
+        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    //get values from json
+                    try{
+                        int i = 0;
+                        int responseLength = response.length();
+                        String classString;
+                        //build courses with values
+                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();;
+                        while(i < responseLength){
+                            classString = response.getString(String.valueOf(i++));
+                            courses.add(gson.fromJson(classString, Course.class));
+                        }
+                    } catch(Exception e){
+                        System.out.println(e.toString());
+                    }
+                    //update view with new adapter
+                    Log.d("Suggested", courses.toString());
+                    coursesAdapter = new CourseItemListAdapter(courses);
+                    coursesRecyclerView.setAdapter(coursesAdapter);
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println(error);
+                });
+
+        queue.add(jsonObjectRequest);
 
         //TODO: replace with student's programs from DB
         String [] programs = {"Computer Engineering", "Computer Science"};
@@ -103,6 +144,7 @@ public class ProfileActivity extends AppCompatActivity {
         planRecyclerView.setLayoutManager(planLayoutManager);
         planAdapter = new CourseItemListAdapter(courses); //TODO: include student's planned courses
         planRecyclerView.setAdapter(planAdapter);
+
     }
 
     //TODO: delete this test when everything works

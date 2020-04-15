@@ -14,9 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
+import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Regex;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RegexInfoActivity extends AppCompatActivity {
 
@@ -64,7 +69,7 @@ public class RegexInfoActivity extends AppCompatActivity {
         regexRecyclerView.setHasFixedSize(true);
         regexRecyclerView.setLayoutManager(regexLayoutManager);
         //TODO: save regexs as Course objects and use CourseItemListAdapter instead
-        regexAdapter = new StringArrayAdapter(regex.getCourses());
+        regexAdapter = new CourseItemListAdapter(new ArrayList<>(regex.getCourses()));
         regexRecyclerView.setAdapter(regexAdapter);
     }
 

@@ -1,6 +1,7 @@
 package com.sunnyfeng.rugraduating.objects;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Course implements Serializable, CourseItem {
 
@@ -10,11 +11,11 @@ public class Course implements Serializable, CourseItem {
     private String department;
     private String school;
     private String description;
-    private String[] prereqs;
-    private String[] coreqs;
+    private ArrayList<String> prereqs;
+    private ArrayList<String> coreqs;
 
     public Course(String _id, String name, Integer credits, String department, String school,
-                  String description, String[] prereqs, String[] coreqs) {
+                  String description, ArrayList<String> prereqs, ArrayList<String> coreqs) {
                                     //TODO: Make these string arrays into course objects
         this._id = _id;
         this.name = name;
@@ -74,19 +75,19 @@ public class Course implements Serializable, CourseItem {
         this.description = description;
     }
 
-    public String[] getPrereqs() {
+    public ArrayList<String> getPrereqs() {
         return prereqs;
     }
 
-    public void setPrereqs(String[] prereqs) {
+    public void setPrereqs(ArrayList<String> prereqs) {
         this.prereqs = prereqs;
     }
 
-    public String[] getCoreqs() {
+    public ArrayList<String> getCoreqs() {
         return coreqs;
     }
 
-    public void setCoreqs(String[] coreqs) {
+    public void setCoreqs(ArrayList<String> coreqs) {
         this.coreqs = coreqs;
     }
 

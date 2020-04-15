@@ -22,6 +22,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
@@ -29,6 +31,10 @@ import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Equivalency;
+import com.sunnyfeng.rugraduating.objects.Regex;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -104,33 +110,59 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         suggestedRecyclerView.setLayoutManager(suggestedLayoutManager);
 
         ArrayList<CourseItem> suggestedTest = new ArrayList<>();
-        String[] testEquivCourses = {"Course 1", "Course 2"};
-        suggestedTest.add(new Equivalency("EQUIV", testEquivCourses));
+        suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+        suggestedRecyclerView.setAdapter(suggestedAdapter);
 
+        //this query works for courses, equivalencies, and regexes
+        //should have an array of courses
+        String[] testCourses = {"14:332:331", "Calculus II Math/Phys Equivalency", "01:160:12.*"};
+        //convert to a string
+        StringBuilder sb = new StringBuilder("{");
+        for(int i = 0; i < testCourses.length; i++){
+            sb.append(testCourses[i]);
+            sb.append(",");
+        }
+        sb.append("}");
+        String testCoursesString = sb.toString();
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
         RequestQueue queue = Volley.newRequestQueue(this);
-        String netID = "AmanyTest";
-        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
-
-        //TODO: this isnt returning anything right now, fix? Also put this into profile activity when getting all classes
+        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
                     //get values from json
                     try{
                         int i = 0;
-                        int responseLength = response.length();
                         String classString;
                         //build courses with values
-                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();;
-                        while(i < responseLength){
-                            classString = response.getString(String.valueOf(i++));
+                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+
+                        //add courses
+                        JSONArray respCourses = (JSONArray) response.get("courses");
+                        int respCoursesLength = respCourses.length();
+                        while(i < respCoursesLength){
+                            classString = respCourses.getString(i++);
                             suggestedTest.add(gson.fromJson(classString, Course.class));
+                        }
+                        //add equivalencies
+                        i=0;
+                        JSONArray respEquivs = (JSONArray) response.get("equivalencies");
+                        int respEquivsLength = respEquivs.length();
+                        while(i < respEquivsLength){
+                            classString = respEquivs.getString(i++);
+                            suggestedTest.add(gson.fromJson(classString, Equivalency.class));
+                        }
+                        //add regexes
+                        i=0;
+                        JSONArray respRegexes = (JSONArray)response.get("regexes");
+                        int respRegexesLength = respRegexes.length();
+                        while(i < respRegexesLength){
+                            classString = respRegexes.getString(i++);
+                            suggestedTest.add(gson.fromJson(classString, Regex.class));
                         }
                     } catch(Exception e){
                         System.out.println(e.toString());
                     }
                     //update view with new adapter
-                    Log.d("Suggested", suggestedTest.toString());
                     suggestedAdapter = new CourseItemListAdapter(suggestedTest);
                     suggestedRecyclerView.setAdapter(suggestedAdapter);
                 }, error -> {

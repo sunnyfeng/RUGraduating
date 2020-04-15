@@ -19,6 +19,8 @@ import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 
+import java.util.Arrays;
+
 public class CourseInfoActivity extends AppCompatActivity {
 
     private RecyclerView prereqRecyclerView;
@@ -76,7 +78,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         prereqRecyclerView.setHasFixedSize(true);
         prereqRecyclerView.setLayoutManager(prereqLayoutManager);
         //TODO: save prereqs as Course objects and use CourseItemListAdapter instead
-        prereqAdapter = new StringArrayAdapter(currentCourse.getPrereqs());
+        prereqAdapter = new StringArrayAdapter(currentCourse.getPrereqs().toArray(new String[0]));
         prereqRecyclerView.setAdapter(prereqAdapter);
 
         // Set up coreq recycler view
@@ -85,7 +87,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         coreqRecyclerView.setHasFixedSize(true);
         coreqRecyclerView.setLayoutManager(coreqLayoutManager);
         //TODO: save coreqas as Course objects and use CourseItemListAdapter instead
-        coreqAdapter = new StringArrayAdapter(currentCourse.getCoreqs());
+        coreqAdapter = new StringArrayAdapter(currentCourse.getCoreqs().toArray(new String[0]));
         coreqRecyclerView.setAdapter(coreqAdapter);
     }
 
