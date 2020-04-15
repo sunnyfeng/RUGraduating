@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerViews() {
-        //TODO: replace with student's courses from DB
+        //TODO: separate student courses into regular and planned courses
         ArrayList<CourseItem> courses = new ArrayList<>();
 
         // Set up courses recycler view

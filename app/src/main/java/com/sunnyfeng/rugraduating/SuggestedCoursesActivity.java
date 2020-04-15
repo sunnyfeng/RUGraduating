@@ -127,6 +127,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString;
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
                     //get values from json
@@ -169,8 +170,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     // TODO: Handle error
                     System.out.println(error);
                 });
-        //suggestedAdapter = new CourseItemListAdapter(suggestedTest);
-        //suggestedRecyclerView.setAdapter(suggestedAdapter);
 
         queue.add(jsonObjectRequest);
     }

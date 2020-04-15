@@ -8,7 +8,6 @@ public class Regex implements Serializable, CourseItem {
     private String _id;
     private ArrayList<Course> courses;
 
-    // TODO: make string array into Course objects
     public Regex(String _id, ArrayList<Course> courses) {
         this._id = _id;
         this.courses = courses;

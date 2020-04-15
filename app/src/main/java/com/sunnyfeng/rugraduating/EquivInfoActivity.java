@@ -63,13 +63,11 @@ public class EquivInfoActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerViews() {
-
         // Set up equiv recycler view
         equivLayoutManager = new LinearLayoutManager(this);
         equivRecyclerView = findViewById(R.id.equiv_recyclerView);
         equivRecyclerView.setHasFixedSize(true);
         equivRecyclerView.setLayoutManager(equivLayoutManager);
-        //TODO: save equivs as Course objects and use CourseItemListAdapter instead
         equivAdapter = new CourseItemListAdapter(new ArrayList<>(equivalency.getCourses()));
         equivRecyclerView.setAdapter(equivAdapter);
     }

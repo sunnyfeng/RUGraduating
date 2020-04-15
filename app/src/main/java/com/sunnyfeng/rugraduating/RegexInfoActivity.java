@@ -68,7 +68,6 @@ public class RegexInfoActivity extends AppCompatActivity {
         regexRecyclerView = findViewById(R.id.regex_recyclerView);
         regexRecyclerView.setHasFixedSize(true);
         regexRecyclerView.setLayoutManager(regexLayoutManager);
-        //TODO: save regexs as Course objects and use CourseItemListAdapter instead
         regexAdapter = new CourseItemListAdapter(new ArrayList<>(regex.getCourses()));
         regexRecyclerView.setAdapter(regexAdapter);
     }
