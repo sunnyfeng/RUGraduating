@@ -24,6 +24,9 @@ import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -82,20 +85,29 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUpRecyclerViews() {
         //TODO: separate student courses into regular and planned courses
-        ArrayList<CourseItem> courses = new ArrayList<>();
+        ArrayList<CourseItem> takenCourses = new ArrayList<>();
+        ArrayList<CourseItem> plannedCourses = new ArrayList<>();
 
         // Set up courses recycler view
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView = findViewById(R.id.all_classes_recyclerView);
         coursesRecyclerView.setHasFixedSize(true);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
-        coursesAdapter = new CourseItemListAdapter(courses);
+        coursesAdapter = new CourseItemListAdapter(takenCourses);
         coursesRecyclerView.setAdapter(coursesAdapter);
+
+        // Set up plan recycler view
+        planLayoutManager = new LinearLayoutManager(this);
+        planRecyclerView = findViewById(R.id.planned_courses_recyclerView);
+        planRecyclerView.setHasFixedSize(true);
+        planRecyclerView.setLayoutManager(planLayoutManager);
+        planAdapter = new CourseItemListAdapter(plannedCourses); //TODO: include student's planned courses
+        planRecyclerView.setAdapter(planAdapter);
 
         //a user's taken courses are always just courses, no need to add processing for equiv. or regex here
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
         RequestQueue queue = Volley.newRequestQueue(this);
-        String netID = "AmanyTest";
+        String netID = "avin";
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -107,17 +119,29 @@ public class ProfileActivity extends AppCompatActivity {
                         String classString;
                         //build courses with values
                         Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();;
-                        while(i < responseLength){
-                            classString = response.getString(String.valueOf(i++));
-                            courses.add(gson.fromJson(classString, Course.class));
+                        //add takenCourses
+                        JSONObject respCourses = response.getJSONObject("takenCourses");
+                        int respCoursesLength = respCourses.length();
+                        while(i < respCoursesLength){
+                            classString = respCourses.getString(Integer.toString(i++));
+                            takenCourses.add(gson.fromJson(classString, Course.class));
+                        }
+                        //add plannedCourses
+                        i=0;
+                        JSONObject respPlannedCourses = response.getJSONObject("plannedCourses");
+                        int respPlannedCoursesLength = respPlannedCourses.length();
+                        while(i < respPlannedCoursesLength){
+                            classString = respPlannedCourses.getString(Integer.toString(i++));
+                            plannedCourses.add(gson.fromJson(classString, Course.class));
                         }
                     } catch(Exception e){
                         System.out.println(e.toString());
                     }
-                    //update view with new adapter
-                    Log.d("Suggested", courses.toString());
-                    coursesAdapter = new CourseItemListAdapter(courses);
+                    //update views with new adapters
+                    coursesAdapter = new CourseItemListAdapter(takenCourses);
                     coursesRecyclerView.setAdapter(coursesAdapter);
+                    planAdapter = new CourseItemListAdapter(plannedCourses); //TODO: include student's planned courses
+                    planRecyclerView.setAdapter(planAdapter);
                 }, error -> {
                     // TODO: Handle error
                     System.out.println(error);
@@ -135,14 +159,6 @@ public class ProfileActivity extends AppCompatActivity {
         programsRecyclerView.setLayoutManager(programsLayoutManager);
         programsAdapter = new StringArrayAdapter(programs);
         programsRecyclerView.setAdapter(programsAdapter);
-
-        // Set up plan recycler view
-        planLayoutManager = new LinearLayoutManager(this);
-        planRecyclerView = findViewById(R.id.planned_courses_recyclerView);
-        planRecyclerView.setHasFixedSize(true);
-        planRecyclerView.setLayoutManager(planLayoutManager);
-        planAdapter = new CourseItemListAdapter(courses); //TODO: include student's planned courses
-        planRecyclerView.setAdapter(planAdapter);
 
     }
 

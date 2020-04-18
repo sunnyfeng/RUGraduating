@@ -314,7 +314,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                             (Request.Method.POST, url, null, response -> {
-                                System.out.println(response.toString());
                                 //get values from json
                                 try{
                                     int k = 0;
