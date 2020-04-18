@@ -46,6 +46,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         spinner.setOnItemSelectedListener(this);
 
         // Progress wheel
+        // From: https://github.com/zekapp/Android-ProgressViews
         int totalRequirements = 10;
         int completedRequirements = 3;
         float percentage = ((float)completedRequirements)/totalRequirements * 100;
