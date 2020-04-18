@@ -22,8 +22,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
@@ -34,7 +32,6 @@ import com.sunnyfeng.rugraduating.objects.Equivalency;
 import com.sunnyfeng.rugraduating.objects.Regex;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 

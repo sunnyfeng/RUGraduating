@@ -13,15 +13,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
-import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Regex;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class RegexInfoActivity extends AppCompatActivity {
 
@@ -37,7 +34,7 @@ public class RegexInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_regex_info);
 
         Intent intent = getIntent();
-        Regex regex = (Regex) intent.getSerializableExtra(MainActivity.REGEX_INTENT_KEY);
+        Regex regex = (Regex) intent.getSerializableExtra(MajorActivity.REGEX_INTENT_KEY);
         this.regex = regex;
 
         TextView title = findViewById(R.id.regex_title);
@@ -57,7 +54,7 @@ public class RegexInfoActivity extends AppCompatActivity {
         // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_regex);
         backToMainButton.setOnClickListener(v -> {
-            Intent intentMain = new Intent(RegexInfoActivity.this, MainActivity.class);
+            Intent intentMain = new Intent(RegexInfoActivity.this, TopViewActivity.class);
             startActivity(intentMain);
         });
     }

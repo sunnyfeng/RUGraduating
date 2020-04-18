@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.CourseInfoActivity;
 import com.sunnyfeng.rugraduating.EquivInfoActivity;
-import com.sunnyfeng.rugraduating.MainActivity;
+import com.sunnyfeng.rugraduating.MajorActivity;
 import com.sunnyfeng.rugraduating.R;
 import com.sunnyfeng.rugraduating.RegexInfoActivity;
 import com.sunnyfeng.rugraduating.objects.Course;
@@ -67,17 +67,17 @@ public class CourseItemListAdapter extends
             switch (courseItem.getType()){
                 case CourseItem.TYPE_COURSE:
                     Intent intentCourse = new Intent(holder.context, CourseInfoActivity.class);
-                    intentCourse.putExtra(MainActivity.COURSE_INTENT_KEY, (Course) courseItem);
+                    intentCourse.putExtra(MajorActivity.COURSE_INTENT_KEY, (Course) courseItem);
                     holder.context.startActivity(intentCourse);
                     break;
                 case CourseItem.TYPE_EQUIV:
                     Intent intentEquiv = new Intent(holder.context, EquivInfoActivity.class);
-                    intentEquiv.putExtra(MainActivity.EQUIV_INTENT_KEY, (Equivalency) courseItem);
+                    intentEquiv.putExtra(MajorActivity.EQUIV_INTENT_KEY, (Equivalency) courseItem);
                     holder.context.startActivity(intentEquiv);
                     break;
                 case CourseItem.TYPE_REGEX:
                     Intent intentRegex = new Intent(holder.context, RegexInfoActivity.class);
-                    intentRegex.putExtra(MainActivity.REGEX_INTENT_KEY, (Regex) courseItem);
+                    intentRegex.putExtra(MajorActivity.REGEX_INTENT_KEY, (Regex) courseItem);
                     holder.context.startActivity(intentRegex);
                     break;
             }

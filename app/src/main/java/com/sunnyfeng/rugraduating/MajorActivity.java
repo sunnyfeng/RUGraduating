@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,13 +23,14 @@ import com.sunnyfeng.rugraduating.objects.Requirement;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MajorActivity extends AppCompatActivity {
 
     // intent keys
     public static final String REQUIREMENT_INTENT_KEY = "requirement intent key";
     public static final String COURSE_INTENT_KEY = "course intent key";
     public static final String EQUIV_INTENT_KEY = "equiv intent key";
     public static final String REGEX_INTENT_KEY = "regex intent key";
+    public static final String MAJOR_INTENT_KEY = "major intent key";
 
 
     private RecyclerView requirementsRecyclerView;
@@ -44,22 +42,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get major from intent
+        Intent intent = getIntent();
+        String major_from_intent = (String) intent.getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
+
+        // Set major name to be display
+        TextView major_display = findViewById(R.id.selected_major_textView);
+        major_display.setText(major_from_intent);
+
         // Toolbar with title
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("RU Graduating");
         }
-        toolbar.setSubtitle("Main Page");
+        toolbar.setSubtitle(major_from_intent);
         toolbar.inflateMenu(R.menu.options_menu);
-
-        // Drop down menu for majors
-        Spinner spinner = findViewById(R.id.major_spinner_main);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.major_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
 
         // Switch for withPlan
         Switch sw = findViewById(R.id.withPlanSwitch);
@@ -67,19 +65,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (withPlan) {
                 // The toggle is enabled
                 // TODO: add function with plan
-                Toast.makeText(MainActivity.this, "Including plan.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MajorActivity.this, "Including plan.", Toast.LENGTH_SHORT).show();
             } else {
                 // The toggle is disabled
                 // TODO: add function without plan
-                Toast.makeText(MainActivity.this, "Not including plan.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MajorActivity.this, "Not including plan.", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Go to suggested courses button
         Button suggestedButton = findViewById(R.id.go_to_suggested_button);
         suggestedButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SuggestedCoursesActivity.class);
-            startActivity(intent);
+            Intent suggestedIntent = new Intent(MajorActivity.this, SuggestedCoursesActivity.class);
+            startActivity(suggestedIntent);
         });
 
         setUpRecyclerViews();
@@ -143,16 +141,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    // Handle major spinner item selected
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        String itemSelected = parent.getItemAtPosition(pos).toString();
-        // TODO: on item selected, filter progress by major
-    }
-
-    // Handle major spinner item not selected
-    public void onNothingSelected(AdapterView<?> parent) {
-        // TODO: maybe handle this? or just lead blank
     }
 }

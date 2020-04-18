@@ -1,7 +1,6 @@
 package com.sunnyfeng.rugraduating.objects;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Equivalency implements Serializable, CourseItem {

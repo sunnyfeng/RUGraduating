@@ -50,7 +50,7 @@ public class RequirementsActivity extends AppCompatActivity {
 
         // Get requirement
         Intent intent = getIntent();
-        Requirement requirement = (Requirement) intent.getSerializableExtra(MainActivity.REQUIREMENT_INTENT_KEY);
+        Requirement requirement = (Requirement) intent.getSerializableExtra(MajorActivity.REQUIREMENT_INTENT_KEY);
         currentReq = requirement;
         TextView reqName = findViewById(R.id.requirement_name);
         reqName.setText(requirement.title);
@@ -78,7 +78,7 @@ public class RequirementsActivity extends AppCompatActivity {
         // Set up button
         Button backToMainButton = findViewById(R.id.back_to_main_req);
         backToMainButton.setOnClickListener(v -> {
-            Intent intentMain = new Intent(RequirementsActivity.this, MainActivity.class);
+            Intent intentMain = new Intent(RequirementsActivity.this, TopViewActivity.class);
             startActivity(intentMain);
         });
     }

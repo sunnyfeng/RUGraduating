@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.mongodb:stitch-android-sdk:4.1.0'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.zekapp.library:progreswheelview:1.1.5'
 }
 repositories {
     mavenCentral()

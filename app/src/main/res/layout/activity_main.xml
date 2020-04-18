@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MajorActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -21,17 +21,6 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <Spinner
-        android:id="@+id/major_spinner_main"
-        android:layout_width="0dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/major_display"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/major_display"
-        app:layout_constraintTop_toTopOf="@+id/major_display" />
 
     <Switch
         android:id="@+id/withPlanSwitch"
@@ -70,9 +59,10 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/go_to_suggested_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requirements_display" />
+        app:layout_constraintTop_toBottomOf="@+id/requirements_display"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/go_to_suggested_button"
@@ -99,5 +89,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/major_display" />
+
+    <TextView
+        android:id="@+id/selected_major_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Computer Engineering"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toEndOf="@+id/major_display"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

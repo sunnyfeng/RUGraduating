@@ -14,14 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
-import com.sunnyfeng.rugraduating.adapters.StringArrayAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
-import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Equivalency;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class EquivInfoActivity extends AppCompatActivity {
 
@@ -37,7 +34,7 @@ public class EquivInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_equiv_info);
 
         Intent intent = getIntent();
-        Equivalency equiv = (Equivalency) intent.getSerializableExtra(MainActivity.EQUIV_INTENT_KEY);
+        Equivalency equiv = (Equivalency) intent.getSerializableExtra(MajorActivity.EQUIV_INTENT_KEY);
         equivalency = equiv;
 
         TextView title = findViewById(R.id.equiv_title);
@@ -57,7 +54,7 @@ public class EquivInfoActivity extends AppCompatActivity {
         // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_equiv);
         backToMainButton.setOnClickListener(v -> {
-            Intent intentMain = new Intent(EquivInfoActivity.this, MainActivity.class);
+            Intent intentMain = new Intent(EquivInfoActivity.this, TopViewActivity.class);
             startActivity(intentMain);
         });
     }

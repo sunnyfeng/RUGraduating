@@ -25,7 +25,6 @@ import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -74,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_profile);
         backToMainButton.setOnClickListener(v -> {
-            Intent intentMain = new Intent(ProfileActivity.this, MainActivity.class);
+            Intent intentMain = new Intent(ProfileActivity.this, TopViewActivity.class);
             startActivity(intentMain);
         });
 

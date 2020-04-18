@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sunnyfeng.rugraduating.MainActivity;
+import com.sunnyfeng.rugraduating.MajorActivity;
 import com.sunnyfeng.rugraduating.R;
 import com.sunnyfeng.rugraduating.objects.Requirement;
 import com.sunnyfeng.rugraduating.RequirementsActivity;
@@ -61,7 +61,7 @@ public class RequirementsListAdapter extends RecyclerView.Adapter<RequirementsLi
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(holder.context, RequirementsActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable(MainActivity.REQUIREMENT_INTENT_KEY, curReq);
+            bundle.putSerializable(MajorActivity.REQUIREMENT_INTENT_KEY, curReq);
             intent.putExtras(bundle);
             holder.context.startActivity(intent);
         });

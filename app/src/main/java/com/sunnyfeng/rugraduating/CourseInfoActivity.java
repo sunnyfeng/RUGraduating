@@ -19,8 +19,6 @@ import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 
-import java.util.Arrays;
-
 public class CourseInfoActivity extends AppCompatActivity {
 
     private RecyclerView prereqRecyclerView;
@@ -39,7 +37,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_info);
 
         Intent intent = getIntent();
-        Course course = (Course) intent.getSerializableExtra(MainActivity.COURSE_INTENT_KEY);
+        Course course = (Course) intent.getSerializableExtra(MajorActivity.COURSE_INTENT_KEY);
         currentCourse = course;
 
         TextView className = findViewById(R.id.class_name);
@@ -66,7 +64,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         // Back to main button
         Button backToMainButton = findViewById(R.id.back_to_main_course);
         backToMainButton.setOnClickListener(v -> {
-            Intent intentMain = new Intent(CourseInfoActivity.this, MainActivity.class);
+            Intent intentMain = new Intent(CourseInfoActivity.this, TopViewActivity.class);
             startActivity(intentMain);
         });
     }

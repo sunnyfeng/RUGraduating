@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -125,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //temporary just go to main page
             boolean user_in_db = false; //TODO: replace with backend query to verify user is in database
             if(user_in_db){
-                Intent main_page = new Intent(this, MainActivity.class);
+                Intent main_page = new Intent(this, TopViewActivity.class);
                 startActivity(main_page);
             }
 
