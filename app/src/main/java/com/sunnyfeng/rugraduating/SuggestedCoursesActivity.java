@@ -32,14 +32,25 @@ import com.sunnyfeng.rugraduating.objects.Equivalency;
 import com.sunnyfeng.rugraduating.objects.Regex;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 public class SuggestedCoursesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private RecyclerView suggestedRecyclerView;
     private RecyclerView.Adapter suggestedAdapter;
     private RecyclerView.LayoutManager suggestedLayoutManager;
+
+    private JSONObject suggestedCoursesObject;
+    private JSONObject levelObject;
+    private JSONObject programObject;
+    private LinkedHashMap<String, String[]> requirements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +69,9 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         toolbar.inflateMenu(R.menu.options_menu);
 
         //TODO: get these options from DB
-        String[] levelArray = {"No Selection", "0", "1", "2"};
-        String[] programArray = {"No Selection", "Computer Engineering", "Computer Science"};
-        String[] reqArray = {"No Selection", "Technical Electives", "Computer Electives"};
+        String[] levelArray = {"Loading . . ."};
+        String[] programArray = {};
+        String[] reqArray = {};
 
         // Drop down menu for level
         Spinner levelSpinner = findViewById(R.id.level_spinner);
@@ -97,6 +108,37 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         backToMainButton.setOnClickListener(v -> {
             super.onBackPressed();
         });
+
+        //download SuggestedCoursesObject
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String netID = "avin";
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSuggestedCourses?netID="+netID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    //get values from json
+                    try{
+                        suggestedCoursesObject = response;
+                        ArrayList<String> keys = new ArrayList<>();
+                        keys.add("No Selection");
+                        Iterator<String> i = response.keys();
+                        do{
+                            keys.add(i.next());
+                        }while(i.hasNext());
+                        //populate top-level menu with levels
+                        ArrayAdapter<String> levelAdapterNew = new ArrayAdapter<>
+                                (this, android.R.layout.simple_spinner_item, (String[])keys.toArray(new String[0]));
+                        levelAdapterNew.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        levelSpinner.setAdapter(levelAdapterNew);
+                    } catch(Exception e){
+                        System.out.println(e.toString());
+                    }
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println(error);
+                });
+
+        queue.add(jsonObjectRequest);
     }
 
     private void setUpRecyclerViews() {
@@ -109,66 +151,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         ArrayList<CourseItem> suggestedTest = new ArrayList<>();
         suggestedAdapter = new CourseItemListAdapter(suggestedTest);
         suggestedRecyclerView.setAdapter(suggestedAdapter);
-
-        //this query works for courses, equivalencies, and regexes
-        //should have an array of courses
-        String[] testCourses = {"14:332:331", "Calculus II Math/Phys Equivalency", "01:160:12.*"};
-        //convert to a string
-        StringBuilder sb = new StringBuilder("{");
-        for(int i = 0; i < testCourses.length; i++){
-            sb.append(testCourses[i]);
-            sb.append(",");
-        }
-        sb.append("}");
-        String testCoursesString = sb.toString();
-        //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString;
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, null, response -> {
-                    //get values from json
-                    try{
-                        int i = 0;
-                        String classString;
-                        //build courses with values
-                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
-
-                        //add courses
-                        JSONArray respCourses = (JSONArray) response.get("courses");
-                        int respCoursesLength = respCourses.length();
-                        while(i < respCoursesLength){
-                            classString = respCourses.getString(i++);
-                            suggestedTest.add(gson.fromJson(classString, Course.class));
-                        }
-                        //add equivalencies
-                        i=0;
-                        JSONArray respEquivs = (JSONArray) response.get("equivalencies");
-                        int respEquivsLength = respEquivs.length();
-                        while(i < respEquivsLength){
-                            classString = respEquivs.getString(i++);
-                            suggestedTest.add(gson.fromJson(classString, Equivalency.class));
-                        }
-                        //add regexes
-                        i=0;
-                        JSONArray respRegexes = (JSONArray)response.get("regexes");
-                        int respRegexesLength = respRegexes.length();
-                        while(i < respRegexesLength){
-                            classString = respRegexes.getString(i++);
-                            suggestedTest.add(gson.fromJson(classString, Regex.class));
-                        }
-                    } catch(Exception e){
-                        System.out.println(e.toString());
-                    }
-                    //update view with new adapter
-                    suggestedAdapter = new CourseItemListAdapter(suggestedTest);
-                    suggestedRecyclerView.setAdapter(suggestedAdapter);
-                }, error -> {
-                    // TODO: Handle error
-                    System.out.println(error);
-                });
-
-        queue.add(jsonObjectRequest);
+        suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+        suggestedRecyclerView.setAdapter(suggestedAdapter);
     }
 
     // Inflate options menu
@@ -206,15 +190,176 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         }
     }
 
+    static String splitCamelCase(String s) {
+        s = s.replaceAll(
+                String.format("%s|%s|%s",
+                        "(?<=[A-Z])(?=[A-Z][a-z])",
+                        "(?<=[^A-Z])(?=[A-Z])",
+                        "(?<=[A-Za-z])(?=[^A-Za-z])"
+                ),
+                " "
+        );
+        return s.substring(0,1).toUpperCase() + s.substring(1);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String selectionValue  = adapterView.getSelectedItem().toString();
+        if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
+
+        //clear courses
+        ArrayList<CourseItem> suggestedTest = new ArrayList<>();
+        suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+        suggestedRecyclerView.setAdapter(suggestedAdapter);
+        suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+        suggestedRecyclerView.setAdapter(suggestedAdapter);
+
+        Spinner programSpinner = findViewById(R.id.program_spinner);
+        Spinner reqSpinner = findViewById(R.id.requirement_spinner);
+        ArrayAdapter<String> programAdapter;
+        ArrayAdapter<String> reqAdapter;
+
         switch(adapterView.getId()) {
             //TODO: filter options based on the selections above
             case R.id.level_spinner:
+                //clear programs and reqs
+                // Drop down menu for program
+                programAdapter = new ArrayAdapter<>
+                        (this, android.R.layout.simple_spinner_item, new String[0]);
+                programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                programSpinner.setAdapter(programAdapter);
+                programSpinner.setOnItemSelectedListener(this);
+
+                // Drop down menu for reqs
+                reqAdapter = new ArrayAdapter<>
+                        (this, android.R.layout.simple_spinner_item, new String[0]);
+                reqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                reqSpinner.setAdapter(reqAdapter);
+                reqSpinner.setOnItemSelectedListener(this);
+
+                //populate program spinner object
+                try{
+                    levelObject = suggestedCoursesObject.getJSONObject(selectionValue);
+                ArrayList<String> keys = new ArrayList<>();
+                keys.add("No Selection");
+                Iterator<String> keyIter = levelObject.keys();
+                do{
+                    keys.add(keyIter.next());
+                }while(keyIter.hasNext());
+                //populate top-level menu with levels
+                programAdapter = new ArrayAdapter<>
+                        (this, android.R.layout.simple_spinner_item, keys.toArray(new String[0]));
+                programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                programSpinner.setAdapter(programAdapter);
+                programSpinner.setOnItemSelectedListener(this);
+                } catch(Exception e){
+                    System.out.println("Error fetching levelObject for level: " + selectionValue);
+                }
                 break;
             case R.id.program_spinner:
+                //clear reqs
+                // Drop down menu for reqs
+                reqAdapter = new ArrayAdapter<>
+                        (this, android.R.layout.simple_spinner_item, new String[0]);
+                reqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                reqSpinner.setAdapter(reqAdapter);
+                reqSpinner.setOnItemSelectedListener(this);
+
+                //populate req spinner object
+                try{
+                    programObject = levelObject.getJSONObject(selectionValue);
+                    requirements = new LinkedHashMap<>();
+                    requirements.put("No Selection", new String[0]);
+                    Iterator<String> keyIter = programObject.keys();
+                    do{
+                        String keyString = keyIter.next();
+                        String courses = programObject.getJSONArray(keyString).toString();
+                        if(courses.length() == 2) continue;
+                        courses = courses.substring( 1, courses.length() - 1);
+                        String[] key = keyString.split(":");
+                        if(key[0].charAt(0) == 'g') key[0] = "School-Level " + splitCamelCase(key[0].substring(2));
+                        else key[0] = splitCamelCase(key[0]);
+                        String toAdd;
+                        if(key[1].equals("-1")) toAdd = key[0];
+                        else toAdd = key[0] + " (credits left: " + key[1] + ")";
+                        requirements.put(toAdd, new HashSet<>(Arrays.asList(courses.split(","))).toArray(new String[0]));
+                    }while(keyIter.hasNext());
+                    //populate top-level menu with levels
+                    reqAdapter = new ArrayAdapter<>
+                            (this, android.R.layout.simple_spinner_item, requirements.keySet().toArray(new String[0]));
+                    reqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    reqSpinner.setAdapter(reqAdapter);
+                    reqSpinner.setOnItemSelectedListener(this);
+                } catch(Exception e){
+                    System.out.println("Error fetching programObject for program: " + selectionValue);
+                }
                 break;
             case R.id.requirement_spinner:
+                //populate courses
+                String[] courses = requirements.get(selectionValue);
+                try {
+                    //convert to a string
+                    StringBuilder sb = new StringBuilder("{");
+                    for(int j = 0; j < courses.length; j++){
+                        sb.append(courses[j].substring( 1, courses[j].length() - 1));
+                        sb.append(",");
+                    }
+                    sb.setLength(sb.length() - 1);
+                    sb.append("}");
+                    String testCoursesString = sb.toString();
+                    System.out.println(testCoursesString);
+                    //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
+                    RequestQueue queue = Volley.newRequestQueue(this);
+                    String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString;
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                            (Request.Method.POST, url, null, response -> {
+                                System.out.println(response.toString());
+                                //get values from json
+                                try{
+                                    int k = 0;
+                                    String classString;
+                                    //build courses with values
+                                    Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+
+                                    //add courses
+                                    JSONArray respCourses = (JSONArray) response.get("courses");
+                                    int respCoursesLength = respCourses.length();
+                                    while(k < respCoursesLength){
+                                        classString = respCourses.getString(k++);
+                                        suggestedTest.add(gson.fromJson(classString, Course.class));
+                                    }
+                                    //add equivalencies
+                                    k=0;
+                                    JSONArray respEquivs = (JSONArray) response.get("equivalencies");
+                                    int respEquivsLength = respEquivs.length();
+                                    while(k < respEquivsLength){
+                                        classString = respEquivs.getString(k++);
+                                        suggestedTest.add(gson.fromJson(classString, Equivalency.class));
+                                    }
+                                    //add regexes
+                                    k=0;
+                                    JSONArray respRegexes = (JSONArray)response.get("regexes");
+                                    int respRegexesLength = respRegexes.length();
+                                    while(k < respRegexesLength){
+                                        classString = respRegexes.getString(k++);
+                                        suggestedTest.add(gson.fromJson(classString, Regex.class));
+                                    }
+                                } catch(Exception e){
+                                    System.out.println(e.toString());
+                                }
+                                //update view with new adapter
+                                suggestedAdapter = new CourseItemListAdapter(suggestedTest);
+                                suggestedRecyclerView.setAdapter(suggestedAdapter);
+                            }, error -> {
+                                // TODO: Handle error
+                                System.out.println(error);
+                            });
+
+                    queue.add(jsonObjectRequest);
+                } catch (Exception e){
+                    System.out.println("Error fetching courses for req: " + selectionValue);
+                }
                 break;
         }
     }
