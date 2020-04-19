@@ -335,9 +335,10 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                         //remove not-taken courses (in this level) from equivalency
                                         ArrayList<Course> courseList = equiv.getCourses();
                                         courseList.retainAll(suggestedTest);
+                                        equiv.setCourses(courseList);
                                         //remove courses covered by equivalency from main list
                                         suggestedTest.removeAll(courseList);
-                                        equiv.setCourses(courseList);
+                                        //add equivalency to main list
                                         suggestedTest.add(equiv);
                                     }
                                     //add regexes
@@ -350,9 +351,10 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                         //remove not-taken courses (in this level) from regex
                                         ArrayList<Course> courseList = regex.getCourses();
                                         courseList.retainAll(suggestedTest);
+                                        regex.setCourses(courseList);
                                         //remove courses covered by regex from main list
                                         suggestedTest.removeAll(courseList);
-                                        regex.setCourses(courseList);
+                                        //add regex to main list
                                         suggestedTest.add(regex);
                                     }
                                 } catch(Exception e){
