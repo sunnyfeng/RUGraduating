@@ -278,7 +278,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                         else key[0] = splitCamelCase(key[0]);
                         String toAdd;
                         if(key[1].equals("-1")) toAdd = key[0];
-                        else toAdd = key[0] + " (credits left: " + key[1] + ")";
+                        else if(key[1].equals("1")) toAdd = key[0] + " (" + key[1] + " course left)";
+                        else toAdd = key[0] + " (" + key[1] + " courses left)";
                         requirements.put(toAdd, new HashSet<>(Arrays.asList(courses.split(","))).toArray(new String[0]));
                     }while(keyIter.hasNext());
                     //populate top-level menu with levels
