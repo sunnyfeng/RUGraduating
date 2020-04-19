@@ -116,6 +116,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(account != null){
             User mUser = ((User)getApplicationContext());
             if(account.getEmail() == null) {
+                System.out.println("error fetching user email");
+            } else{
                 mUser.setNetID(account.getEmail().split("@", 2)[0]);
                 mUser.setEmail(account.getEmail());
             }
