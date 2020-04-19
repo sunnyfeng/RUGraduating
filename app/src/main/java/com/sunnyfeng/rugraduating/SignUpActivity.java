@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.sunnyfeng.rugraduating.objects.User;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,6 +76,23 @@ public class SignUpActivity extends AppCompatActivity{
                 }
         );
 
+        User mUser = ((User)getApplicationContext());
+        String firstName = mUser.getFirstName();
+        String lastName = mUser.getLastName();
+        String email = mUser.getEmail();
+        String netID = mUser.getNetID();
+        if(!(firstName.equals("not set") || lastName.equals("not set"))) {
+            EditText name_textbox = (EditText)findViewById(R.id.name_sign_up);
+            name_textbox.setText(mUser.getFirstName() + " " + mUser.getLastName());
+        }
+        if(!mUser.getEmail().equals("not set")){
+            EditText email_textbox = (EditText)findViewById(R.id.email_sign_up);
+            email_textbox.setText(mUser.getEmail());
+        }
+        if(!mUser.getNetID().equals("not set")){
+            EditText netid_textbox = (EditText)findViewById(R.id.netid_sign_up);
+            netid_textbox.setText(mUser.getNetID());
+        }
     }
 
     public boolean signup_check_populated(){
@@ -135,6 +154,14 @@ public class SignUpActivity extends AppCompatActivity{
     public void create_user(View view){
         // check all fields are populated
         if(signup_check_populated()){
+            User user = ((User)(getApplicationContext()));
+            String[] userNameArr = user_name.split(" ");
+            user.setFirstName(userNameArr[0]);
+            if(userNameArr[1] != null){
+                user.setLastName(userNameArr[1]);
+            }
+            user.setEmail(user_email);
+            user.setNetID(netID);
             // TODO: create the user (add to database), new intent to add classes
 
             Intent mainIntent = new Intent(this, AddClassesActivity.class);
