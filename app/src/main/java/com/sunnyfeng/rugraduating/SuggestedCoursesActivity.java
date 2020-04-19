@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -49,7 +50,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     private JSONObject suggestedCoursesObject;
     private JSONObject levelObject;
     private JSONObject programObject;
-    private LinkedHashMap<String, String[]> requirements;
+    private HashMap<String, String[]> requirements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +114,13 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     try{
                         suggestedCoursesObject = response;
                         ArrayList<String> keys = new ArrayList<>();
-                        keys.add("No Selection");
                         Iterator<String> i = response.keys();
                         do{
-                            keys.add(i.next());
+                            String key = i.next();
+                            if(key.equals("0")) key = "Next Semester";
+                            else if (key.equals("1")) key = "After 1 Semester";
+                            else key = "After " + key + " Semesters";
+                            keys.add(key);
                         }while(i.hasNext());
                         //populate top-level menu with levels
                         ArrayAdapter<String> levelAdapterNew = new ArrayAdapter<>
@@ -198,7 +202,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String selectionValue  = adapterView.getSelectedItem().toString();
-
+        if(selectionValue.equals("Loading . . .")) return;
         //clear courses
         ArrayList<CourseItem> suggestedTest = new ArrayList<>();
         suggestedAdapter = new CourseItemListAdapter(suggestedTest);
@@ -229,13 +233,13 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 reqSpinner.setAdapter(reqAdapter);
                 reqSpinner.setOnItemSelectedListener(this);
 
-                if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
-
                 //populate program spinner object
                 try{
+                    String[] selectionValueArray = selectionValue.split(" ");
+                    if(selectionValueArray[0].equals("Next")) selectionValue = "0";
+                    else selectionValue = selectionValueArray[1];
                     levelObject = suggestedCoursesObject.getJSONObject(selectionValue);
                 ArrayList<String> keys = new ArrayList<>();
-                keys.add("No Selection");
                 Iterator<String> keyIter = levelObject.keys();
                 do{
                     keys.add(keyIter.next());
@@ -259,13 +263,10 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 reqSpinner.setAdapter(reqAdapter);
                 reqSpinner.setOnItemSelectedListener(this);
 
-                if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
-
                 //populate req spinner object
                 try{
                     programObject = levelObject.getJSONObject(selectionValue);
-                    requirements = new LinkedHashMap<>();
-                    requirements.put("No Selection", new String[0]);
+                    requirements = new HashMap<>();
                     Iterator<String> keyIter = programObject.keys();
                     do{
                         String keyString = keyIter.next();
@@ -291,7 +292,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 }
                 break;
             case R.id.requirement_spinner:
-                if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
                 //populate courses
                 String[] courses = requirements.get(selectionValue);
                 try {
@@ -304,7 +304,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     sb.setLength(sb.length() - 1);
                     sb.append("}");
                     String testCoursesString = sb.toString();
-                    System.out.println(testCoursesString);
                     //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
                     RequestQueue queue = Volley.newRequestQueue(this);
                     String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString;
