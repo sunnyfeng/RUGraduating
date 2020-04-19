@@ -27,6 +27,21 @@ public class Course implements Serializable, CourseItem {
         this.coreqs = coreqs;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Course other = (Course) obj;
+        if (!(_id.equals(other._id))) {
+            return false;
+        }
+        return true;
+    }
+
     public String get_id() {
         return _id;
     }

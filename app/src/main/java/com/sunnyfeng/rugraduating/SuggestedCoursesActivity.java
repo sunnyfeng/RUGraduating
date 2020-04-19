@@ -105,7 +105,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
 
         //download SuggestedCoursesObject
         RequestQueue queue = Volley.newRequestQueue(this);
-        String netID = "avin";
+        String netID = "test9";
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSuggestedCourses?netID="+netID;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -304,8 +304,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     }
                     sb.setLength(sb.length() - 1);
                     sb.append("}");
-                    String testCoursesString = sb.toString();
-                    String netID = "avin";
+                    String testCoursesString = sb.toString().replace("\\", "");
+                    String netID = "test9";
                     //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
                     RequestQueue queue = Volley.newRequestQueue(this);
                     String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString + "&netID="+netID;
@@ -318,7 +318,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                     String classString;
                                     //build courses with values
                                     Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
-
                                     //add courses
                                     JSONArray respCourses = (JSONArray) response.get("courses");
                                     int respCoursesLength = respCourses.length();
@@ -332,7 +331,14 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                     int respEquivsLength = respEquivs.length();
                                     while(k < respEquivsLength){
                                         classString = respEquivs.getString(k++);
-                                        suggestedTest.add(gson.fromJson(classString, Equivalency.class));
+                                        Equivalency equiv = gson.fromJson(classString, Equivalency.class);
+                                        //remove not-taken courses (in this level) from equivalency
+                                        ArrayList<Course> courseList = equiv.getCourses();
+                                        courseList.retainAll(suggestedTest);
+                                        //remove courses covered by equivalency from main list
+                                        suggestedTest.removeAll(courseList);
+                                        equiv.setCourses(courseList);
+                                        suggestedTest.add(equiv);
                                     }
                                     //add regexes
                                     k=0;
@@ -340,7 +346,14 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                     int respRegexesLength = respRegexes.length();
                                     while(k < respRegexesLength){
                                         classString = respRegexes.getString(k++);
-                                        suggestedTest.add(gson.fromJson(classString, Regex.class));
+                                        Regex regex = gson.fromJson(classString, Regex.class);
+                                        //remove not-taken courses (in this level) from regex
+                                        ArrayList<Course> courseList = regex.getCourses();
+                                        courseList.retainAll(suggestedTest);
+                                        //remove courses covered by regex from main list
+                                        suggestedTest.removeAll(courseList);
+                                        regex.setCourses(courseList);
+                                        suggestedTest.add(regex);
                                     }
                                 } catch(Exception e){
                                     System.out.println(e.toString());
