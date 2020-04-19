@@ -24,7 +24,6 @@ import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -87,6 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
         //TODO: separate student courses into regular and planned courses
         ArrayList<CourseItem> takenCourses = new ArrayList<>();
         ArrayList<CourseItem> plannedCourses = new ArrayList<>();
+        ArrayList<String> programs = new ArrayList<>();
 
         // Set up courses recycler view
         coursesLayoutManager = new LinearLayoutManager(this);
@@ -101,8 +101,16 @@ public class ProfileActivity extends AppCompatActivity {
         planRecyclerView = findViewById(R.id.planned_courses_recyclerView);
         planRecyclerView.setHasFixedSize(true);
         planRecyclerView.setLayoutManager(planLayoutManager);
-        planAdapter = new CourseItemListAdapter(plannedCourses); //TODO: include student's planned courses
+        planAdapter = new CourseItemListAdapter(plannedCourses);
         planRecyclerView.setAdapter(planAdapter);
+
+        // Set up programs recycler view
+        programsLayoutManager = new LinearLayoutManager(this);
+        programsRecyclerView = findViewById(R.id.programs_recyclerView);
+        programsRecyclerView.setHasFixedSize(true);
+        programsRecyclerView.setLayoutManager(programsLayoutManager);
+        programsAdapter = new StringArrayAdapter(programs.toArray(new String[0]));
+        programsRecyclerView.setAdapter(programsAdapter);
 
         //a user's taken courses are always just courses, no need to add processing for equiv. or regex here
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
@@ -140,7 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
                     //update views with new adapters
                     coursesAdapter = new CourseItemListAdapter(takenCourses);
                     coursesRecyclerView.setAdapter(coursesAdapter);
-                    planAdapter = new CourseItemListAdapter(plannedCourses); //TODO: include student's planned courses
+                    planAdapter = new CourseItemListAdapter(plannedCourses);
                     planRecyclerView.setAdapter(planAdapter);
                 }, error -> {
                     // TODO: Handle error
@@ -149,24 +157,32 @@ public class ProfileActivity extends AppCompatActivity {
 
         queue.add(jsonObjectRequest);
 
-        //TODO: replace with student's programs from DB
-        String [] programs = {"Computer Engineering", "Computer Science"};
+        url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getStudentPrograms?netID="+netID;
+        //get programs
+        jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    //get values from json
+                    try{
+                        int i = 0;
+                        int responseLength = response.length();
+                        String programString;
+                        //add programs
+                        while(i < responseLength){
+                            programString = response.getJSONObject(Integer.toString(i++)).getString("name");
+                            programs.add(programString);
+                        }
+                    } catch(Exception e){
+                        System.out.println(e.toString());
+                    }
+                    //update views with new adapters
+                    programsAdapter = new StringArrayAdapter(programs.toArray(new String[0]));
+                    programsRecyclerView.setAdapter(programsAdapter);
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println(error);
+                });
 
-        // Set up programs recycler view
-        programsLayoutManager = new LinearLayoutManager(this);
-        programsRecyclerView = findViewById(R.id.programs_recyclerView);
-        programsRecyclerView.setHasFixedSize(true);
-        programsRecyclerView.setLayoutManager(programsLayoutManager);
-        programsAdapter = new StringArrayAdapter(programs);
-        programsRecyclerView.setAdapter(programsAdapter);
-
+        queue.add(jsonObjectRequest);
     }
 
-    //TODO: delete this test when everything works
-    private Course getPrinCommCourse() {
-        Course prinComm = new Course("14:332:301", "Wireless Revolution", 3, "ECE", "SOE",
-                "This \"flipped\" undergraduate course provides a broad view of how new technologies, economic forces, political constraints, and competitive warfare have created and shaped the \"wireless revolution\" in the last 50 years.  It offers a view inside the world of corporate management-- how strategies were created and why many have failed—and gives students a chance to develop their own strategic skills by solving real-world problems.  The course includes a historical overview of communications and communication systems, basics of wireless technology, technology and politics of cellular, basics of corporate finance, economics of cellular systems and spectrum auctions, case studies in wireless business strategy, the strategic implications of unregulated spectrum, a comparison of 3G, 4G, 5G and WiFi, IoT and the wireless future. Students are required to interact during the lectures in a flipped classroom setting—necessitating pre-lecture preparation, in-class attendance and participation.",
-                null, null);
-        return prinComm;
-    }
 }
