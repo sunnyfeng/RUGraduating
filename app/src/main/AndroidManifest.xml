@@ -29,7 +29,8 @@
         <activity android:name=".EquivInfoActivity" > </activity>
         <activity android:name=".RegexInfoActivity" > </activity>
         <activity android:name=".AddClassesActivity" > </activity>
-        <activity android:name=".SuggestedCoursesActivity" ></activity>
+        <activity android:name=".SuggestedCoursesActivity" >
+        </activity>
         <activity android:name=".ProfileActivity" ></activity>
         <activity android:name=".RequirementsActivity" > </activity>
         <activity android:name=".SignUpActivity" ></activity>

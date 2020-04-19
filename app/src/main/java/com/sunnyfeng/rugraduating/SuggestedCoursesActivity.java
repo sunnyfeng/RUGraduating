@@ -198,7 +198,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String selectionValue  = adapterView.getSelectedItem().toString();
-        if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
 
         //clear courses
         ArrayList<CourseItem> suggestedTest = new ArrayList<>();
@@ -230,6 +229,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 reqSpinner.setAdapter(reqAdapter);
                 reqSpinner.setOnItemSelectedListener(this);
 
+                if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
+
                 //populate program spinner object
                 try{
                     levelObject = suggestedCoursesObject.getJSONObject(selectionValue);
@@ -257,6 +258,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 reqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 reqSpinner.setAdapter(reqAdapter);
                 reqSpinner.setOnItemSelectedListener(this);
+
+                if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
 
                 //populate req spinner object
                 try{
@@ -288,6 +291,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 }
                 break;
             case R.id.requirement_spinner:
+                if(selectionValue.equals("No Selection") || selectionValue.equals("Loading . . .")) return;
                 //populate courses
                 String[] courses = requirements.get(selectionValue);
                 try {
