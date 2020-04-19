@@ -117,9 +117,9 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                         Iterator<String> i = response.keys();
                         do{
                             String key = i.next();
-                            if(key.equals("0")) key = "Next Semester";
-                            else if (key.equals("1")) key = "After 1 Semester";
-                            else key = "After " + key + " Semesters";
+                            if(key.equals("0")) key = "Immediately";
+                            else if (key.equals("1")) key = "After 1 Prerequisite";
+                            else key = "After " + key + " Prerequisites";
                             keys.add(key);
                         }while(i.hasNext());
                         //populate top-level menu with levels
@@ -236,7 +236,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 //populate program spinner object
                 try{
                     String[] selectionValueArray = selectionValue.split(" ");
-                    if(selectionValueArray[0].equals("Next")) selectionValue = "0";
+                    if(selectionValueArray[0].equals("Immediately")) selectionValue = "0";
                     else selectionValue = selectionValueArray[1];
                     levelObject = suggestedCoursesObject.getJSONObject(selectionValue);
                 ArrayList<String> keys = new ArrayList<>();
