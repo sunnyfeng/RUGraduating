@@ -36,7 +36,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -96,12 +95,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         reqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reqSpinner.setAdapter(reqAdapter);
         reqSpinner.setOnItemSelectedListener(this);
-
-        // Refresh button
-        Button refreshButton = findViewById(R.id.refresh_suggested_button);
-        refreshButton.setOnClickListener(v -> {
-            //TODO: On refresh, do query for suggested courses with the spinner parameters
-        });
 
         // Back button
         Button backToMainButton = findViewById(R.id.back_to_main_suggested);

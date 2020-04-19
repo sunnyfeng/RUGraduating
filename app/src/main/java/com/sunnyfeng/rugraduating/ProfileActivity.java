@@ -2,7 +2,6 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +23,6 @@ import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

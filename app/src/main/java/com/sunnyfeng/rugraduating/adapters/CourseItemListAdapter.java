@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sunnyfeng.rugraduating.CourseInfoActivity;
 import com.sunnyfeng.rugraduating.EquivInfoActivity;
 import com.sunnyfeng.rugraduating.MajorActivity;
+import com.sunnyfeng.rugraduating.ProfileActivity;
 import com.sunnyfeng.rugraduating.R;
 import com.sunnyfeng.rugraduating.RegexInfoActivity;
 import com.sunnyfeng.rugraduating.objects.Course;
@@ -63,6 +64,8 @@ public class CourseItemListAdapter extends
         final CourseItem courseItem = courses.get(position);
         holder.titleView.setText(courseItem.getTitle());
         holder.codeView.setText(courseItem.getSubtitle());
+
+        // Go to more details
         holder.itemView.setOnClickListener(view -> {
             switch (courseItem.getType()){
                 case CourseItem.TYPE_COURSE:
@@ -81,6 +84,17 @@ public class CourseItemListAdapter extends
                     holder.context.startActivity(intentRegex);
                     break;
             }
+        });
+
+        // Remove on long click
+        holder.itemView.setOnLongClickListener(view -> {
+            // only allow remove in ProfileActivity
+            if(view.getContext() instanceof ProfileActivity) {
+                courses.remove(position);
+                // TODO: remove class from student's planned or taken course
+                this.notifyDataSetChanged();
+            }
+            return true;
         });
     }
 
