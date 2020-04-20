@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,11 +15,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class AddClassesActivity extends AppCompatActivity {
 
@@ -27,6 +34,8 @@ public class AddClassesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager codesLayoutManager;
 
     private ArrayList<String> codes;
+
+    private String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +63,9 @@ public class AddClassesActivity extends AppCompatActivity {
             EditText gradeEditText = findViewById(R.id.grade_edit_text);
             String grade = gradeEditText.getText().toString();
 
-            //TODO: add some error checking here (such as not adding if it's already in there)
+            //TODO: add some error checking here (such as not adding if it's already in there //Amany --> you dont need to do this because i already do it in the mongodb side, if you send me the same code twice, ill only insert the first one
             if (code.length() > 0 && grade.length() > 0) {
-                codes.add(code + ": " + grade);
+                codes.add(code + "-" + grade);
                 codesAdapter.notifyDataSetChanged();
                 codeEditText.setText("");
                 gradeEditText.setText("");
@@ -64,12 +73,47 @@ public class AddClassesActivity extends AppCompatActivity {
                 Toast.makeText(AddClassesActivity.this,
                         "One or more fields are empty, try again.", Toast.LENGTH_SHORT).show();
             }
+
+
+
+
         });
 
         // Submit classes button
         Button submitButton = findViewById(R.id.submit_classes_button);
         submitButton.setOnClickListener(v -> {
-            //TODO: insert new classes into database
+
+            String courses = "";
+            int check = 1;
+            for(String eachCode: codes){
+                courses += eachCode;
+                if(check != codes.size()){
+                    courses += ",";
+                }
+                check++;
+            }
+            RequestQueue queue = Volley.newRequestQueue(this);
+            User mUser = ((User)getApplicationContext());
+            String netID = mUser.getNetID();
+            String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses={" + courses + "}&netID=" + netID;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, url, null, response -> {
+                        //get values from json
+                        try{
+                            result = response.getString("0");
+
+                            if(result.compareTo("") != 0){
+                                //TODO: it shouldnt go back to prev screen, it should the classes that couldn't be added
+                            }
+                        } catch(Exception e){
+                            Log.d("error", e.toString());
+                        }
+
+                    }, error -> {
+                        // TODO: Handle error
+                        Log.d("error", error.toString());
+                    });
+            queue.add(jsonObjectRequest);
             super.onBackPressed(); // go back to previous activity
         });
 
