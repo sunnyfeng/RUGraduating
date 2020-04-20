@@ -7,10 +7,15 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -115,6 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(GoogleSignInAccount account){
         if(account != null){
             User mUser = ((User)getApplicationContext());
+            mUser.setSclient(sClient);
             if(account.getEmail() == null) {
                 System.out.println("error fetching user email");
             } else{
@@ -127,8 +133,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 mUser.setFirstName(String.valueOf(toCapitalize[0].charAt(0)).toUpperCase() + toCapitalize[0].substring(1));
                 mUser.setLastName(String.valueOf(toCapitalize[1].charAt(0)).toUpperCase() + toCapitalize[1].substring(1));
             }
-            Intent main_page = new Intent(this, InterSignUpActivity.class);
-            startActivity(main_page);
+            SignInButton signInButton = findViewById(R.id.sign_in_button);
+            signInButton.setVisibility(View.GONE);
+
+            TextView showSign = findViewById(R.id.show_signing);
+            showSign.setVisibility(View.VISIBLE);
+
+            //check here if user is in database to decide whether to sign-up or login
+            //temporary just go to main page
+            RequestQueue requests = Volley.newRequestQueue(this);
+            String netID = mUser.getNetID();
+            String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/doesStudentExist?netID=" + netID;
+
+            JsonObjectRequest doesStudentExist = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+                try{
+                    boolean userInDb = response.getBoolean("0");
+                    if(userInDb){
+                        Intent main_page = new Intent(this, TopViewActivity.class);
+                        startActivity(main_page);
+                    } else {
+                        Intent signup_page = new Intent(this, SignUpActivity.class);
+                        startActivity(signup_page);
+                    }
+
+                } catch (Exception e) {
+                    System.out.println(e.toString());
+                }
+
+            }, error -> {
+                //TODO: Handle error gracefully
+                System.out.println(error);
+            });
+            requests.add(doesStudentExist);
+
         }
     }
 

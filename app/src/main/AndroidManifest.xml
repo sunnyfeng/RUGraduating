@@ -21,8 +21,6 @@
         <activity android:name=".BuildStudentActivity" >
 
         </activity>
-        <activity android:name=".InterSignUpActivity" >
-        </activity>
         <activity android:name=".MajorActivity" ></activity>
         <activity android:name=".TopViewActivity" >
         </activity>

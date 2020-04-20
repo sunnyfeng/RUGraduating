@@ -12,12 +12,16 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.app.progresviews.ProgressWheel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
+import com.sunnyfeng.rugraduating.objects.User;
 
 public class TopViewActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -108,6 +112,14 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
                 return true;
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
+                User mUser = (User)getApplicationContext();
+                mUser.getSclient().signOut()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // ...
+                            }
+                        });
                 // don't allow back press to re-enter
                 intent_logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent_logout);
