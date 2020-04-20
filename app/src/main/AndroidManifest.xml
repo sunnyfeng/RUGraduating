@@ -18,9 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BuildStudentActivity" >
+
+        </activity>
+        <activity android:name=".InterSignUpActivity" >
+        </activity>
         <activity android:name=".MajorActivity" ></activity>
         <activity android:name=".TopViewActivity" >
-
         </activity>
         <activity android:name=".CourseInfoActivity" > </activity>
         <activity android:name=".EquivInfoActivity" > </activity>

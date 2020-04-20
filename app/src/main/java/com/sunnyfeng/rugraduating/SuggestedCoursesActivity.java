@@ -280,7 +280,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                         if(key[1].equals("-1")) toAdd = key[0];
                         else if(key[1].equals("1")) toAdd = key[0] + " (" + key[1] + " course left)";
                         else toAdd = key[0] + " (" + key[1] + " courses left)";
-                        requirements.put(toAdd, new HashSet<>(Arrays.asList(courses.split(","))).toArray(new String[0]));
+                        requirements.put(toAdd, courses.split(","));
                     }while(keyIter.hasNext());
                     //populate top-level menu with levels
                     reqAdapter = new ArrayAdapter<>
@@ -309,7 +309,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
                     RequestQueue queue = Volley.newRequestQueue(this);
                     String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString + "&netID="+netID;
-
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                             (Request.Method.POST, url, null, response -> {
                                 //get values from json
@@ -337,7 +336,9 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                         courseList.retainAll(suggestedTest);
                                         equiv.setCourses(courseList);
                                         //remove courses covered by equivalency from main list
-                                        suggestedTest.removeAll(courseList);
+                                        for(Course x : courseList){
+                                            suggestedTest.remove(x);
+                                        }
                                         //add equivalency to main list
                                         suggestedTest.add(equiv);
                                     }
@@ -353,7 +354,9 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                                         courseList.retainAll(suggestedTest);
                                         regex.setCourses(courseList);
                                         //remove courses covered by regex from main list
-                                        suggestedTest.removeAll(courseList);
+                                        for(Course x : courseList){
+                                            suggestedTest.remove(x);
+                                        }
                                         //add regex to main list
                                         suggestedTest.add(regex);
                                     }
