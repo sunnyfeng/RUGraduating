@@ -31,8 +31,6 @@ public class SignUpActivity extends AppCompatActivity{
     private String netID = "";
     private String school = "";
     private String major = "";
-    private String user_email = "";
-    private String user_pwd = "";
 
     private String emptyString = "None selected";
 
@@ -172,20 +170,6 @@ public class SignUpActivity extends AppCompatActivity{
             errorText.setError("");
             errorText.setTextColor(Color.RED);//just to highlight that this is an error
 
-        }
-
-        EditText email_textbox = (EditText)findViewById(R.id.email_sign_up);
-        user_email = email_textbox.getText().toString();
-        if(user_email.length() == 0){
-            complete = false;
-            email_textbox.setError("Please enter your email");
-        }
-
-        EditText pwd_textbox = (EditText)findViewById(R.id.pwd_sign_up);
-        user_pwd = pwd_textbox.getText().toString();
-        if(user_pwd.length() == 0){
-            complete = false;
-            pwd_textbox.setError("Please enter your password");
         }
 
         return complete;
