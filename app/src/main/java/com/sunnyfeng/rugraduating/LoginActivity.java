@@ -11,6 +11,11 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -131,14 +136,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             //check here if user is in database to decide whether to sign-up or login
             //temporary just go to main page
-            boolean user_in_db = false; //TODO: replace with backend query to verify user is in database
-            if(user_in_db){
-                Intent main_page = new Intent(this, TopViewActivity.class);
-                startActivity(main_page);
-            }
+            RequestQueue requests = Volley.newRequestQueue(this);
+            String netID = mUser.getNetID();
+            String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/doesStudentExist?netID=" + netID;
 
-            Intent signup_page = new Intent(this, SignUpActivity.class);
-            startActivity(signup_page);
+            JsonObjectRequest doesStudentExist = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+                try{
+                    boolean userInDb = response.getBoolean("0");
+                    if(userInDb){
+                        Intent main_page = new Intent(this, TopViewActivity.class);
+                        startActivity(main_page);
+                    }
+
+                    Intent signup_page = new Intent(this, SignUpActivity.class);
+                    startActivity(signup_page);
+
+                } catch (Exception e) {
+                    System.out.println(e.toString());
+                }
+
+            }, error -> {
+                //TODO: Handle error gracefully
+                System.out.println(error);
+            });
+            requests.add(doesStudentExist);
+            //boolean user_in_db = false; //TODO: replace with backend query to verify user is in database
+
         }
     }
 
