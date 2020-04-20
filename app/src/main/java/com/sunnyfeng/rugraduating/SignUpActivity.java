@@ -154,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity{
 
         Spinner school_spin = (Spinner)findViewById(R.id.spin_school);
         school = school_spin.getSelectedItem().toString();
-        if(school.length() == 0){
+        if(school.length() == 0 || school.equals(emptyString)){
             complete = false;
 
             TextView errorText = (TextView)school_spin.getSelectedView();
@@ -165,7 +165,7 @@ public class SignUpActivity extends AppCompatActivity{
 
         Spinner major_spin = (Spinner)findViewById(R.id.spin_major);
         major = major_spin.getSelectedItem().toString();
-        if(major.length() == 0){
+        if(major.length() == 0 || major.equals(emptyString)){
             complete = false;
 
             TextView errorText = (TextView)major_spin.getSelectedView();
@@ -200,8 +200,7 @@ public class SignUpActivity extends AppCompatActivity{
             if(userNameArr[1] != null){
                 user.setLastName(userNameArr[1]);
             }
-            user.setEmail(user_email);
-            user.setNetID(netID);
+            //user.setNetID(netID); //should be set in stone at this point
             // Now, package schools and majors into two comma separated strings delineated by { and }. For now, not doing that b/c
             // both of the inputs only accept one school and major.....(should be changed).
             // Then, send POST request to backend to create new student in the database. If it works, then we receive true,

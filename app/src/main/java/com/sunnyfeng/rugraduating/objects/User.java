@@ -7,7 +7,6 @@ public class User extends Application {
     private String netID = "not set";
     private String firstName = "not set";
     private String lastName = "not set";
-    private String email = "not set";
 
     public String getNetID() {
         return netID;
@@ -31,13 +30,5 @@ public class User extends Application {
 
     public void setLastName(String str) {
         lastName = str;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String str) {
-        email = str;
     }
 }
