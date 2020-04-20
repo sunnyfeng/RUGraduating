@@ -3,6 +3,7 @@ package com.sunnyfeng.rugraduating;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -21,9 +22,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.sunnyfeng.rugraduating.objects.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class SignUpActivity extends AppCompatActivity{
 
@@ -34,6 +33,8 @@ public class SignUpActivity extends AppCompatActivity{
     private String major = "";
     private String user_email = "";
     private String user_pwd = "";
+
+    private String emptyString = "None selected";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity{
 
         // Populating schools with names of all schools via POST request to Stitch getSchools function.
         ArrayList<String> schools = new ArrayList<String>();
-        schools.add(""); // Empty entry at top of drop-down.
+        schools.add(emptyString); // Empty entry at top of drop-down.
         RequestQueue requests = Volley.newRequestQueue(this);
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSchools";
         JsonObjectRequest getAllSchools = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
@@ -71,8 +72,6 @@ public class SignUpActivity extends AppCompatActivity{
         });
         requests.add(getAllSchools);
 
-        // TODO: INSERT QUERY TO GET SCHOOLS HERE, REPLACE PLACEHOLDER
-
 
         ArrayAdapter<String> school_adapter  =  new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, schools);
         Spinner school_spin = (Spinner) findViewById(R.id.spin_school);
@@ -80,7 +79,6 @@ public class SignUpActivity extends AppCompatActivity{
 
         // Leave majors spinner blank until schools spinner has a selected value.
         ArrayList<String> majors = new ArrayList<String>();
-        majors.add("");
 
         ArrayAdapter<String> major_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, majors);
         Spinner major_spin = (Spinner) findViewById(R.id.spin_major);
@@ -90,9 +88,9 @@ public class SignUpActivity extends AppCompatActivity{
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
                         majors.clear();
-                        majors.add("");
                         String selectedSchool = school_spin.getSelectedItem().toString();
-                        if(selectedSchool.length() > 0){
+                        if(selectedSchool.length() > 0 && !selectedSchool.equals(emptyString)){
+                            majors.add(emptyString);
                             // Passing selectedSchool into Stitch getPrograms function to populate majors with strings of program names
                             // in selectedSchool.
                             String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getPrograms?schoolName="+selectedSchool;
@@ -124,19 +122,16 @@ public class SignUpActivity extends AppCompatActivity{
         User mUser = ((User)getApplicationContext());
         String firstName = mUser.getFirstName();
         String lastName = mUser.getLastName();
-        String email = mUser.getEmail();
         String netID = mUser.getNetID();
         if(!(firstName.equals("not set") || lastName.equals("not set"))) {
             EditText name_textbox = (EditText)findViewById(R.id.name_sign_up);
             name_textbox.setText(mUser.getFirstName() + " " + mUser.getLastName());
         }
-        if(!mUser.getEmail().equals("not set")){
-            EditText email_textbox = (EditText)findViewById(R.id.email_sign_up);
-            email_textbox.setText(mUser.getEmail());
-        }
         if(!mUser.getNetID().equals("not set")){
             EditText netid_textbox = (EditText)findViewById(R.id.netid_sign_up);
-            netid_textbox.setText(mUser.getNetID());
+            netid_textbox.setText(netID);
+            netid_textbox.setEnabled(false);
+            netid_textbox.setInputType(InputType.TYPE_NULL);
         }
     }
 

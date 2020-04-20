@@ -126,7 +126,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 mUser.setNetID(account.getEmail().split("@", 2)[0]);
                 mUser.setEmail(account.getEmail());
             }
-            System.out.println(account.getDisplayName());
             if(account.getDisplayName() == null){
                 System.out.println("error fetching user name");
             } else {
@@ -146,10 +145,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if(userInDb){
                         Intent main_page = new Intent(this, TopViewActivity.class);
                         startActivity(main_page);
+                    } else {
+                        Intent signup_page = new Intent(this, SignUpActivity.class);
+                        startActivity(signup_page);
                     }
-
-                    Intent signup_page = new Intent(this, SignUpActivity.class);
-                    startActivity(signup_page);
 
                 } catch (Exception e) {
                     System.out.println(e.toString());
