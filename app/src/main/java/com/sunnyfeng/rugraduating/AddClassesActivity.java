@@ -160,8 +160,11 @@ public class AddClassesActivity extends AppCompatActivity {
                             System.out.println(e.toString());
                         }
                     }, error -> {
-                        // TODO: Handle error
-                        System.out.println(error);
+                        View progress_layout2 = findViewById(R.id.adding_progress_layout);
+                        progress_layout2.setClickable(true);
+                        progress_layout2.setVisibility(View.GONE);
+
+                        Toast.makeText(AddClassesActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     });
 
             buildFulfilled.setRetryPolicy(new DefaultRetryPolicy(
