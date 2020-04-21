@@ -354,7 +354,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     sb.setLength(sb.length() - 1);
                     sb.append("}");
                     String testCoursesString = sb.toString().replace("\\", "");
-                    String netID = "test9";
+                    User mUser = (User)getApplicationContext();
+                    String netID = mUser.getNetID();
                     //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
                     RequestQueue queue = Volley.newRequestQueue(this);
                     String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString + "&netID="+netID;
