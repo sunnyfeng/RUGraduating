@@ -41,7 +41,6 @@ public class BuildStudentActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         User mUser = ((User)getApplicationContext());
         String netID = mUser.getNetID();
-        netID="aja193";
         Intent intent = getIntent();
         String courses = intent.getExtras().getString("courses");
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses="+courses+"+&netID="+netID;

@@ -22,6 +22,7 @@ import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
+import com.sunnyfeng.rugraduating.objects.User;
 
 import org.json.JSONObject;
 
@@ -114,7 +115,8 @@ public class ProfileActivity extends AppCompatActivity {
         //a user's taken courses are always just courses, no need to add processing for equiv. or regex here
         //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
         RequestQueue queue = Volley.newRequestQueue(this);
-        String netID = "avin";
+        User mUser = (User)getApplicationContext();
+        String netID = mUser.getNetID();
         String url ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getTakenCourses?netID="+netID;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

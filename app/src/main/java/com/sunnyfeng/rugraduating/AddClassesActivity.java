@@ -93,7 +93,6 @@ public class AddClassesActivity extends AppCompatActivity {
                 check++;
             }
 
-            System.out.println(courses);
             //pass url to buildStudentActivity Intent
             Intent i = new Intent(this, BuildStudentActivity.class);
             i.putExtra("courses", courses);

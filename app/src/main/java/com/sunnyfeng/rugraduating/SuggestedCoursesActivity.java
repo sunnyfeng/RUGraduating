@@ -30,6 +30,7 @@ import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Equivalency;
 import com.sunnyfeng.rugraduating.objects.Regex;
+import com.sunnyfeng.rugraduating.objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -105,7 +106,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
 
         //download SuggestedCoursesObject
         RequestQueue queue = Volley.newRequestQueue(this);
-        String netID = "test9";
+        User mUser = (User)getApplicationContext();
+        String netID = mUser.getNetID();
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSuggestedCourses?netID="+netID;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
