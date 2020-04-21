@@ -2,7 +2,6 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,18 +13,23 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.objects.User;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
+import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
+import static com.sunnyfeng.rugraduating.SuggestedCoursesActivity.SUGGESTED_COURSES_OBJECT_KEY;
 
 public class BuildStudentActivity extends AppCompatActivity {
     TextView view;
     User mUser;
     Intent intent;
+    private String major_from_intent;
+    private String suggested_courses_from_intent;
+
+    //intent keys
+    public static final String BUILD_STUDENT_TYPE_KEY = "buildType";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +38,11 @@ public class BuildStudentActivity extends AppCompatActivity {
         mUser = ((User)getApplicationContext());
         intent = getIntent();
         view = findViewById(R.id.building_student);
+        major_from_intent = (String) intent.getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
+        suggested_courses_from_intent = intent.getStringExtra(SUGGESTED_COURSES_OBJECT_KEY);
 
         String buildType;
-        if(intent.hasExtra("buildType")) buildType = intent.getExtras().getString("buildType");
+        if(intent.hasExtra(BUILD_STUDENT_TYPE_KEY)) buildType = intent.getExtras().getString(BUILD_STUDENT_TYPE_KEY);
         else buildType = "addCourses";
 
         List<String> phrases = Arrays.asList("fasten your seatbelt", "sit tight", "fire up the engines", "prepare for liftoff", "saddle up",
@@ -70,6 +76,9 @@ public class BuildStudentActivity extends AppCompatActivity {
                             startActivity(mainIntent);
                         } else {
                             Intent mainIntent = new Intent(this, ProfileActivity.class);
+                            mainIntent.putExtra(MAJOR_INTENT_KEY, major_from_intent);
+                            mainIntent.putExtra(PROFILE_COMING_FROM_KEY, intent.getStringExtra(PROFILE_COMING_FROM_KEY));
+                            mainIntent.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggested_courses_from_intent);
                             startActivity(mainIntent);
                         }
 
@@ -101,7 +110,8 @@ public class BuildStudentActivity extends AppCompatActivity {
                     //get values from json
                     try{
                         Intent i = new Intent(this, SuggestedCoursesActivity.class);
-                        i.putExtra("response", response.toString());
+                        i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, response.toString());
+                        i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
                         startActivity(i);
                     } catch(Exception e){
                         System.out.println(e.toString());

@@ -69,6 +69,7 @@ public class RegexInfoActivity extends AppCompatActivity {
         regexRecyclerView.setAdapter(regexAdapter);
     }
 
+    /*
     // Inflate options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,5 +103,5 @@ public class RegexInfoActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

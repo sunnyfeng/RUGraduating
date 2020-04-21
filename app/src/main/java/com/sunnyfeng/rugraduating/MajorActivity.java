@@ -1,5 +1,6 @@
 package com.sunnyfeng.rugraduating;
 
+import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,9 @@ import com.sunnyfeng.rugraduating.objects.Requirement;
 
 import java.util.ArrayList;
 
+import static com.sunnyfeng.rugraduating.BuildStudentActivity.BUILD_STUDENT_TYPE_KEY;
+import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
+
 public class MajorActivity extends AppCompatActivity {
 
     // intent keys
@@ -37,6 +41,8 @@ public class MajorActivity extends AppCompatActivity {
     private RecyclerView.Adapter requirementsAdapter;
     private RecyclerView.LayoutManager requirementLayoutManager;
 
+    private String major_from_intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +50,7 @@ public class MajorActivity extends AppCompatActivity {
 
         // Get major from intent
         Intent intent = getIntent();
-        String major_from_intent = (String) intent.getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
+        major_from_intent = (String) intent.getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
 
         // Set major name to be display
         TextView major_display = findViewById(R.id.selected_major_textView);
@@ -77,11 +83,18 @@ public class MajorActivity extends AppCompatActivity {
         Button suggestedButton = findViewById(R.id.go_to_suggested_button);
         suggestedButton.setOnClickListener(v -> {
             Intent i = new Intent(MajorActivity.this, BuildStudentActivity.class);
-            i.putExtra("buildType", "buildSuggested");
+            i.putExtra(BUILD_STUDENT_TYPE_KEY, "buildSuggested");
+            i.putExtra(MajorActivity.MAJOR_INTENT_KEY, major_from_intent);
             startActivity(i);
         });
 
         setUpRecyclerViews();
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(MajorActivity.this, TopViewActivity.class);
+        startActivity(i);
     }
 
     private void setUpRecyclerViews() {
@@ -121,6 +134,7 @@ public class MajorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
+            /*
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
@@ -128,7 +142,7 @@ public class MajorActivity extends AppCompatActivity {
             case R.id.add_to_plan_item:
                 AddToPlanDialog dialogPlan = new AddToPlanDialog(this);
                 dialogPlan.show();
-                return true;
+                return true;*/
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
                 // don't allow back press to re-enter
@@ -137,6 +151,8 @@ public class MajorActivity extends AppCompatActivity {
                 return true;
             case R.id.profile_item:
                 Intent intent_profile = new Intent(this, ProfileActivity.class);
+                intent_profile.putExtra(MAJOR_INTENT_KEY, major_from_intent);
+                intent_profile.putExtra(PROFILE_COMING_FROM_KEY, "MajorActivity");
                 startActivity(intent_profile);
                 return true;
             default:

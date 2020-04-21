@@ -23,6 +23,8 @@ import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.User;
 
+import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
+
 public class TopViewActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private String selectedMajor = "";
@@ -102,6 +104,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
+            /*
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
@@ -109,7 +112,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
             case R.id.add_to_plan_item:
                 AddToPlanDialog dialogPlan = new AddToPlanDialog(this);
                 dialogPlan.show();
-                return true;
+                return true;*/
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
                 User mUser = (User)getApplicationContext();
@@ -126,6 +129,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
                 return true;
             case R.id.profile_item:
                 Intent intent_profile = new Intent(this, ProfileActivity.class);
+                intent_profile.putExtra(PROFILE_COMING_FROM_KEY, "TopViewActivity");
                 startActivity(intent_profile);
                 return true;
             default:

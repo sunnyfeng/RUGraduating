@@ -89,6 +89,7 @@ public class CourseInfoActivity extends AppCompatActivity {
         coreqRecyclerView.setAdapter(coreqAdapter);
     }
 
+    /*
     // Inflate options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,5 +123,5 @@ public class CourseInfoActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

@@ -25,6 +25,10 @@ import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
+import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
+import static com.sunnyfeng.rugraduating.SuggestedCoursesActivity.SUGGESTED_COURSES_OBJECT_KEY;
+
 public class AddClassesActivity extends AppCompatActivity {
 
     private RecyclerView codesRecyclerView;
@@ -34,6 +38,12 @@ public class AddClassesActivity extends AppCompatActivity {
     private ArrayList<String> codes;
 
     private String result;
+    private String coming_from;
+    private String major_from_intent;
+    private String suggested_courses_from_intent;
+
+    //intent keys
+    public static final String IS_PLAN_KEY = "isPlan";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +51,12 @@ public class AddClassesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_classes);
 
         Intent intent = getIntent();
+        coming_from = intent.getStringExtra(PROFILE_COMING_FROM_KEY);
+        major_from_intent = (String) intent.getSerializableExtra(MAJOR_INTENT_KEY);
+        suggested_courses_from_intent = intent.getStringExtra(SUGGESTED_COURSES_OBJECT_KEY);
+
         final boolean isPlan;
-        if(intent.hasExtra("isPlan")) isPlan = intent.getExtras().getBoolean("isPlan");
+        if(intent.hasExtra(IS_PLAN_KEY)) isPlan = intent.getExtras().getBoolean(IS_PLAN_KEY);
         else isPlan = false;
 
         if(isPlan){
@@ -121,6 +135,9 @@ public class AddClassesActivity extends AppCompatActivity {
             if(intent.hasExtra("destination")){
                 i.putExtra("destination", intent.getExtras().getString("destination"));
             }
+            i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
+            i.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
+            i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggested_courses_from_intent);
             startActivity(i);
             /*
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -153,8 +170,18 @@ public class AddClassesActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancel_add_classes_button);
         cancelButton.setOnClickListener(v -> {
             // go back to the page before
-            super.onBackPressed();
+            this.onBackPressed();
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(AddClassesActivity.this, ProfileActivity.class);
+        System.out.println(coming_from);
+        i.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
+        i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
+        i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggested_courses_from_intent);
+        startActivity(i);
     }
 
     private void setUpRecyclerViews() {
@@ -167,6 +194,7 @@ public class AddClassesActivity extends AppCompatActivity {
         codesRecyclerView.setAdapter(codesAdapter);
     }
 
+    /*
     // Inflate options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,5 +228,5 @@ public class AddClassesActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

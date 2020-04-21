@@ -45,6 +45,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
+import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
+
 public class SuggestedCoursesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private RecyclerView suggestedRecyclerView;
@@ -56,13 +59,20 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     private JSONObject programObject;
     private HashMap<String, String[]> requirements;
 
+    //Intent keys
+    public static final String SUGGESTED_COURSES_OBJECT_KEY = "response";
+
+    private String major_from_intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_classes);
 
+        major_from_intent = (String) getIntent().getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
+
         try {
-            suggestedCoursesObject = new JSONObject(getIntent().getStringExtra("response"));
+            suggestedCoursesObject = new JSONObject(getIntent().getStringExtra(SUGGESTED_COURSES_OBJECT_KEY));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -131,6 +141,15 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         levelSpinner.setAdapter(levelAdapterNew);
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(SuggestedCoursesActivity.this, MajorActivity.class);
+        System.out.println(major_from_intent);
+        i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
+        startActivity(i);
+    }
+
+
     private void setUpRecyclerViews() {
         // Set up suggested recycler view
         suggestedLayoutManager = new LinearLayoutManager(this);
@@ -157,6 +176,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(this.getLocalClassName(), "Selected Item: " +item.getTitle());
         switch (item.getItemId()) {
+            /*
             case R.id.add_program_item:
                 AddProgramDialog dialogProgram = new AddProgramDialog(this);
                 dialogProgram.show();
@@ -165,6 +185,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 AddToPlanDialog dialogPlan = new AddToPlanDialog(this);
                 dialogPlan.show();
                 return true;
+             */
             case R.id.logout_item:
                 Intent intent_logout = new Intent(this, LoginActivity.class);
                 // don't allow back press to re-enter
@@ -173,6 +194,9 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 return true;
             case R.id.profile_item:
                 Intent intent_profile = new Intent(this, ProfileActivity.class);
+                intent_profile.putExtra(MAJOR_INTENT_KEY, major_from_intent);
+                intent_profile.putExtra(PROFILE_COMING_FROM_KEY, "SuggestedCoursesActivity");
+                intent_profile.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggestedCoursesObject.toString());
                 startActivity(intent_profile);
                 return true;
             default:

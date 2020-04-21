@@ -106,6 +106,7 @@ public class RequirementsActivity extends AppCompatActivity {
         return new ArrayList<>();
     }
 
+    /*
     // Inflate options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,5 +140,5 @@ public class RequirementsActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

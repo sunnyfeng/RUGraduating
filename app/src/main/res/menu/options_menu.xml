@@ -2,12 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/profile_item"
         android:title="See your profile" />
+   <!--
     <item android:id="@+id/add_class_item"
         android:title="Add course" />
     <item android:id="@+id/add_program_item"
         android:title="Add major/minor" />
     <item android:id="@+id/add_to_plan_item"
-        android:title="Add to plan" />
+        android:title="Add to plan" />-->
     <item android:id="@+id/logout_item"
         android:title="Log out" />
 </menu>
