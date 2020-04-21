@@ -177,10 +177,10 @@ public class SignUpActivity extends AppCompatActivity{
         if(signup_check_populated()){
             User user = ((User)(getApplicationContext()));
             String[] userNameArr = user_name.split(" ");
-            user.setFirstName(userNameArr[0]);
-            if(userNameArr[1] != null){
-                user.setLastName(userNameArr[1]);
-            }
+            if(userNameArr.length != 0){
+                user.setFirstName(userNameArr[0]);
+                if(userNameArr[1] != null) user.setLastName(userNameArr[1]);
+            } else user.setFirstName("Anonymous");
             //user.setNetID(netID); //should be set in stone at this point
             // Now, package schools and majors into two comma separated strings delineated by { and }. For now, not doing that b/c
             // both of the inputs only accept one school and major.....(should be changed).
