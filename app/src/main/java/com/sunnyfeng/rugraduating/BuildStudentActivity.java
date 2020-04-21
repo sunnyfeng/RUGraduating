@@ -27,12 +27,12 @@ public class BuildStudentActivity extends AppCompatActivity {
         User mUser = ((User)getApplicationContext());
 
         List<String> phrases = Arrays.asList("fasten your seatbelt", "sit tight", "fire up the engines", "prepare for liftoff", "saddle up",
-                "let's get ready to RUUMMBBLE","don't change the channel","don't blink or you'll miss it", "before you ask");
+                "let's get ready to RUUMMBBLE","don't change the channel","don't blink or you'll miss it", "before you ask","watch and learn");
         Random rand = new Random();
         int randomIndex = rand.nextInt(phrases.size());
 
         TextView view = findViewById(R.id.building_student);
-        view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + " - we're updating your plan!");
+        view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + ":\nWe're updating your plan!");
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String netID = mUser.getNetID();
