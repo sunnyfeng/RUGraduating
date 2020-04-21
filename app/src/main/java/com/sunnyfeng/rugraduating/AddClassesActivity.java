@@ -2,9 +2,7 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,8 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
-import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
-import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,7 +114,13 @@ public class AddClassesActivity extends AppCompatActivity {
         // Submit classes button
         Button submitButton = findViewById(R.id.submit_classes_button);
         submitButton.setOnClickListener(v -> {
+            View progress_layout = findViewById(R.id.progress_layout);
+            progress_layout.setClickable(false);
+            progress_layout.setVisibility(View.VISIBLE);
 
+            (new Handler()).postDelayed(this::goToProfileActivity, 5000); // pause 5 sec, then run method
+
+/*
             String courses = "";
             int check = 1;
             for(String eachCode: codes){
@@ -139,7 +141,7 @@ public class AddClassesActivity extends AppCompatActivity {
             i.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
             i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggested_courses_from_intent);
             startActivity(i);
-            /*
+
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url, null, response -> {
                         //get values from json
@@ -164,6 +166,7 @@ public class AddClassesActivity extends AppCompatActivity {
             queue.add(jsonObjectRequest);
             */
             //super.onBackPressed(); // go back to previous activity
+
         });
 
         // Cancel classes button
@@ -172,6 +175,15 @@ public class AddClassesActivity extends AppCompatActivity {
             // go back to the page before
             this.onBackPressed();
         });
+    }
+
+    private void goToProfileActivity() {
+        View progress_layout = findViewById(R.id.progress_layout);
+        progress_layout.setClickable(true);
+        progress_layout.setVisibility(View.GONE);
+
+        Intent profileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(profileIntent);
     }
 
     @Override
