@@ -76,7 +76,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
 
         // end progress overlay
         progress_layout.setClickable(true);
-        progress_layout.setVisibility(View.GONE);
+        progress_layout.setVisibility(View.INVISIBLE);
 
         setUpRecyclerViews();
 
