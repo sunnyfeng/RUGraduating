@@ -2,6 +2,7 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button addClassesButton = findViewById(R.id.add_classes_button);
         addClassesButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, AddClassesActivity.class);
+            intent.putExtra("isPlan", false);
             startActivity(intent);
         });
         Button addProgramButton = findViewById(R.id.add_program_button);
@@ -68,8 +70,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
         Button addToPlanButton = findViewById(R.id.add_to_plan_button);
         addToPlanButton.setOnClickListener(v -> {
-            AddToPlanDialog dialogPlan = new AddToPlanDialog(ProfileActivity.this);
-            dialogPlan.show();
+            Intent intent = new Intent(ProfileActivity.this, AddClassesActivity.class);
+            intent.putExtra("isPlan", true);
+            startActivity(intent);
         });
 
         // Back to main button

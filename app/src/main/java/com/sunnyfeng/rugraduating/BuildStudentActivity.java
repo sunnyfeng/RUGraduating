@@ -42,6 +42,9 @@ public class BuildStudentActivity extends AppCompatActivity {
         User mUser = ((User)getApplicationContext());
         String netID = mUser.getNetID();
         Intent intent = getIntent();
+        final String destination;
+        if(intent.hasExtra("destination")) destination = intent.getExtras().getString("destination");
+        else destination = " ";
         String courses = intent.getExtras().getString("courses");
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses={"+courses+"}&netID="+netID;
         JsonObjectRequest buildFulfilled = new JsonObjectRequest
@@ -49,8 +52,14 @@ public class BuildStudentActivity extends AppCompatActivity {
                     //get values from json
                     try{
                         System.out.println(response);
-                        Intent mainIntent = new Intent(this, TopViewActivity.class);
-                        startActivity(mainIntent);
+                        if(destination.equals("TopViewActivity")){
+                            Intent mainIntent = new Intent(this, TopViewActivity.class);
+                            startActivity(mainIntent);
+                        } else {
+                            Intent mainIntent = new Intent(this, ProfileActivity.class);
+                            startActivity(mainIntent);
+                        }
+
                     } catch(Exception e){
                         System.out.println(e.toString());
                     }

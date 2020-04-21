@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +28,7 @@ import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class AddClassesActivity extends AppCompatActivity {
@@ -42,6 +46,16 @@ public class AddClassesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_classes);
 
+        Intent intent = getIntent();
+        final boolean isPlan;
+        if(intent.hasExtra("isPlan")) isPlan = intent.getExtras().getBoolean("isPlan");
+        else isPlan = false;
+
+        if(isPlan){
+            TextView view = findViewById(R.id.classes_taken_text_display);
+            view.setText("Add Planned Courses");
+        }
+
         codes = new ArrayList<>();
         setUpRecyclerViews();
 
@@ -51,31 +65,45 @@ public class AddClassesActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("RU Graduating");
         }
-        toolbar.setSubtitle("Add Courses");
+        if(isPlan) toolbar.setSubtitle("Add Planned Courses");
+        else toolbar.setSubtitle("Add Courses");
+
         toolbar.inflateMenu(R.menu.options_menu);
 
+        //Populate spinner with possible grades
+        String gradesList[] = {"A","B+","B","C","D","F"};
+        ArrayList<String> grades = new ArrayList<>(Arrays.asList(gradesList));
+        ArrayAdapter<String> grade_adapter  =  new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, grades);
+        Spinner grade_spin = (Spinner) findViewById(R.id.grade_edit_text);
+
+        if(isPlan){
+            grade_spin.setVisibility(View.GONE);
+        } else{
+            grade_spin.setAdapter(grade_adapter);
+            grade_adapter.notifyDataSetChanged();
+        }
 
         // add classes button
         Button addClassButton = findViewById(R.id.add_class_button);
         addClassButton.setOnClickListener(v -> {
             EditText codeEditText = findViewById(R.id.add_class_edit_text);
             String code = codeEditText.getText().toString();
-            EditText gradeEditText = findViewById(R.id.grade_edit_text);
-            String grade = gradeEditText.getText().toString();
+            Spinner gradeEditText = findViewById(R.id.grade_edit_text);
+            String grade = "N";
+            if(!isPlan){
+                grade = gradeEditText.getSelectedItem().toString();
+            }
 
             //TODO: add some error checking here (such as not adding if it's already in there //Amany --> you dont need to do this because i already do it in the mongodb side, if you send me the same code twice, ill only insert the first one
             if (code.length() > 0 && grade.length() > 0) {
                 codes.add(code + "-" + grade);
                 codesAdapter.notifyDataSetChanged();
                 codeEditText.setText("");
-                gradeEditText.setText("");
+                gradeEditText.setSelection(0);
             } else {
                 Toast.makeText(AddClassesActivity.this,
                         "One or more fields are empty, try again.", Toast.LENGTH_SHORT).show();
             }
-
-
-
 
         });
 
@@ -96,6 +124,9 @@ public class AddClassesActivity extends AppCompatActivity {
             //pass url to buildStudentActivity Intent
             Intent i = new Intent(this, BuildStudentActivity.class);
             i.putExtra("courses", courses);
+            if(intent.hasExtra("destination")){
+                i.putExtra("destination", intent.getExtras().getString("destination"));
+            }
             startActivity(i);
             /*
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

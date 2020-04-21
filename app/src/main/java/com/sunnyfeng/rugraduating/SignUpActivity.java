@@ -48,6 +48,9 @@ public class SignUpActivity extends AppCompatActivity{
         // Populating schools with names of all schools via POST request to Stitch getSchools function.
         ArrayList<String> schools = new ArrayList<String>();
         schools.add(emptyString); // Empty entry at top of drop-down.
+        ArrayAdapter<String> school_adapter  =  new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, schools);
+        Spinner school_spin = (Spinner) findViewById(R.id.spin_school);
+        school_spin.setAdapter(school_adapter);
         RequestQueue requests = Volley.newRequestQueue(this);
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSchools";
         JsonObjectRequest getAllSchools = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
@@ -57,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity{
                     schools.add(response.getString(Integer.toString(count)));
                     count++;
                 }
-
+                school_adapter.notifyDataSetChanged();
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
@@ -67,11 +70,6 @@ public class SignUpActivity extends AppCompatActivity{
             System.out.println(error);
         });
         requests.add(getAllSchools);
-
-
-        ArrayAdapter<String> school_adapter  =  new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, schools);
-        Spinner school_spin = (Spinner) findViewById(R.id.spin_school);
-        school_spin.setAdapter(school_adapter);
 
         // Leave majors spinner blank until schools spinner has a selected value.
         ArrayList<String> majors = new ArrayList<String>();
@@ -85,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity{
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
                         majors.clear();
+                        major_adapter.notifyDataSetChanged();
                         majors.add(emptyString);
                         String selectedSchool = school_spin.getSelectedItem().toString();
                         if(selectedSchool.length() > 0 && !selectedSchool.equals(emptyString)){
@@ -98,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity{
                                         majors.add(response.getString(Integer.toString(count)));
                                         count++;
                                     }
-
+                                    major_adapter.notifyDataSetChanged();
                                 } catch (Exception e) {
                                     System.out.println(e.toString());
                                 }
@@ -110,7 +109,6 @@ public class SignUpActivity extends AppCompatActivity{
                             requests.add(getAllPrograms);
 
                         }
-                        major_adapter.notifyDataSetChanged();
                     }
                     public void onNothingSelected(AdapterView<?> parent){}
                 }
@@ -196,6 +194,7 @@ public class SignUpActivity extends AppCompatActivity{
                     boolean isSuccessful = response.getBoolean("0");
                     if (isSuccessful) {
                         Intent mainIntent = new Intent(this, AddClassesActivity.class);
+                        mainIntent.putExtra("destination", "TopViewActivity");
                         startActivity(mainIntent);
                     } else {
                         Intent mainIntent = new Intent(this, LoginActivity.class);

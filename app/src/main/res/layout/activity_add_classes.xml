@@ -46,8 +46,8 @@
 
     <EditText
         android:id="@+id/add_class_edit_text"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
+        android:layout_width="155dp"
+        android:layout_height="43dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -76,18 +76,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <Spinner
         android:id="@+id/grade_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
         android:ems="10"
-        android:hint="Grade (B+)"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/add_class_edit_text"
         app:layout_constraintEnd_toStartOf="@+id/add_class_button"
         app:layout_constraintStart_toEndOf="@+id/add_class_edit_text"
         app:layout_constraintTop_toTopOf="@+id/add_class_edit_text" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
