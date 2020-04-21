@@ -118,8 +118,10 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 }, error -> {
                     // TODO: Handle error
                     try {
-                        String res = new String(error.networkResponse.data, "utf-8");
-                        System.out.println(res);
+                        if(error.networkResponse != null) {
+                            String res = new String(error.networkResponse.data, "utf-8");
+                            System.out.println(res);
+                        } else System.out.println(error);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
