@@ -34,7 +34,6 @@ import com.sunnyfeng.rugraduating.objects.Regex;
 import com.sunnyfeng.rugraduating.objects.User;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;

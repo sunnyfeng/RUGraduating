@@ -41,6 +41,10 @@ public class Regex implements Serializable, CourseItem {
 
     @Override
     public String getSubtitle() {
-        return courses.size() + " courses";
+        if (courses.size() == 1) {
+            return courses.size() + " course";
+        } else {
+            return courses.size() + " courses";
+        }
     }
 }
