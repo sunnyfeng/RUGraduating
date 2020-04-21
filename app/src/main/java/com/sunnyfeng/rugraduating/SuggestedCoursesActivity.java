@@ -1,7 +1,6 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -26,24 +24,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
 import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
-import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
-import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Equivalency;
 import com.sunnyfeng.rugraduating.objects.Regex;
-import com.sunnyfeng.rugraduating.objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
 import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
@@ -71,11 +63,20 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
 
         major_from_intent = (String) getIntent().getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
 
+        // start progress overlay
+        View progress_layout = findViewById(R.id.suggested_progress_layout);
+        progress_layout.setClickable(false);
+        progress_layout.setVisibility(View.VISIBLE);
+
         try {
             suggestedCoursesObject = new JSONObject(getIntent().getStringExtra(SUGGESTED_COURSES_OBJECT_KEY));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        // end progress overlay
+        progress_layout.setClickable(true);
+        progress_layout.setVisibility(View.INVISIBLE);
 
         setUpRecyclerViews();
 
