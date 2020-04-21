@@ -92,15 +92,22 @@ public class AddClassesActivity extends AppCompatActivity {
                 }
                 check++;
             }
-            RequestQueue queue = Volley.newRequestQueue(this);
-            User mUser = ((User)getApplicationContext());
-            String netID = mUser.getNetID();
-            String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses={" + courses + "}&netID=" + netID;
+
+            System.out.println(courses);
+            //pass url to buildStudentActivity Intent
+            Intent i = new Intent(this, BuildStudentActivity.class);
+            i.putExtra("courses", courses);
+            startActivity(i);
+            /*
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url, null, response -> {
                         //get values from json
                         try{
                             result = response.getString("0");
+                            System.out.println("RESULT: " + result);
+                            //build Future after showing courses, then go to profile
+                            Intent main_page = new Intent(this, BuildStudentActivity.class);
+                            startActivity(main_page);
 
                             if(result.compareTo("") != 0){
                                 //TODO: it shouldnt go back to prev screen, it should the classes that couldn't be added
@@ -114,7 +121,8 @@ public class AddClassesActivity extends AppCompatActivity {
                         Log.d("error", error.toString());
                     });
             queue.add(jsonObjectRequest);
-            super.onBackPressed(); // go back to previous activity
+            */
+            //super.onBackPressed(); // go back to previous activity
         });
 
         // Cancel classes button

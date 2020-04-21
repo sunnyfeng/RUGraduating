@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BuildStudentActivity" >
+        <activity android:name=".BuildStudentActivity" android:theme="@style/Theme.AppCompat.Translucent" >
 
         </activity>
         <activity android:name=".MajorActivity" ></activity>
@@ -27,7 +27,8 @@
         <activity android:name=".CourseInfoActivity" > </activity>
         <activity android:name=".EquivInfoActivity" > </activity>
         <activity android:name=".RegexInfoActivity" > </activity>
-        <activity android:name=".AddClassesActivity" > </activity>
+        <activity android:name=".AddClassesActivity" >
+            </activity>
         <activity android:name=".SuggestedCoursesActivity" >
 
         </activity>
