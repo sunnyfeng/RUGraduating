@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -19,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
@@ -77,6 +75,7 @@ public class SignUpActivity extends AppCompatActivity{
 
         // Leave majors spinner blank until schools spinner has a selected value.
         ArrayList<String> majors = new ArrayList<String>();
+        majors.add(emptyString);
 
         ArrayAdapter<String> major_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, majors);
         Spinner major_spin = (Spinner) findViewById(R.id.spin_major);
@@ -86,9 +85,9 @@ public class SignUpActivity extends AppCompatActivity{
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
                         majors.clear();
+                        majors.add(emptyString);
                         String selectedSchool = school_spin.getSelectedItem().toString();
                         if(selectedSchool.length() > 0 && !selectedSchool.equals(emptyString)){
-                            majors.add(emptyString);
                             // Passing selectedSchool into Stitch getPrograms function to populate majors with strings of program names
                             // in selectedSchool.
                             String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getPrograms?schoolName="+selectedSchool;
