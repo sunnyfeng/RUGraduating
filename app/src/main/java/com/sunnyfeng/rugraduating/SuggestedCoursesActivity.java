@@ -10,12 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -28,14 +30,18 @@ import com.sunnyfeng.rugraduating.objects.Course;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
 import com.sunnyfeng.rugraduating.objects.Equivalency;
 import com.sunnyfeng.rugraduating.objects.Regex;
+import com.sunnyfeng.rugraduating.objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
 import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
@@ -54,29 +60,77 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     //Intent keys
     public static final String SUGGESTED_COURSES_OBJECT_KEY = "response";
 
-    private String major_from_intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_classes);
 
-        major_from_intent = (String) getIntent().getSerializableExtra(MajorActivity.MAJOR_INTENT_KEY);
+        String[] levelArray = {"Loading . . ."};
+        // Drop down menu for level
+        Spinner levelSpinner = findViewById(R.id.level_spinner);
+        ArrayAdapter<String> levelAdapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item, levelArray);
+        levelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        levelSpinner.setAdapter(levelAdapter);
+        levelSpinner.setOnItemSelectedListener(this);
+
+        User mUser = (User)getApplicationContext();
 
         // start progress overlay
         View progress_layout = findViewById(R.id.suggested_progress_layout);
         progress_layout.setClickable(false);
         progress_layout.setVisibility(View.VISIBLE);
 
-        try {
-            suggestedCoursesObject = new JSONObject(getIntent().getStringExtra(SUGGESTED_COURSES_OBJECT_KEY));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        TextView view = findViewById(R.id.suggested_progress_message);
+        List<String> phrases = Arrays.asList("fasten your seatbelt", "sit tight", "fire up the engines", "prepare for liftoff", "saddle up",
+                "let's get ready to RUUMMBBLE","don't change the channel","don't blink or you'll miss it", "before you ask","watch and learn");
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(phrases.size());
+        view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + ":\nWe're calculating your options!");
 
-        // end progress overlay
-        progress_layout.setClickable(true);
-        progress_layout.setVisibility(View.INVISIBLE);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String netID = mUser.getNetID();
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSuggestedCourses?netID="+netID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    //get values from json
+                    try{
+                        suggestedCoursesObject = response;
+                        //populate level spinner
+                        ArrayList<String> keys = new ArrayList<>();
+                        Iterator<String> i = suggestedCoursesObject.keys();
+                        do{
+                            String key = i.next();
+                            if(key.equals("0")) key = "Immediately";
+                            else if (key.equals("1")) key = "After 1 Prerequisite";
+                            else key = "After " + key + " Prerequisites";
+                            keys.add(key);
+                        }while(i.hasNext());
+
+                        ArrayAdapter<String> levelAdapterNew = new ArrayAdapter<>
+                                (this, android.R.layout.simple_spinner_item, (String[])keys.toArray(new String[0]));
+                        levelAdapterNew.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        levelSpinner.setAdapter(levelAdapterNew);
+
+                        // end progress overlay
+                        progress_layout.setClickable(true);
+                        progress_layout.setVisibility(View.INVISIBLE);
+                    } catch(Exception e){
+                        System.out.println(e.toString());
+                    }
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println(error);
+                });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(jsonObjectRequest);
 
         setUpRecyclerViews();
 
@@ -89,18 +143,8 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         toolbar.setSubtitle("Suggested Courses");
         toolbar.inflateMenu(R.menu.options_menu);
 
-        //TODO: get these options from DB
-        String[] levelArray = {"Loading . . ."};
         String[] programArray = {};
         String[] reqArray = {};
-
-        // Drop down menu for level
-        Spinner levelSpinner = findViewById(R.id.level_spinner);
-        ArrayAdapter<String> levelAdapter = new ArrayAdapter<>
-                (this, android.R.layout.simple_spinner_item, levelArray);
-        levelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        levelSpinner.setAdapter(levelAdapter);
-        levelSpinner.setOnItemSelectedListener(this);
 
         // Drop down menu for program
         Spinner programSpinner = findViewById(R.id.program_spinner);
@@ -124,30 +168,15 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
             Intent i = new Intent(SuggestedCoursesActivity.this, TopViewActivity.class);
             startActivity(i);
         });
-
-        //populate level spinner
-        ArrayList<String> keys = new ArrayList<>();
-        Iterator<String> i = suggestedCoursesObject.keys();
-        do{
-            String key = i.next();
-            if(key.equals("0")) key = "Immediately";
-            else if (key.equals("1")) key = "After 1 Prerequisite";
-            else key = "After " + key + " Prerequisites";
-            keys.add(key);
-        }while(i.hasNext());
-
-        ArrayAdapter<String> levelAdapterNew = new ArrayAdapter<>
-                (this, android.R.layout.simple_spinner_item, (String[])keys.toArray(new String[0]));
-        levelAdapterNew.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        levelSpinner.setAdapter(levelAdapterNew);
     }
 
+    /*
     @Override
     public void onBackPressed(){
         Intent i = new Intent(SuggestedCoursesActivity.this, MajorActivity.class);
         i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
         startActivity(i);
-    }
+    }*/
 
 
     private void setUpRecyclerViews() {
@@ -194,9 +223,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 return true;
             case R.id.profile_item:
                 Intent intent_profile = new Intent(this, ProfileActivity.class);
-                intent_profile.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-                intent_profile.putExtra(PROFILE_COMING_FROM_KEY, "SuggestedCoursesActivity");
-                intent_profile.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggestedCoursesObject.toString());
                 startActivity(intent_profile);
                 return true;
             default:
