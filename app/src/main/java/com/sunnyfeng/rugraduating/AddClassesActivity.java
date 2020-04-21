@@ -114,7 +114,8 @@ public class AddClassesActivity extends AppCompatActivity {
         // Submit classes button
         Button submitButton = findViewById(R.id.submit_classes_button);
         submitButton.setOnClickListener(v -> {
-            View progress_layout = findViewById(R.id.progress_layout);
+            // start progress overlay
+            View progress_layout = findViewById(R.id.adding_progress_layout);
             progress_layout.setClickable(false);
             progress_layout.setVisibility(View.VISIBLE);
 
@@ -178,9 +179,9 @@ public class AddClassesActivity extends AppCompatActivity {
     }
 
     private void goToProfileActivity() {
-        View progress_layout = findViewById(R.id.progress_layout);
+        View progress_layout = findViewById(R.id.adding_progress_layout);
         progress_layout.setClickable(true);
-        progress_layout.setVisibility(View.GONE);
+        progress_layout.setVisibility(View.INVISIBLE);
 
         Intent profileIntent = new Intent(this, ProfileActivity.class);
         startActivity(profileIntent);

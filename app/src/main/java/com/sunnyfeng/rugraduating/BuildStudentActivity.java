@@ -1,3 +1,5 @@
+
+/*
 package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
@@ -130,3 +132,5 @@ public class BuildStudentActivity extends AppCompatActivity {
     }
 
 }
+
+*/
