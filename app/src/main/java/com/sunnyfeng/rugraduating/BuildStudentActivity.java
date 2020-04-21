@@ -2,6 +2,7 @@ package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,30 +14,47 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.objects.User;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 public class BuildStudentActivity extends AppCompatActivity {
-
+    TextView view;
+    User mUser;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_student);
-        User mUser = ((User)getApplicationContext());
+        mUser = ((User)getApplicationContext());
+        intent = getIntent();
+        view = findViewById(R.id.building_student);
+
+        String buildType;
+        if(intent.hasExtra("buildType")) buildType = intent.getExtras().getString("buildType");
+        else buildType = "addCourses";
 
         List<String> phrases = Arrays.asList("fasten your seatbelt", "sit tight", "fire up the engines", "prepare for liftoff", "saddle up",
                 "let's get ready to RUUMMBBLE","don't change the channel","don't blink or you'll miss it", "before you ask","watch and learn");
         Random rand = new Random();
         int randomIndex = rand.nextInt(phrases.size());
 
-        TextView view = findViewById(R.id.building_student);
-        view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + ":\nWe're updating your plan!");
+        if(buildType.equals("buildSuggested")) buildSuggested(phrases.get(randomIndex));
+        else addCourses(phrases.get(randomIndex));
+
+
+    }
+
+    private void addCourses(String phrase){
+        view.setText("Hey " + mUser.getFirstName() + ", " + phrase + ":\nWe're updating your profile!");
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String netID = mUser.getNetID();
-        Intent intent = getIntent();
         final String destination;
         if(intent.hasExtra("destination")) destination = intent.getExtras().getString("destination");
         else destination = " ";
@@ -69,7 +87,36 @@ public class BuildStudentActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         queue.add(buildFulfilled);
+    }
 
+    private void buildSuggested(String phrase){
+        view.setText("Hey " + mUser.getFirstName() + ", " + phrase + ":\nWe're calculating your options!");
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String netID = mUser.getNetID();
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSuggestedCourses?netID="+netID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    //get values from json
+                    try{
+                        Intent i = new Intent(this, SuggestedCoursesActivity.class);
+                        i.putExtra("response", response.toString());
+                        startActivity(i);
+                    } catch(Exception e){
+                        System.out.println(e.toString());
+                    }
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println(error);
+                });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(jsonObjectRequest);
     }
 
 }

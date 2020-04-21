@@ -76,8 +76,9 @@ public class MajorActivity extends AppCompatActivity {
         // Go to suggested courses button
         Button suggestedButton = findViewById(R.id.go_to_suggested_button);
         suggestedButton.setOnClickListener(v -> {
-            Intent suggestedIntent = new Intent(MajorActivity.this, SuggestedCoursesActivity.class);
-            startActivity(suggestedIntent);
+            Intent i = new Intent(MajorActivity.this, BuildStudentActivity.class);
+            i.putExtra("buildType", "buildSuggested");
+            startActivity(i);
         });
 
         setUpRecyclerViews();

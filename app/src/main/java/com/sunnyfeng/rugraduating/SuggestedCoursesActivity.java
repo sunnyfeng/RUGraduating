@@ -1,6 +1,7 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -33,6 +35,7 @@ import com.sunnyfeng.rugraduating.objects.Regex;
 import com.sunnyfeng.rugraduating.objects.User;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -57,6 +60,12 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_classes);
+
+        try {
+            suggestedCoursesObject = new JSONObject(getIntent().getStringExtra("response"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         setUpRecyclerViews();
 
@@ -101,43 +110,25 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
         // Back button
         Button backToMainButton = findViewById(R.id.back_to_main_suggested);
         backToMainButton.setOnClickListener(v -> {
-            super.onBackPressed();
+            Intent i = new Intent(SuggestedCoursesActivity.this, TopViewActivity.class);
+            startActivity(i);
         });
 
-        //download SuggestedCoursesObject
-        RequestQueue queue = Volley.newRequestQueue(this);
-        User mUser = (User)getApplicationContext();
-        String netID = mUser.getNetID();
-        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSuggestedCourses?netID="+netID;
+        //populate level spinner
+        ArrayList<String> keys = new ArrayList<>();
+        Iterator<String> i = suggestedCoursesObject.keys();
+        do{
+            String key = i.next();
+            if(key.equals("0")) key = "Immediately";
+            else if (key.equals("1")) key = "After 1 Prerequisite";
+            else key = "After " + key + " Prerequisites";
+            keys.add(key);
+        }while(i.hasNext());
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, null, response -> {
-                    //get values from json
-                    try{
-                        suggestedCoursesObject = response;
-                        ArrayList<String> keys = new ArrayList<>();
-                        Iterator<String> i = response.keys();
-                        do{
-                            String key = i.next();
-                            if(key.equals("0")) key = "Immediately";
-                            else if (key.equals("1")) key = "After 1 Prerequisite";
-                            else key = "After " + key + " Prerequisites";
-                            keys.add(key);
-                        }while(i.hasNext());
-                        //populate top-level menu with levels
-                        ArrayAdapter<String> levelAdapterNew = new ArrayAdapter<>
-                                (this, android.R.layout.simple_spinner_item, (String[])keys.toArray(new String[0]));
-                        levelAdapterNew.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        levelSpinner.setAdapter(levelAdapterNew);
-                    } catch(Exception e){
-                        System.out.println(e.toString());
-                    }
-                }, error -> {
-                    // TODO: Handle error
-                    System.out.println(error);
-                });
-
-        queue.add(jsonObjectRequest);
+        ArrayAdapter<String> levelAdapterNew = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item, (String[])keys.toArray(new String[0]));
+        levelAdapterNew.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        levelSpinner.setAdapter(levelAdapterNew);
     }
 
     private void setUpRecyclerViews() {
