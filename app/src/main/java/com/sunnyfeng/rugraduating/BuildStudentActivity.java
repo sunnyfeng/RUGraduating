@@ -43,7 +43,7 @@ public class BuildStudentActivity extends AppCompatActivity {
         String netID = mUser.getNetID();
         Intent intent = getIntent();
         String courses = intent.getExtras().getString("courses");
-        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses="+courses+"+&netID="+netID;
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses={"+courses+"}+&netID="+netID;
         JsonObjectRequest buildFulfilled = new JsonObjectRequest
                 (Request.Method.POST, url, null, response -> {
                     //get values from json
