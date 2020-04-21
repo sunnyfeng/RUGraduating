@@ -18,18 +18,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
-import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 public class AddClassesActivity extends AppCompatActivity {
 
@@ -74,7 +68,7 @@ public class AddClassesActivity extends AppCompatActivity {
         String gradesList[] = {"A","B+","B","C","D","F"};
         ArrayList<String> grades = new ArrayList<>(Arrays.asList(gradesList));
         ArrayAdapter<String> grade_adapter  =  new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, grades);
-        Spinner grade_spin = (Spinner) findViewById(R.id.grade_edit_text);
+        Spinner grade_spin = (Spinner) findViewById(R.id.grade_spinner);
 
         if(isPlan){
             grade_spin.setVisibility(View.GONE);
@@ -88,7 +82,7 @@ public class AddClassesActivity extends AppCompatActivity {
         addClassButton.setOnClickListener(v -> {
             EditText codeEditText = findViewById(R.id.add_class_edit_text);
             String code = codeEditText.getText().toString();
-            Spinner gradeEditText = findViewById(R.id.grade_edit_text);
+            Spinner gradeEditText = findViewById(R.id.grade_spinner);
             String grade = "N";
             if(!isPlan){
                 grade = gradeEditText.getSelectedItem().toString();
