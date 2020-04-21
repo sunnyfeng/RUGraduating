@@ -22,6 +22,8 @@ import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
 
+import static com.sunnyfeng.rugraduating.AddClassesActivity.PROFILE_ACTIVITY_DESTINATION_KEY;
+
 public class SignUpActivity extends AppCompatActivity{
 
     // Store registration credentials and pass to database for first-time users
@@ -195,7 +197,7 @@ public class SignUpActivity extends AppCompatActivity{
                     if (isSuccessful) {
                         Intent mainIntent = new Intent(this, AddClassesActivity.class);
                         mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        mainIntent.putExtra("destination", "TopViewActivity");
+                        mainIntent.putExtra(PROFILE_ACTIVITY_DESTINATION_KEY, "TopViewActivity");
                         startActivity(mainIntent);
                     } else {
                         Intent mainIntent = new Intent(this, LoginActivity.class);

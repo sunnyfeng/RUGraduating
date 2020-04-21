@@ -21,8 +21,6 @@ import com.sunnyfeng.rugraduating.objects.Requirement;
 
 import java.util.ArrayList;
 
-import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
-
 public class MajorActivity extends AppCompatActivity {
 
     // intent keys
@@ -145,8 +143,6 @@ public class MajorActivity extends AppCompatActivity {
                 return true;
             case R.id.profile_item:
                 Intent intent_profile = new Intent(this, ProfileActivity.class);
-                intent_profile.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-                intent_profile.putExtra(PROFILE_COMING_FROM_KEY, "MajorActivity");
                 startActivity(intent_profile);
                 return true;
             default:

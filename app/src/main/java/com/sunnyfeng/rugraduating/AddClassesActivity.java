@@ -30,10 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
-import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
-import static com.sunnyfeng.rugraduating.SuggestedCoursesActivity.SUGGESTED_COURSES_OBJECT_KEY;
-
 public class AddClassesActivity extends AppCompatActivity {
 
     private RecyclerView codesRecyclerView;
@@ -42,14 +38,11 @@ public class AddClassesActivity extends AppCompatActivity {
 
     private ArrayList<String> codes;
 
-    private String result;
-    private String coming_from;
-    private String major_from_intent;
-    private String suggested_courses_from_intent;
     private String destination;
 
     //intent keys
     public static final String IS_PLAN_KEY = "isPlan";
+    public static final String PROFILE_ACTIVITY_DESTINATION_KEY = "destination";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +50,7 @@ public class AddClassesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_classes);
 
         Intent intent = getIntent();
-        coming_from = intent.getStringExtra(PROFILE_COMING_FROM_KEY);
-        major_from_intent = (String) intent.getSerializableExtra(MAJOR_INTENT_KEY);
-        suggested_courses_from_intent = intent.getStringExtra(SUGGESTED_COURSES_OBJECT_KEY);
-        if(intent.hasExtra("destination")) destination = intent.getExtras().getString("destination");
+        if(intent.hasExtra(PROFILE_ACTIVITY_DESTINATION_KEY)) destination = intent.getExtras().getString(PROFILE_ACTIVITY_DESTINATION_KEY);
         else destination = " ";
 
         final boolean isPlan;
@@ -160,7 +150,6 @@ public class AddClassesActivity extends AppCompatActivity {
                     (Request.Method.POST, url, null, response -> {
                         //get values from json
                         try{
-                            System.out.println(response);
                             if(destination.equals("TopViewActivity")){
                                 goToTopViewActivity();
                             } else {

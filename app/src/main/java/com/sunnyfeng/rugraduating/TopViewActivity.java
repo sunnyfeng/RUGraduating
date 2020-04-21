@@ -19,11 +19,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.app.progresviews.ProgressWheel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
-import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.User;
 
-import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
 
 public class TopViewActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -129,7 +126,6 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
                 return true;
             case R.id.profile_item:
                 Intent intent_profile = new Intent(this, ProfileActivity.class);
-                intent_profile.putExtra(PROFILE_COMING_FROM_KEY, "TopViewActivity");
                 startActivity(intent_profile);
                 return true;
             default:

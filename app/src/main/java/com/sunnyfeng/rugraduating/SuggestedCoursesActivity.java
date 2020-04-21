@@ -36,15 +36,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
-import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
 
 public class SuggestedCoursesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -56,9 +54,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     private JSONObject levelObject;
     private JSONObject programObject;
     private HashMap<String, String[]> requirements;
-
-    //Intent keys
-    public static final String SUGGESTED_COURSES_OBJECT_KEY = "response";
 
 
     @Override
@@ -122,7 +117,12 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                     }
                 }, error -> {
                     // TODO: Handle error
-                    System.out.println(error);
+                    try {
+                        String res = new String(error.networkResponse.data, "utf-8");
+                        System.out.println(res);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 });
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(

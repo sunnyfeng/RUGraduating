@@ -30,8 +30,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.sunnyfeng.rugraduating.AddClassesActivity.IS_PLAN_KEY;
-import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
-import static com.sunnyfeng.rugraduating.SuggestedCoursesActivity.SUGGESTED_COURSES_OBJECT_KEY;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -47,23 +45,10 @@ public class ProfileActivity extends AppCompatActivity {
     private RecyclerView.Adapter planAdapter;
     private RecyclerView.LayoutManager planLayoutManager;
 
-    //Intent keys
-    public static final String PROFILE_COMING_FROM_KEY = "comingFrom";
-
-    //Intent value
-    private String major_from_intent;
-    private String coming_from;
-    String response;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        Intent i = getIntent();
-        major_from_intent = (String) i.getSerializableExtra(MAJOR_INTENT_KEY);
-        coming_from = i.getStringExtra(PROFILE_COMING_FROM_KEY);
-        response = i.getStringExtra(SUGGESTED_COURSES_OBJECT_KEY);
 
         // Toolbar with title for profile (no menu)
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -78,9 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
         addClassesButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, AddClassesActivity.class);
             intent.putExtra(IS_PLAN_KEY, false);
-            intent.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
-            intent.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-            intent.putExtra(SUGGESTED_COURSES_OBJECT_KEY, response);
             startActivity(intent);
         });
         Button addProgramButton = findViewById(R.id.add_program_button);
@@ -92,9 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
         addToPlanButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, AddClassesActivity.class);
             intent.putExtra(IS_PLAN_KEY, true);
-            intent.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
-            intent.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-            intent.putExtra(SUGGESTED_COURSES_OBJECT_KEY, response);
             startActivity(intent);
         });
 
