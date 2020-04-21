@@ -32,7 +32,7 @@ public class BuildStudentActivity extends AppCompatActivity {
         int randomIndex = rand.nextInt(phrases.size());
 
         TextView view = findViewById(R.id.building_student);
-        view.setText(mUser.getFirstName() + ", " + phrases.get(randomIndex) + " - we're updating your plan!");
+        view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + " - we're updating your plan!");
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String netID = mUser.getNetID();
