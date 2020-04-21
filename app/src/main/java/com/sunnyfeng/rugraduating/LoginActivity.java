@@ -130,7 +130,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } else {
                 String[] toCapitalize = account.getDisplayName().toLowerCase().split(" ");
                 mUser.setFirstName(String.valueOf(toCapitalize[0].charAt(0)).toUpperCase() + toCapitalize[0].substring(1));
-                mUser.setLastName(String.valueOf(toCapitalize[1].charAt(0)).toUpperCase() + toCapitalize[1].substring(1));
+                if(toCapitalize.length > 1) {
+                    mUser.setLastName(String.valueOf(toCapitalize[1].charAt(0)).toUpperCase() + toCapitalize[1].substring(1));
+                }
             }
             SignInButton signInButton = findViewById(R.id.sign_in_button);
             signInButton.setVisibility(View.GONE);
