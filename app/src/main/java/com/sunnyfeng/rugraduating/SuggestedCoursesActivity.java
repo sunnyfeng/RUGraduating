@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -116,14 +117,17 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                         System.out.println(e.toString());
                     }
                 }, error -> {
-                    // TODO: Handle error
+                    // end progress overlay
+                    progress_layout.setClickable(true);
+                    progress_layout.setVisibility(View.INVISIBLE);
                     try {
                         if(error.networkResponse != null) {
                             String res = new String(error.networkResponse.data, "utf-8");
-                            System.out.println(res);
-                        } else System.out.println(error);
+                            Toast.makeText(SuggestedCoursesActivity.this, res, Toast.LENGTH_SHORT).show();
+                        } else Toast.makeText(SuggestedCoursesActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
+                        Toast.makeText(SuggestedCoursesActivity.this, "Unsupported encoding.", Toast.LENGTH_SHORT).show();
                     }
                 });
 
