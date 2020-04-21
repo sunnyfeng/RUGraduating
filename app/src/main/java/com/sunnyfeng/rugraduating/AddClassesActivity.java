@@ -1,10 +1,10 @@
 package com.sunnyfeng.rugraduating;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,6 +102,7 @@ public class AddClassesActivity extends AppCompatActivity {
         // add classes button
         Button addClassButton = findViewById(R.id.add_class_button);
         addClassButton.setOnClickListener(v -> {
+            hideSoftKeyboard(AddClassesActivity.this);
             EditText codeEditText = findViewById(R.id.add_class_edit_text);
             String code = codeEditText.getText().toString();
             Spinner gradeEditText = findViewById(R.id.grade_spinner);
@@ -212,6 +213,14 @@ public class AddClassesActivity extends AppCompatActivity {
 
         Intent profileIntent = new Intent(this, ProfileActivity.class);
         startActivity(profileIntent);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     private void setUpRecyclerViews() {
