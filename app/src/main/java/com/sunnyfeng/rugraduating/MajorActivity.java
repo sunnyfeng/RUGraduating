@@ -21,7 +21,6 @@ import com.sunnyfeng.rugraduating.objects.Requirement;
 
 import java.util.ArrayList;
 
-import static com.sunnyfeng.rugraduating.BuildStudentActivity.BUILD_STUDENT_TYPE_KEY;
 import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
 
 public class MajorActivity extends AppCompatActivity {
@@ -79,9 +78,7 @@ public class MajorActivity extends AppCompatActivity {
         // Go to suggested courses button
         Button suggestedButton = findViewById(R.id.go_to_suggested_button);
         suggestedButton.setOnClickListener(v -> {
-            Intent i = new Intent(MajorActivity.this, BuildStudentActivity.class);
-            i.putExtra(BUILD_STUDENT_TYPE_KEY, "buildSuggested");
-            i.putExtra(MajorActivity.MAJOR_INTENT_KEY, major_from_intent);
+            Intent i = new Intent(MajorActivity.this, SuggestedCoursesActivity.class);
             startActivity(i);
         });
 

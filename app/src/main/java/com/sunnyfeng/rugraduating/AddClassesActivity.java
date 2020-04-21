@@ -197,7 +197,7 @@ public class AddClassesActivity extends AppCompatActivity {
     }
 
     private void goToTopViewActivity() {
-        View progress_layout = findViewById(R.id.progress_layout);
+        View progress_layout = findViewById(R.id.adding_progress_layout);
         progress_layout.setClickable(true);
         progress_layout.setVisibility(View.GONE);
 

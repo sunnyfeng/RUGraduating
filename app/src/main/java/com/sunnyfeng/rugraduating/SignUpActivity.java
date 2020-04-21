@@ -194,6 +194,7 @@ public class SignUpActivity extends AppCompatActivity{
                     boolean isSuccessful = response.getBoolean("0");
                     if (isSuccessful) {
                         Intent mainIntent = new Intent(this, AddClassesActivity.class);
+                        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         mainIntent.putExtra("destination", "TopViewActivity");
                         startActivity(mainIntent);
                     } else {
