@@ -144,7 +144,6 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
     @Override
     public void onBackPressed(){
         Intent i = new Intent(SuggestedCoursesActivity.this, MajorActivity.class);
-        System.out.println(major_from_intent);
         i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
         startActivity(i);
     }

@@ -3,6 +3,7 @@ package com.sunnyfeng.rugraduating;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,10 +17,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
+import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static com.sunnyfeng.rugraduating.MajorActivity.MAJOR_INTENT_KEY;
 import static com.sunnyfeng.rugraduating.ProfileActivity.PROFILE_COMING_FROM_KEY;
@@ -37,6 +46,7 @@ public class AddClassesActivity extends AppCompatActivity {
     private String coming_from;
     private String major_from_intent;
     private String suggested_courses_from_intent;
+    private String destination;
 
     //intent keys
     public static final String IS_PLAN_KEY = "isPlan";
@@ -50,6 +60,8 @@ public class AddClassesActivity extends AppCompatActivity {
         coming_from = intent.getStringExtra(PROFILE_COMING_FROM_KEY);
         major_from_intent = (String) intent.getSerializableExtra(MAJOR_INTENT_KEY);
         suggested_courses_from_intent = intent.getStringExtra(SUGGESTED_COURSES_OBJECT_KEY);
+        if(intent.hasExtra("destination")) destination = intent.getExtras().getString("destination");
+        else destination = " ";
 
         final boolean isPlan;
         if(intent.hasExtra(IS_PLAN_KEY)) isPlan = intent.getExtras().getBoolean(IS_PLAN_KEY);
@@ -118,9 +130,16 @@ public class AddClassesActivity extends AppCompatActivity {
             progress_layout.setClickable(false);
             progress_layout.setVisibility(View.VISIBLE);
 
-            (new Handler()).postDelayed(this::goToProfileActivity, 5000); // pause 5 sec, then run method
+            User mUser = (User)getApplicationContext();
+            TextView view = findViewById(R.id.adding_message);
+            List<String> phrases = Arrays.asList("fasten your seatbelt", "sit tight", "fire up the engines", "prepare for liftoff", "saddle up",
+                    "let's get ready to RUUMMBBLE","don't change the channel","don't blink or you'll miss it", "before you ask","watch and learn");
+            Random rand = new Random();
+            int randomIndex = rand.nextInt(phrases.size());
+            view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + ":\nWe're updating your profile!");
 
-/*
+            //(new Handler()).postDelayed(this::goToProfileActivity, 5000); // pause 5 sec, then run method
+
             String courses = "";
             int check = 1;
             for(String eachCode: codes){
@@ -131,40 +150,35 @@ public class AddClassesActivity extends AppCompatActivity {
                 check++;
             }
 
-            //pass url to buildStudentActivity Intent
-            Intent i = new Intent(this, BuildStudentActivity.class);
-            i.putExtra("courses", courses);
-            if(intent.hasExtra("destination")){
-                i.putExtra("destination", intent.getExtras().getString("destination"));
-            }
-            i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-            i.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
-            i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggested_courses_from_intent);
-            startActivity(i);
+            String netID = mUser.getNetID();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses={"+courses+"}&netID="+netID;
+            JsonObjectRequest buildFulfilled = new JsonObjectRequest
                     (Request.Method.POST, url, null, response -> {
                         //get values from json
                         try{
-                            result = response.getString("0");
-                            System.out.println("RESULT: " + result);
-                            //build Future after showing courses, then go to profile
-                            Intent main_page = new Intent(this, BuildStudentActivity.class);
-                            startActivity(main_page);
-
-                            if(result.compareTo("") != 0){
-                                //TODO: it shouldnt go back to prev screen, it should the classes that couldn't be added
+                            System.out.println(response);
+                            if(destination.equals("TopViewActivity")){
+                                goToTopViewActivity();
+                            } else {
+                                goToProfileActivity();
                             }
-                        } catch(Exception e){
-                            Log.d("error", e.toString());
-                        }
 
+                        } catch(Exception e){
+                            System.out.println(e.toString());
+                        }
                     }, error -> {
                         // TODO: Handle error
-                        Log.d("error", error.toString());
+                        System.out.println(error);
                     });
-            queue.add(jsonObjectRequest);
-            */
+
+            buildFulfilled.setRetryPolicy(new DefaultRetryPolicy(
+                    20000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            queue.add(buildFulfilled);
             //super.onBackPressed(); // go back to previous activity
 
         });
@@ -173,8 +187,21 @@ public class AddClassesActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.cancel_add_classes_button);
         cancelButton.setOnClickListener(v -> {
             // go back to the page before
-            this.onBackPressed();
+            if(destination.equals("TopViewActivity")){
+                Intent i = new Intent(AddClassesActivity.this, TopViewActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else super.onBackPressed();
         });
+    }
+
+    private void goToTopViewActivity() {
+        View progress_layout = findViewById(R.id.progress_layout);
+        progress_layout.setClickable(true);
+        progress_layout.setVisibility(View.GONE);
+
+        Intent mainIntent = new Intent(this, TopViewActivity.class);
+        startActivity(mainIntent);
     }
 
     private void goToProfileActivity() {
@@ -184,16 +211,6 @@ public class AddClassesActivity extends AppCompatActivity {
 
         Intent profileIntent = new Intent(this, ProfileActivity.class);
         startActivity(profileIntent);
-    }
-
-    @Override
-    public void onBackPressed(){
-        Intent i = new Intent(AddClassesActivity.this, ProfileActivity.class);
-        System.out.println(coming_from);
-        i.putExtra(PROFILE_COMING_FROM_KEY, coming_from);
-        i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-        i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, suggested_courses_from_intent);
-        startActivity(i);
     }
 
     private void setUpRecyclerViews() {

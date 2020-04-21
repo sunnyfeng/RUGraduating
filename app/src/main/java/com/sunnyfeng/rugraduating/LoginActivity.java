@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     boolean userInDb = response.getBoolean("0");
                     if(userInDb){
                         Intent main_page = new Intent(this, TopViewActivity.class);
+                        main_page.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(main_page);
                     } else {
                         Intent signup_page = new Intent(this, SignUpActivity.class);

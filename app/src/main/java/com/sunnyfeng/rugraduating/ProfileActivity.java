@@ -108,30 +108,6 @@ public class ProfileActivity extends AppCompatActivity {
         setUpRecyclerViews();
     }
 
-    @Override
-    public void onBackPressed(){
-        Intent i;
-        switch(coming_from){
-            case "SuggestedCoursesActivity":
-                i = new Intent(ProfileActivity.this, SuggestedCoursesActivity.class);
-                i.putExtra(SUGGESTED_COURSES_OBJECT_KEY, getIntent().getStringExtra(SUGGESTED_COURSES_OBJECT_KEY));
-                i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-                startActivity(i);
-                break;
-            case "TopViewActivity":
-                i = new Intent(ProfileActivity.this, TopViewActivity.class);
-                startActivity(i);
-                break;
-            case "MajorActivity":
-                i = new Intent(ProfileActivity.this, MajorActivity.class);
-                i.putExtra(MAJOR_INTENT_KEY, major_from_intent);
-                startActivity(i);
-                break;
-                default:
-                    break;
-        }
-    }
-
     private void setUpRecyclerViews() {
         //TODO: separate student courses into regular and planned courses
         ArrayList<CourseItem> takenCourses = new ArrayList<>();
