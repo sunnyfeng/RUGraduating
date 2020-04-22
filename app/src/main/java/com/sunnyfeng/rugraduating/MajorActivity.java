@@ -160,11 +160,32 @@ public class MajorActivity extends AppCompatActivity {
                     reqInfo.remove("untakenCourses");
 
                     String reqJSONString = reqInfo.toString();
-                    Requirement req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberLong"),
-                            reqInfo.getJSONObject("numTotalCourses").getInt("$numberLong"));
+                    String reqName = reqInfo.getString("name");
+                    JSONObject takenCourseObj = reqInfo.getJSONObject("numTakenCourses");
+                    JSONObject totalCourseObj = reqInfo.getJSONObject("numTotalCourses");
+                    int numTakenCourses = 0;
+                    int numTotalCourses = 0;
+                    if (takenCourseObj.has("$numberLong")) {
+                        numTakenCourses = takenCourseObj.getInt("$numberLong");
+                    } else if (takenCourseObj.has("$numberInt")) {
+                        numTakenCourses = takenCourseObj.getInt("$numberInt");
+                    } else {
+                        // Assuming Mongo might throw double at us sometimes
+                        numTakenCourses = takenCourseObj.getInt("$numberDouble");
+                    }
+                    if (totalCourseObj.has("$numberLong")) {
+                        numTotalCourses = totalCourseObj.getInt("$numberLong");
+                    } else if (totalCourseObj.has("$numberInt")) {
+                        numTotalCourses = totalCourseObj.getInt("$numberInt");
+                    } else {
+                        // Assuming Mongo might throw doubles at us occasionally
+                        numTotalCourses = totalCourseObj.getInt("$numberDouble");
+                    }
+                    Requirement req = new Requirement(reqName, numTakenCourses, numTotalCourses);
+
                     req.setCoursesTaken(courses);
                     req.setUntakenCourses(untakenCourses);
-                    // add courses
+
                     reqsTest.add(req);
                     //Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
                     //reqsTest.add(gson.fromJson(reqJSONString, Requirement.class));
