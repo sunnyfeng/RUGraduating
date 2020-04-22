@@ -31,7 +31,7 @@ import static com.sunnyfeng.rugraduating.AddClassesActivity.PROFILE_ACTIVITY_DES
 
 
 public class TopViewActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    public static final String MAJOR_INTENT_KEY = "major intent key";
+
     private String selectedMajor = "";
 
     @Override
@@ -117,17 +117,6 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
             System.out.println(error);
         });
         requests.add(calcNumAllFulfilledReqs);
-//        int totalRequirements = 10;
-//        int completedRequirements = 3;
-//        float percentage = ((float)completedRequirements)/totalRequirements * 100;
-//        int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
-//        ProgressWheel progressWheel = findViewById(R.id.progress_wheel);
-//        progressWheel.setPercentage(wheelPercentage);
-//        progressWheel.setStepCountText((int)percentage + "%"); //sets text in the middle
-
-//        // Set encouraging words based on percentage done
-//        TextView encouragingWords = findViewById(R.id.encouraging_words);
-//        encouragingWords.setText(getEncouragingWords(percentage));
 
         // Go to suggested courses button
         Button specificButton = findViewById(R.id.see_specific_button);

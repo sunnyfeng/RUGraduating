@@ -16,8 +16,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.sunnyfeng.rugraduating.adapters.RequirementsListAdapter;
 import com.sunnyfeng.rugraduating.objects.Requirement;
+import com.sunnyfeng.rugraduating.objects.User;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -92,26 +99,68 @@ public class MajorActivity extends AppCompatActivity {
     private void setUpRecyclerViews() {
         // Set up requirements recycler view
         ArrayList<Requirement> reqsTest = new ArrayList<>();
-        Requirement eceTech = new Requirement("ECE Tech Electives", false, 5, 2);
-        //eceTech.addCourseTaken(getPrinCommCourse());
-        reqsTest.add(eceTech);
-        Requirement soeGen = new Requirement("SOE General Electives", false, 10, 3);
-        //soeGen.addCourseTaken(getMultiVarCalcCourse());
-        reqsTest.add(soeGen);
+        RequestQueue requests = Volley.newRequestQueue(this);
 
-        requirementLayoutManager = new LinearLayoutManager(this);
-        requirementsRecyclerView = findViewById(R.id.requirements_recyclerView);
-        requirementsRecyclerView.setHasFixedSize(true);
-        requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
-        requirementsAdapter = new RequirementsListAdapter(reqsTest);
-        requirementsRecyclerView.setAdapter(requirementsAdapter);
+        User mUser = ((User)getApplicationContext());
+        String firstName = mUser.getFirstName();
+        String lastName = mUser.getLastName();
+        String netID = mUser.getNetID();
+
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getRequirementProgress?netID=" + netID + "&program=" + major_from_intent;
+        JsonObjectRequest getReqsProgress = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+            try{
+                int count = 0;
+                while (count < response.length()) {
+                    JSONObject reqInfo = response.getJSONObject(Integer.toString(count));
+                    Requirement req = new Requirement(reqInfo.getString("name"), false, reqInfo.getJSONObject("numTotalCourses").getInt("$numberInt"),
+                            reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"));
+                    reqsTest.add(req);
+                    count++;
+                }
+                requirementLayoutManager = new LinearLayoutManager(this);
+                requirementsRecyclerView = findViewById(R.id.requirements_recyclerView);
+                requirementsRecyclerView.setHasFixedSize(true);
+                requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
+                requirementsAdapter = new RequirementsListAdapter(reqsTest);
+                requirementsRecyclerView.setAdapter(requirementsAdapter);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }, error -> {
+            //TODO: Handle error gracefully
+            System.out.println(error);
+        });
+        requests.add(getReqsProgress);
+
+//        Requirement eceTech = new Requirement("ECE Tech Electives", false, 5, 2);
+//        //eceTech.addCourseTaken(getPrinCommCourse());
+//        reqsTest.add(eceTech);
+//        Requirement soeGen = new Requirement("SOE General Electives", false, 10, 3);
+//        //soeGen.addCourseTaken(getMultiVarCalcCourse());
+//        reqsTest.add(soeGen);
+
+
 
         // Progress bar
-        int totalRequirements = 10;
-        int completedRequirements = 3;
-        ProgressBar progressBar = findViewById(R.id.overall_progress_bar);
-        progressBar.setProgress(completedRequirements);
-        progressBar.setMax(totalRequirements);
+        url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumProgramFulfilledReqs?netID=" + netID + "&program=" + major_from_intent;
+        JsonObjectRequest calcNumProgramFulfilledReqs = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+            try{
+                int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
+                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
+                ProgressBar progressBar = findViewById(R.id.overall_progress_bar);
+                progressBar.setProgress(completedRequirements);
+                progressBar.setMax(totalRequirements);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }, error -> {
+            //TODO: Handle error gracefully
+            System.out.println(error);
+        });
+        requests.add(calcNumProgramFulfilledReqs);
+
     }
 
     // Inflate options menu
