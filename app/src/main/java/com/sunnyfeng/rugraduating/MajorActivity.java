@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -125,13 +126,13 @@ public class MajorActivity extends AppCompatActivity {
                     JSONObject reqInfo = response.getJSONObject(Integer.toString(count));
                     JSONArray JSONcourses = reqInfo.getJSONArray("courses");
                     JSONArray JSONuntakenCourses = reqInfo.getJSONArray("untakenCourses");
-                    ArrayList<String> courses = new ArrayList<String>();
+                    ArrayList<String> coursesList = new ArrayList<String>();
                     for (int i = 0; i < JSONcourses.length(); i++) {
-                        courses.add(JSONcourses.getString(i));
+                        coursesList.add(JSONcourses.getString(i));
                     }
-                    ArrayList<String> untakenCourses = new ArrayList<String>();
+                    ArrayList<String> untakenCoursesList = new ArrayList<String>();
                     for (int i = 0; i < JSONuntakenCourses.length(); i++) {
-                        untakenCourses.add(JSONuntakenCourses.getString(i));
+                        untakenCoursesList.add(JSONuntakenCourses.getString(i));
                     }
                     // Convert to list of CER string names and store reqCourses to use for CERObjects call later
 //                    String[] coursesStringArr = new String[2];
@@ -156,17 +157,138 @@ public class MajorActivity extends AppCompatActivity {
 //
 //                    reqCourses.add(coursesStringArr);
 
-                    //reqInfo.remove("courses");
-                    //reqInfo.remove("untakenCourses");
+                    reqInfo.remove("courses");
+                    reqInfo.remove("untakenCourses");
 
                     String reqJSONString = reqInfo.toString();
-                    System.out.println(reqJSONString);
-                    System.out.println(reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"));
+                    //System.out.println(reqJSONString);
+                    //System.out.println(reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"));
 
-                    Requirement req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"),
-                            reqInfo.getJSONObject("numTotalCourses").getInt("$numberInt"));
-                    req.setCoursesTaken(courses);
-                    req.setUntakenCourses(untakenCourses);
+                    Requirement req;
+                    if(reqInfo.getJSONObject("numTakenCourses").has("$numberInt")) {
+                        req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"),
+                                reqInfo.getJSONObject("numTotalCourses").getInt("$numberInt"));
+                    }else{
+                        req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberLong"),
+                                reqInfo.getJSONObject("numTotalCourses").getInt("$numberLong"));
+                    }
+
+                    //get courses
+                    //populate courses
+                    String courses[] = coursesList.toArray(new String[0]);
+                    ArrayList<CourseItem> courseObjects = new ArrayList<>();
+                    try {
+                        //convert to a string
+                        StringBuilder sb = new StringBuilder("{");
+                        for(int j = 0; j < courses.length; j++){
+                            sb.append(courses[j]);
+                            sb.append(",");
+                        }
+                        sb.setLength(sb.length() - 1);
+                        sb.append("}");
+                        String testCoursesString = sb.toString().replace("\\", "");
+                        //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
+                        //RequestQueue queue = Volley.newRequestQueue(this);
+                        String url2 ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString + "&netID="+netID;
+                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                                (Request.Method.POST, url2, null, response2 -> {
+                                    //get values from json
+                                    try{
+                                        int k = 0;
+                                        String classString;
+                                        //build courses with values
+                                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+                                        //add courses
+                                        JSONArray respCourses = (JSONArray) response2.get("courses");
+                                        int respCoursesLength = respCourses.length();
+                                        while(k < respCoursesLength){
+                                            classString = respCourses.getString(k++);
+                                            courseObjects.add(gson.fromJson(classString, Course.class));
+                                        }
+                                    } catch(Exception e){
+                                        System.out.println(e.toString());
+                                    }
+                                    System.out.println("TAKEN" + requests.getSequenceNumber());
+                                    req.setCoursesTaken(courseObjects);
+                                    requirementsAdapter.notifyDataSetChanged();
+                                }, error -> {
+                                    // TODO: Handle error
+                                    System.out.println(error);
+                                });
+
+                        requests.add(jsonObjectRequest);
+                    } catch (Exception e){
+                        System.out.println("Error fetching courses");
+                    }
+
+                    //get untaken courses
+                    //get courses
+                    //populate courses
+                    String untakenCourses[] = untakenCoursesList.toArray(new String[0]);
+                    ArrayList<CourseItem> untakenCourseObjects = new ArrayList<>();
+                    try {
+                        //convert to a string
+                        StringBuilder sb = new StringBuilder("{");
+                        for(int j = 0; j < untakenCourses.length; j++){
+                            sb.append(untakenCourses[j]);
+                            sb.append(",");
+                        }
+                        sb.setLength(sb.length() - 1);
+                        sb.append("}");
+                        String testCoursesString = sb.toString().replace("\\", "");
+                        //hit mongodb webhook for course data, will update suggestedRecyclerView asynchronously
+                        //RequestQueue queue = Volley.newRequestQueue(this);
+                        String url2 ="https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+testCoursesString + "&netID="+netID;
+                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                                (Request.Method.POST, url2, null, response2 -> {
+                                    //get values from json
+                                    try{
+                                        int k = 0;
+                                        String classString;
+                                        //build courses with values
+                                        Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+                                        //add courses
+                                        JSONArray respCourses = (JSONArray) response2.get("courses");
+                                        int respCoursesLength = respCourses.length();
+                                        while(k < respCoursesLength){
+                                            classString = respCourses.getString(k++);
+                                            untakenCourseObjects.add(gson.fromJson(classString, Course.class));
+                                        }
+                                        //add equivalencies
+                                        k=0;
+                                        JSONArray respEquivs = (JSONArray) response2.get("equivalencies");
+                                        int respEquivsLength = respEquivs.length();
+                                        while(k < respEquivsLength){
+                                            classString = respEquivs.getString(k++);
+                                            Equivalency equiv = gson.fromJson(classString, Equivalency.class);
+                                            //add equivalency to main list
+                                            untakenCourseObjects.add(equiv);
+                                        }
+                                        //add regexes
+                                        k=0;
+                                        JSONArray respRegexes = (JSONArray)response2.get("regexes");
+                                        int respRegexesLength = respRegexes.length();
+                                        while(k < respRegexesLength){
+                                            classString = respRegexes.getString(k++);
+                                            Regex regex = gson.fromJson(classString, Regex.class);
+                                            //add regex to main list
+                                            untakenCourseObjects.add(regex);
+                                        }
+                                    } catch(Exception e){
+                                        System.out.println(e.toString());
+                                    }
+                                    req.setUntakenCourses(untakenCourseObjects);
+                                    requirementsAdapter.notifyDataSetChanged();
+                                }, error -> {
+                                    // TODO: Handle error
+                                    System.out.println(error);
+                                });
+
+                        requests.add(jsonObjectRequest);
+                    } catch (Exception e){
+                        System.out.println("Error fetching courses");
+                    }
+
                     // add courses
                     reqsTest.add(req);
 
@@ -182,6 +304,7 @@ public class MajorActivity extends AppCompatActivity {
                 requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
                 requirementsAdapter = new RequirementsListAdapter(reqsTest);
                 requirementsRecyclerView.setAdapter(requirementsAdapter);
+
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
@@ -190,6 +313,10 @@ public class MajorActivity extends AppCompatActivity {
             //TODO: Handle error gracefully
             System.out.println(error);
         });
+        getReqsProgress.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requests.add(getReqsProgress);
 
         /*for (int i = 0; i < reqCourses.size(); i++) {

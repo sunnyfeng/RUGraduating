@@ -8,10 +8,10 @@ import java.util.ArrayList;
  */
 public class Requirement implements Serializable {
     public String name;
-    public ArrayList<String> courses;
+    public ArrayList<CourseItem> courses;
     public Integer numTakenCourses;
     public Integer numTotalCourses;
-    public ArrayList<String> untakenCourses;
+    public ArrayList<CourseItem> untakenCourses;
     // ArrayList<CourseItem> coursesTaken; // not in constructor because optional, may be empty
 
     /**
@@ -29,19 +29,19 @@ public class Requirement implements Serializable {
         this.untakenCourses = new ArrayList<>();
     }
 
-    public void setCoursesTaken(ArrayList<String> courses) {
+    public void setCoursesTaken(ArrayList<CourseItem> courses) {
         this.courses = courses;
     }
 
-    public void setUntakenCourses(ArrayList<String> untakenCourses) {
+    public void setUntakenCourses(ArrayList<CourseItem> untakenCourses) {
         this.untakenCourses = untakenCourses;
     }
 
-    public ArrayList<String> getCoursesTaken() {
+    public ArrayList<CourseItem> getCoursesTaken() {
         return courses;
     }
 
-    public ArrayList<String> getUntakenCourses() {
+    public ArrayList<CourseItem> getUntakenCourses() {
         return untakenCourses;
     }
 }
