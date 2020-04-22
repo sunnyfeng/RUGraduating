@@ -156,16 +156,20 @@ public class MajorActivity extends AppCompatActivity {
 //
 //                    reqCourses.add(coursesStringArr);
 
-                    reqInfo.remove("courses");
-                    reqInfo.remove("untakenCourses");
+                    //reqInfo.remove("courses");
+                    //reqInfo.remove("untakenCourses");
 
                     String reqJSONString = reqInfo.toString();
-                    Requirement req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberLong"),
-                            reqInfo.getJSONObject("numTotalCourses").getInt("$numberLong"));
+                    System.out.println(reqJSONString);
+                    System.out.println(reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"));
+
+                    Requirement req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"),
+                            reqInfo.getJSONObject("numTotalCourses").getInt("$numberInt"));
                     req.setCoursesTaken(courses);
                     req.setUntakenCourses(untakenCourses);
                     // add courses
                     reqsTest.add(req);
+
                     //Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
                     //reqsTest.add(gson.fromJson(reqJSONString, Requirement.class));
 

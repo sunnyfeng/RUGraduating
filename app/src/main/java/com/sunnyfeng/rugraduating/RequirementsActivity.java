@@ -63,8 +63,10 @@ public class RequirementsActivity extends AppCompatActivity {
         // complete
         TextView completedNum = findViewById(R.id.completed_courses_credits);
         int completed = currentReq.numTakenCourses;
+        completedNum.setText(Integer.toString(completed));
         TextView remainingNum = findViewById(R.id.remaining_classes_credits);
         int remaining = currentReq.numTotalCourses - completed;
+        remainingNum.setText(Integer.toString(remaining));
 
         /*if (currentReq.isCredits) {
             completedNum.setText(completed + " credits");
