@@ -156,10 +156,11 @@ public class MajorActivity extends AppCompatActivity {
 //
 //                    reqCourses.add(coursesStringArr);
 
-                    reqInfo.remove("courses");
-                    reqInfo.remove("untakenCourses");
+                    //reqInfo.remove("courses");
+                    //reqInfo.remove("untakenCourses");
 
                     String reqJSONString = reqInfo.toString();
+
                     String reqName = reqInfo.getString("name");
                     JSONObject takenCourseObj = reqInfo.getJSONObject("numTakenCourses");
                     JSONObject totalCourseObj = reqInfo.getJSONObject("numTotalCourses");
@@ -183,10 +184,24 @@ public class MajorActivity extends AppCompatActivity {
                     }
                     Requirement req = new Requirement(reqName, numTakenCourses, numTotalCourses);
 
+
+//                    System.out.println(reqJSONString);
+//                    System.out.println(reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"));
+//
+//                    Requirement req;
+//                    if(reqInfo.getJSONObject("numTakenCourses").has("$numberInt")) {
+//                        req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"),
+//                                reqInfo.getJSONObject("numTotalCourses").getInt("$numberInt"));
+//                    }else{
+//                        req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberLong"),
+//                                reqInfo.getJSONObject("numTotalCourses").getInt("$numberLong"));
+//                    }
+
                     req.setCoursesTaken(courses);
                     req.setUntakenCourses(untakenCourses);
 
                     reqsTest.add(req);
+
                     //Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
                     //reqsTest.add(gson.fromJson(reqJSONString, Requirement.class));
 

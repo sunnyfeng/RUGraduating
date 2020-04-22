@@ -13,20 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity android:name=".LoginActivity" >
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity android:name=".BuildStudentActivity" android:theme="@style/Theme.AppCompat.Translucent" >
 
         </activity>
         <activity android:name=".MajorActivity" ></activity>
         <activity android:name=".TopViewActivity" >
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".CourseInfoActivity" > </activity>
         <activity android:name=".EquivInfoActivity" > </activity>
