@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunnyfeng.rugraduating.adapters.CourseItemListAdapter;
+import com.sunnyfeng.rugraduating.adapters.StringListAdapter;
 import com.sunnyfeng.rugraduating.dialogs.AddProgramDialog;
 import com.sunnyfeng.rugraduating.dialogs.AddToPlanDialog;
 import com.sunnyfeng.rugraduating.objects.CourseItem;
@@ -53,25 +54,25 @@ public class RequirementsActivity extends AppCompatActivity {
         Requirement requirement = (Requirement) intent.getSerializableExtra(MajorActivity.REQUIREMENT_INTENT_KEY);
         currentReq = requirement;
         TextView reqName = findViewById(R.id.requirement_name);
-        reqName.setText(requirement.title);
+        reqName.setText(requirement.name);
         ProgressBar progBar = findViewById(R.id.progressBar);
-        progBar.setMax(requirement.totalRequired);
-        progBar.setProgress(requirement.alreadyCompleted);
+        progBar.setMax(requirement.numTotalCourses);
+        progBar.setProgress(requirement.numTakenCourses);
 
         //TODO: get from database how many student has completed and how many more they need to
         // complete
         TextView completedNum = findViewById(R.id.completed_courses_credits);
-        int completed = currentReq.alreadyCompleted;
+        int completed = currentReq.numTakenCourses;
         TextView remainingNum = findViewById(R.id.remaining_classes_credits);
-        int remaining = currentReq.totalRequired - completed;
+        int remaining = currentReq.numTotalCourses - completed;
 
-        if (currentReq.isCredits) {
+        /*if (currentReq.isCredits) {
             completedNum.setText(completed + " credits");
             remainingNum.setText(remaining + " credits");
         } else {
             completedNum.setText(completed + " courses");
             remainingNum.setText(remaining + " courses");
-        }
+        }*/
 
         setUpRecyclerViews();
 
@@ -89,7 +90,7 @@ public class RequirementsActivity extends AppCompatActivity {
         completedRecyclerView = findViewById(R.id.completed_courses_recyclerView);
         completedRecyclerView.setHasFixedSize(true);
         completedRecyclerView.setLayoutManager(completedLayoutManager);
-        completedAdapter = new CourseItemListAdapter(currentReq.getCoursesTaken());
+        completedAdapter = new StringListAdapter(currentReq.getCoursesTaken());
         completedRecyclerView.setAdapter(completedAdapter);
 
         // Set up fulfill recycler view
@@ -97,14 +98,14 @@ public class RequirementsActivity extends AppCompatActivity {
         fulfillRecyclerView = findViewById(R.id.remaining_recyclerView);
         fulfillRecyclerView.setHasFixedSize(true);
         fulfillRecyclerView.setLayoutManager(fulfillLayoutManager);
-        fulfillAdapter = new CourseItemListAdapter(getAllCoursesThatSatisfy(currentReq));
+        fulfillAdapter = new StringListAdapter(currentReq.getUntakenCourses());
         fulfillRecyclerView.setAdapter(fulfillAdapter);
     }
 
-    private ArrayList<CourseItem> getAllCoursesThatSatisfy(Requirement req) {
-        // TODO: get all classes that can fulfill this requirement from DB
-        return new ArrayList<>();
-    }
+//    private ArrayList<CourseItem> getAllCoursesThatSatisfy(Requirement req) {
+//        // TODO: get all classes that can fulfill this requirement from DB
+//        return new ArrayList<>();
+//    }
 
     /*
     // Inflate options menu

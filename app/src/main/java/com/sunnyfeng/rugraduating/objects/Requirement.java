@@ -7,33 +7,41 @@ import java.util.ArrayList;
  * Holds requirement information.
  */
 public class Requirement implements Serializable {
-    public String title;
-    public boolean isCredits;
-    public int totalRequired;
-    public int alreadyCompleted;
-    ArrayList<CourseItem> coursesTaken; // not in constructor because optional, may be empty
+    public String name;
+    public ArrayList<String> courses;
+    public Integer numTakenCourses;
+    public Integer numTotalCourses;
+    public ArrayList<String> untakenCourses;
+    // ArrayList<CourseItem> coursesTaken; // not in constructor because optional, may be empty
 
     /**
-     * @param title name of requirement
-     * @param isCredits if the req is defined by total credits or total number of courses
-     * @param totalRequired total number required to fulfill requirement
-     * @param alreadyCompleted number of courses/credits already completed
+     * @param name name of requirement
+     * @param numTakenCourses total number required to fulfill requirement
+     * @param numTotalCourses number of courses/credits already completed
      */
-    public Requirement(String title, boolean isCredits, int totalRequired, int alreadyCompleted) {
-        this.title = title;
-        this.isCredits = isCredits;
-        this.totalRequired = totalRequired;
-        this.alreadyCompleted = alreadyCompleted;
+    public Requirement(String name,  int numTakenCourses, int numTotalCourses) {
+        this.name = name;
+        this.numTakenCourses = numTakenCourses;
+        this.numTotalCourses = numTotalCourses;
 
         // TODO: alreadyCompleted should equal the length of coursesTaken array
-        this.coursesTaken = new ArrayList<>();
+        this.courses = new ArrayList<>();
+        this.untakenCourses = new ArrayList<>();
     }
 
-    public void addCourseTaken(CourseItem courseTaken) {
-        coursesTaken.add(courseTaken);
+    public void setCoursesTaken(ArrayList<String> courses) {
+        this.courses = courses;
     }
 
-    public ArrayList<CourseItem> getCoursesTaken() {
-        return coursesTaken;
+    public void setUntakenCourses(ArrayList<String> untakenCourses) {
+        this.untakenCourses = untakenCourses;
+    }
+
+    public ArrayList<String> getCoursesTaken() {
+        return courses;
+    }
+
+    public ArrayList<String> getUntakenCourses() {
+        return untakenCourses;
     }
 }

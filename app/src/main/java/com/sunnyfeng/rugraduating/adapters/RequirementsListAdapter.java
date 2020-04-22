@@ -54,9 +54,9 @@ public class RequirementsListAdapter extends RecyclerView.Adapter<RequirementsLi
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Requirement curReq = requirements.get(position);
-        holder.titleView.setText(curReq.title);
-        holder.progressBar.setMax(curReq.totalRequired);
-        holder.progressBar.setProgress(curReq.alreadyCompleted);
+        holder.titleView.setText(curReq.name);
+        holder.progressBar.setMax(curReq.numTotalCourses);
+        holder.progressBar.setProgress(curReq.numTakenCourses);
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(holder.context, RequirementsActivity.class);
