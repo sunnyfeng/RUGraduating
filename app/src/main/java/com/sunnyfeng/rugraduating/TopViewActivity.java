@@ -64,7 +64,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         String lastName = mUser.getLastName();
         String netID = mUser.getNetID();
 
-        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getStudentPrograms?netID=" + "vr250";
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getStudentPrograms?netID=" + netID;
         JsonObjectRequest getStudentPrograms = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
             try{
                 int count = 0;
@@ -90,7 +90,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         // From: https://github.com/zekapp/Android-ProgressViews
         // Connecting to backend to calculate number of requirements completed across all schools and programs
 
-        url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumAllFulfilledReqs?netID=" + "vr250";
+        url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumAllFulfilledReqs?netID=" + netID;
         JsonObjectRequest calcNumAllFulfilledReqs = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
             try{
 
