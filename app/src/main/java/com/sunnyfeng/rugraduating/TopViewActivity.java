@@ -16,14 +16,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.app.progresviews.ProgressWheel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.sunnyfeng.rugraduating.objects.User;
 
+import java.util.ArrayList;
+
+import static com.sunnyfeng.rugraduating.AddClassesActivity.PROFILE_ACTIVITY_DESTINATION_KEY;
+
 
 public class TopViewActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
+    public static final String MAJOR_INTENT_KEY = "major intent key";
     private String selectedMajor = "";
 
     @Override
@@ -42,29 +50,89 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
 
         // Drop down menu for majors
         Spinner spinner = findViewById(R.id.major_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.major_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        ArrayList<String> programs = new ArrayList<String>();
+        programs.add("");
+        ArrayAdapter<String> programAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, programs);
+        programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(programAdapter);
         spinner.setOnItemSelectedListener(this);
+
+        RequestQueue requests = Volley.newRequestQueue(this);
+
+        User mUser = ((User)getApplicationContext());
+        String firstName = mUser.getFirstName();
+        String lastName = mUser.getLastName();
+        String netID = mUser.getNetID();
+
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getStudentPrograms?netID=" + "vr250";
+        JsonObjectRequest getStudentPrograms = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+            try{
+                int count = 0;
+                while (count < response.length()) {
+                    programs.add(response.getJSONObject(Integer.toString(count)).getString("name"));
+                    count++;
+                }
+                programAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }, error -> {
+            //TODO: Handle error gracefully
+            System.out.println(error);
+        });
+        requests.add(getStudentPrograms);
+
+
+
 
         // Progress wheel
         // From: https://github.com/zekapp/Android-ProgressViews
-        int totalRequirements = 10;
-        int completedRequirements = 3;
-        float percentage = ((float)completedRequirements)/totalRequirements * 100;
-        int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
-        ProgressWheel progressWheel = findViewById(R.id.progress_wheel);
-        progressWheel.setPercentage(wheelPercentage);
-        progressWheel.setStepCountText((int)percentage + "%"); //sets text in the middle
+        // Connecting to backend to calculate number of requirements completed across all schools and programs
 
-        // Set encouraging words based on percentage done
-        TextView encouragingWords = findViewById(R.id.encouraging_words);
-        encouragingWords.setText(getEncouragingWords(percentage));
+        url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumAllFulfilledReqs?netID=" + "vr250";
+        JsonObjectRequest calcNumAllFulfilledReqs = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
+            try{
+
+                int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
+                Log.d("Total Requirements", "Total Requirements: " + totalRequirements);
+                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
+                Log.d("Completed Requirements", "Completed Requirements: " + completedRequirements);
+                float percentage = ((float)completedRequirements)/totalRequirements * 100;
+                int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
+                ProgressWheel progressWheel = findViewById(R.id.progress_wheel);
+                progressWheel.setPercentage(wheelPercentage);
+                progressWheel.setStepCountText((int)percentage + "%"); //sets text in the middle
+
+                // Set encouraging words based on percentage done
+                TextView encouragingWords = findViewById(R.id.encouraging_words);
+                encouragingWords.setText(getEncouragingWords(percentage));
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }, error -> {
+            //TODO: Handle error gracefully
+            System.out.println(error);
+        });
+        requests.add(calcNumAllFulfilledReqs);
+//        int totalRequirements = 10;
+//        int completedRequirements = 3;
+//        float percentage = ((float)completedRequirements)/totalRequirements * 100;
+//        int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
+//        ProgressWheel progressWheel = findViewById(R.id.progress_wheel);
+//        progressWheel.setPercentage(wheelPercentage);
+//        progressWheel.setStepCountText((int)percentage + "%"); //sets text in the middle
+
+//        // Set encouraging words based on percentage done
+//        TextView encouragingWords = findViewById(R.id.encouraging_words);
+//        encouragingWords.setText(getEncouragingWords(percentage));
 
         // Go to suggested courses button
         Button specificButton = findViewById(R.id.see_specific_button);
         specificButton.setOnClickListener(v -> {
+            // TODO: make sure that we don't let them continue with the default empty string selected.
             Intent intent = new Intent(TopViewActivity.this, MajorActivity.class);
             intent.putExtra(MajorActivity.MAJOR_INTENT_KEY, selectedMajor);
             startActivity(intent);
@@ -138,6 +206,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         String itemSelected = parent.getItemAtPosition(pos).toString();
         selectedMajor = itemSelected;
         Log.d("SUNNY", "major: " + selectedMajor);
+
     }
 
     // Handle major spinner item not selected
