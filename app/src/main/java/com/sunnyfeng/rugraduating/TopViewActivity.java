@@ -54,7 +54,6 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         // Drop down menu for majors
         Spinner spinner = findViewById(R.id.major_spinner);
         ArrayList<String> programs = new ArrayList<String>();
-        programs.add("");
         ArrayAdapter<String> programAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, programs);
         programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(programAdapter);
