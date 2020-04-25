@@ -23,6 +23,9 @@ import com.android.volley.toolbox.Volley;
 import com.app.progresviews.ProgressWheel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sunnyfeng.rugraduating.adapters.IntegerTypeAdapter;
 import com.sunnyfeng.rugraduating.objects.User;
 
 import java.util.ArrayList;
@@ -93,11 +96,24 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumAllFulfilledReqs?netID=" + netID;
         JsonObjectRequest calcNumAllFulfilledReqs = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
             try{
+                Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+                String totalReqsString = response.getString("totalReqs");
+                String numFulfilledString = response.getString("numFulfilledReqs");
 
-                int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
-                Log.d("Total Requirements", "Total Requirements: " + totalRequirements);
-                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
-                Log.d("Completed Requirements", "Completed Requirements: " + completedRequirements);
+                Log.d("JSON Parse", "totalReqsString: " + totalReqsString);
+                Log.d("JSON Parse", "numFulfilledString: " + numFulfilledString);
+
+                int totalRequirements = gson.fromJson(totalReqsString, Integer.class);
+                int completedRequirements = gson.fromJson(numFulfilledString, Integer.class);
+
+                Log.d("JSON Parse", "totalReqs: " + totalReqsString);
+                Log.d("JSON Parse", "numFulfilledString: " + numFulfilledString);
+
+//                int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
+//                Log.d("Total Requirements", "Total Requirements: " + totalRequirements);
+//                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
+//                Log.d("Completed Requirements", "Completed Requirements: " + completedRequirements);
+
                 float percentage = ((float)completedRequirements)/totalRequirements * 100;
                 int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
                 ProgressWheel progressWheel = findViewById(R.id.progress_wheel);

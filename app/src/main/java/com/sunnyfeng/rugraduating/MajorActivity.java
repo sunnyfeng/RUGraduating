@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -111,11 +112,11 @@ public class MajorActivity extends AppCompatActivity {
         RequestQueue requests = Volley.newRequestQueue(this);
 
         User mUser = ((User)getApplicationContext());
-        String firstName = mUser.getFirstName();
-        String lastName = mUser.getLastName();
+        //String firstName = mUser.getFirstName();
+        //String lastName = mUser.getLastName();
         String netID = mUser.getNetID();
 
-        ArrayList<String[]> reqCourses = new ArrayList<String[]>();
+        //ArrayList<String[]> reqCourses = new ArrayList<String[]>();
 
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getRequirementProgress?netID=" + netID + "&program=" + major_from_intent;
         JsonObjectRequest getReqsProgress = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
@@ -125,87 +126,145 @@ public class MajorActivity extends AppCompatActivity {
                     JSONObject reqInfo = response.getJSONObject(Integer.toString(count));
                     JSONArray JSONcourses = reqInfo.getJSONArray("courses");
                     JSONArray JSONuntakenCourses = reqInfo.getJSONArray("untakenCourses");
-                    ArrayList<String> courses = new ArrayList<String>();
-                    for (int i = 0; i < JSONcourses.length(); i++) {
-                        courses.add(JSONcourses.getString(i));
-                    }
-                    ArrayList<String> untakenCourses = new ArrayList<String>();
-                    for (int i = 0; i < JSONuntakenCourses.length(); i++) {
-                        untakenCourses.add(JSONuntakenCourses.getString(i));
-                    }
-                    // Convert to list of CER string names and store reqCourses to use for CERObjects call later
-//                    String[] coursesStringArr = new String[2];
-//                    StringBuilder sb = new StringBuilder("{");
-//                    for(int j = 0; j < courses.length(); j++){
-//                        sb.append(courses.getString(j));
-//                        sb.append(",");
-//                    }
-//                    sb.setLength(sb.length() - 1);
-//                    sb.append("}");
-//                    coursesStringArr[0] = sb.toString().replace("\\", "");
-//
-//                    sb.delete(0, sb.length());
-//                    sb.append("{");
-//                    for(int j = 0; j < untakenCourses.length(); j++){
-//                        sb.append(untakenCourses.getString(j));
-//                        sb.append(",");
-//                    }
-//                    sb.setLength(sb.length() - 1);
-//                    sb.append("}");
-//                    coursesStringArr[1] = sb.toString().replace("\\", "");
-//
-//                    reqCourses.add(coursesStringArr);
 
-                    //reqInfo.remove("courses");
-                    //reqInfo.remove("untakenCourses");
+                    // Convert to list of CER string names and store reqCourses to use for CERObjects call later
+                    String[] coursesStringArr = new String[2];
+                    StringBuilder sb = new StringBuilder("{");
+                    for(int j = 0; j < JSONcourses.length(); j++){
+                        sb.append(JSONcourses.getString(j));
+                        sb.append(",");
+                    }
+                    sb.setLength(sb.length() - 1);
+                    sb.append("}");
+                    coursesStringArr[0] = sb.toString().replace("\\", "");
+
+                    sb.delete(0, sb.length());
+                    sb.append("{");
+                    for(int j = 0; j < JSONuntakenCourses.length(); j++){
+                        sb.append(JSONuntakenCourses.getString(j));
+                        sb.append(",");
+                    }
+                    sb.setLength(sb.length() - 1);
+                    sb.append("}");
+                    coursesStringArr[1] = sb.toString().replace("\\", "");
+
+                    reqInfo.remove("courses");
+                    reqInfo.remove("untakenCourses");
 
                     String reqJSONString = reqInfo.toString();
 
-                    String reqName = reqInfo.getString("name");
-                    JSONObject takenCourseObj = reqInfo.getJSONObject("numTakenCourses");
-                    JSONObject totalCourseObj = reqInfo.getJSONObject("numTotalCourses");
-                    int numTakenCourses = 0;
-                    int numTotalCourses = 0;
-                    if (takenCourseObj.has("$numberLong")) {
-                        numTakenCourses = takenCourseObj.getInt("$numberLong");
-                    } else if (takenCourseObj.has("$numberInt")) {
-                        numTakenCourses = takenCourseObj.getInt("$numberInt");
-                    } else {
-                        // Assuming Mongo might throw double at us sometimes
-                        numTakenCourses = takenCourseObj.getInt("$numberDouble");
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+                    Requirement req = gson.fromJson(reqJSONString, Requirement.class);
+
+                    Log.d("Help", "Courses Request URL Param: " + coursesStringArr[0]);
+
+                    // Handle empty strings below before requests
+                    String coursesUrl = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+coursesStringArr[0] + "&netID="+netID;
+
+                    ArrayList<CourseItem> courses = new ArrayList<>();
+                    ArrayList<CourseItem> untakenCourses = new ArrayList<>();
+
+                    // Convert list of course strings into CourseItem objects to be put into the requirement's courses list.
+                    if (coursesUrl.length() > 1) {
+                        JsonObjectRequest coursesCERORequest = new JsonObjectRequest
+                                (Request.Method.POST, coursesUrl, null, resp -> {
+                                    //get values from json
+                                    try{
+                                        int k = 0;
+                                        String classString;
+                                        //build courses with values
+                                        JSONArray respCourses = (JSONArray) resp.get("courses");
+                                        int respCoursesLength = respCourses.length();
+                                        while(k < respCoursesLength){
+                                            classString = respCourses.getString(k++);
+                                            courses.add(gson.fromJson(classString, Course.class));
+                                        }
+                                        //add equivalencies
+                                        k=0;
+                                        JSONArray respEquivs = (JSONArray) resp.get("equivalencies");
+                                        int respEquivsLength = respEquivs.length();
+                                        while(k < respEquivsLength){
+                                            classString = respEquivs.getString(k++);
+                                            Equivalency equiv = gson.fromJson(classString, Equivalency.class);
+                                            //add equivalency to main list
+                                            courses.add(equiv);
+                                        }
+                                        //add regexes
+                                        k=0;
+                                        JSONArray respRegexes = (JSONArray)resp.get("regexes");
+                                        int respRegexesLength = respRegexes.length();
+                                        while(k < respRegexesLength){
+                                            classString = respRegexes.getString(k++);
+                                            Regex regex = gson.fromJson(classString, Regex.class);
+                                            //add regex to main list
+                                            courses.add(regex);
+                                        }
+                                        req.setCoursesTaken(courses);
+                                        requirementsAdapter.notifyDataSetChanged();
+                                    } catch(Exception e){
+                                        System.out.println(e.toString());
+                                    }
+
+                                }, error -> {
+                                    // TODO: Handle error
+                                    System.out.println(error);
+                                });
+                        requests.add(coursesCERORequest);
+
                     }
-                    if (totalCourseObj.has("$numberLong")) {
-                        numTotalCourses = totalCourseObj.getInt("$numberLong");
-                    } else if (totalCourseObj.has("$numberInt")) {
-                        numTotalCourses = totalCourseObj.getInt("$numberInt");
-                    } else {
-                        // Assuming Mongo might throw doubles at us occasionally
-                        numTotalCourses = totalCourseObj.getInt("$numberDouble");
+
+
+                    // Convert untaken course strings into CourseItem objects to put into the list
+                    Log.d("Help", "Untaken Courses Request URL Param: " + coursesStringArr[1]);
+                    String untakenCoursesUrl = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+coursesStringArr[1] + "&netID="+netID;
+                    if (untakenCoursesUrl.length() > 1) {
+                        JsonObjectRequest untakenCoursesCERORequest = new JsonObjectRequest
+                                (Request.Method.POST, untakenCoursesUrl, null, resp -> {
+                                    //get values from json
+                                    try{
+                                        int k = 0;
+                                        String classString;
+                                        //build courses with values
+                                        JSONArray respCourses = (JSONArray) resp.get("courses");
+                                        int respCoursesLength = respCourses.length();
+                                        while(k < respCoursesLength){
+                                            classString = respCourses.getString(k++);
+                                            untakenCourses.add(gson.fromJson(classString, Course.class));
+                                        }
+                                        //add equivalencies
+                                        k=0;
+                                        JSONArray respEquivs = (JSONArray) resp.get("equivalencies");
+                                        int respEquivsLength = respEquivs.length();
+                                        while(k < respEquivsLength){
+                                            classString = respEquivs.getString(k++);
+                                            Equivalency equiv = gson.fromJson(classString, Equivalency.class);
+                                            //add equivalency to main list
+                                            untakenCourses.add(equiv);
+                                        }
+                                        //add regexes
+                                        k=0;
+                                        JSONArray respRegexes = (JSONArray)resp.get("regexes");
+                                        int respRegexesLength = respRegexes.length();
+                                        while(k < respRegexesLength){
+                                            classString = respRegexes.getString(k++);
+                                            Regex regex = gson.fromJson(classString, Regex.class);
+
+                                            //add regex to main list
+                                            untakenCourses.add(regex);
+                                        }
+                                        req.setUntakenCourses(untakenCourses);
+                                    } catch(Exception e){
+                                        System.out.println(e.toString());
+                                    }
+
+                                }, error -> {
+                                    // TODO: Handle error
+                                    System.out.println(error);
+                                });
+                        requests.add(untakenCoursesCERORequest);
                     }
-                    Requirement req = new Requirement(reqName, numTakenCourses, numTotalCourses);
-
-
-//                    System.out.println(reqJSONString);
-//                    System.out.println(reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"));
-//
-//                    Requirement req;
-//                    if(reqInfo.getJSONObject("numTakenCourses").has("$numberInt")) {
-//                        req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberInt"),
-//                                reqInfo.getJSONObject("numTotalCourses").getInt("$numberInt"));
-//                    }else{
-//                        req = new Requirement(reqInfo.getString("name"), reqInfo.getJSONObject("numTakenCourses").getInt("$numberLong"),
-//                                reqInfo.getJSONObject("numTotalCourses").getInt("$numberLong"));
-//                    }
-
-                    req.setCoursesTaken(courses);
-                    req.setUntakenCourses(untakenCourses);
 
                     reqsTest.add(req);
-
-                    //Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
-                    //reqsTest.add(gson.fromJson(reqJSONString, Requirement.class));
-
-
                     count++;
                 }
                 requirementLayoutManager = new LinearLayoutManager(this);
@@ -222,177 +281,37 @@ public class MajorActivity extends AppCompatActivity {
             //TODO: Handle error gracefully
             System.out.println(error);
         });
+        getReqsProgress.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requests.add(getReqsProgress);
-
-        /*for (int i = 0; i < reqCourses.size(); i++) {
-            Requirement req = reqsTest.get(i);
-            String coursesString = reqCourses.get(i)[0];
-            String untakenCoursesString = reqCourses.get(i)[1];
-
-            url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+coursesString + "&netID="+"nh335";
-
-            ArrayList<CourseItem> courses = new ArrayList<CourseItem>();
-            ArrayList<CourseItem> untakenCourses = new ArrayList<CourseItem>();
-
-            JsonObjectRequest coursesCERORequest = new JsonObjectRequest
-                    (Request.Method.POST, url, null, response -> {
-                        //get values from json
-                        try{
-                            int k = 0;
-                            String classString;
-                            //build courses with values
-                            Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
-                            //add courses
-                            JSONArray respCourses = (JSONArray) response.get("courses");
-                            int respCoursesLength = respCourses.length();
-                            while(k < respCoursesLength){
-                                classString = respCourses.getString(k++);
-                                courses.add(gson.fromJson(classString, Course.class));
-                            }
-                            //add equivalencies
-                            k=0;
-                            JSONArray respEquivs = (JSONArray) response.get("equivalencies");
-                            int respEquivsLength = respEquivs.length();
-                            while(k < respEquivsLength){
-                                classString = respEquivs.getString(k++);
-                                Equivalency equiv = gson.fromJson(classString, Equivalency.class);
-                                //remove not-taken courses (in this level) from equivalency
-                                ArrayList<Course> courseList = equiv.getCourses();
-                                courseList.retainAll(courses);
-                                equiv.setCourses(courseList);
-                                //remove courses covered by equivalency from main list
-                                for(Course x : courseList){
-                                    courses.remove(x);
-                                }
-                                //add equivalency to main list
-                                courses.add(equiv);
-                            }
-                            //add regexes
-                            k=0;
-                            JSONArray respRegexes = (JSONArray)response.get("regexes");
-                            int respRegexesLength = respRegexes.length();
-                            while(k < respRegexesLength){
-                                classString = respRegexes.getString(k++);
-                                Regex regex = gson.fromJson(classString, Regex.class);
-                                //remove not-taken courses (in this level) from regex
-                                ArrayList<Course> courseList = regex.getCourses();
-                                courseList.retainAll(courses);
-                                regex.setCourses(courseList);
-                                //remove courses covered by regex from main list
-                                for(Course x : courseList){
-                                    courses.remove(x);
-                                }
-                                //add regex to main list
-                                courses.add(regex);
-                            }
-                            req.setCoursesTaken(courses);
-                            req.setUntakenCourses(untakenCourses);
-                            requirementLayoutManager = new LinearLayoutManager(this);
-                            requirementsRecyclerView = findViewById(R.id.requirements_recyclerView);
-                            requirementsRecyclerView.setHasFixedSize(true);
-                            requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
-                            requirementsAdapter = new RequirementsListAdapter(reqsTest);
-                            requirementsRecyclerView.setAdapter(requirementsAdapter);
-                        } catch(Exception e){
-                            System.out.println(e.toString());
-                        }
-
-                    }, error -> {
-                        // TODO: Handle error
-                        System.out.println(error);
-                    });
-            requests.add(coursesCERORequest);
-            url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getCERObjects?wrappedCourseListString="+untakenCoursesString + "&netID="+"nh335";
-
-            JsonObjectRequest untakenCoursesCERORequest = new JsonObjectRequest
-                    (Request.Method.POST, url, null, response -> {
-                        //get values from json
-                        try{
-                            int k = 0;
-                            String classString;
-                            //build courses with values
-                            Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
-                            //add courses
-                            JSONArray respCourses = (JSONArray) response.get("courses");
-                            int respCoursesLength = respCourses.length();
-                            while(k < respCoursesLength){
-                                classString = respCourses.getString(k++);
-                                untakenCourses.add(gson.fromJson(classString, Course.class));
-                            }
-                            //add equivalencies
-                            k=0;
-                            JSONArray respEquivs = (JSONArray) response.get("equivalencies");
-                            int respEquivsLength = respEquivs.length();
-                            while(k < respEquivsLength){
-                                classString = respEquivs.getString(k++);
-                                Equivalency equiv = gson.fromJson(classString, Equivalency.class);
-                                //remove not-taken courses (in this level) from equivalency
-                                ArrayList<Course> courseList = equiv.getCourses();
-                                courseList.retainAll(untakenCourses);
-                                equiv.setCourses(courseList);
-                                //remove courses covered by equivalency from main list
-                                for(Course x : courseList){
-                                    untakenCourses.remove(x);
-                                }
-                                //add equivalency to main list
-                                untakenCourses.add(equiv);
-                            }
-                            //add regexes
-                            k=0;
-                            JSONArray respRegexes = (JSONArray)response.get("regexes");
-                            int respRegexesLength = respRegexes.length();
-                            while(k < respRegexesLength){
-                                classString = respRegexes.getString(k++);
-                                Regex regex = gson.fromJson(classString, Regex.class);
-                                //remove not-taken courses (in this level) from regex
-                                ArrayList<Course> courseList = regex.getCourses();
-                                courseList.retainAll(untakenCourses);
-                                regex.setCourses(courseList);
-                                //remove courses covered by regex from main list
-                                for(Course x : courseList){
-                                    untakenCourses.remove(x);
-                                }
-                                //add regex to main list
-                                untakenCourses.add(regex);
-                            }
-                            req.setCoursesTaken(courses);
-                            req.setUntakenCourses(untakenCourses);
-                            requirementLayoutManager = new LinearLayoutManager(this);
-                            requirementsRecyclerView = findViewById(R.id.requirements_recyclerView);
-                            requirementsRecyclerView.setHasFixedSize(true);
-                            requirementsRecyclerView.setLayoutManager(requirementLayoutManager);
-                            requirementsAdapter = new RequirementsListAdapter(reqsTest);
-                            requirementsRecyclerView.setAdapter(requirementsAdapter);
-                        } catch(Exception e){
-                            System.out.println(e.toString());
-                        }
-
-                    }, error -> {
-                        // TODO: Handle error
-                        System.out.println(error);
-                    });
-            requests.add(untakenCoursesCERORequest);
-
-        }*/
-
-//        Requirement eceTech = new Requirement("ECE Tech Electives", false, 5, 2);
-//        //eceTech.addCourseTaken(getPrinCommCourse());
-//        reqsTest.add(eceTech);
-//        Requirement soeGen = new Requirement("SOE General Electives", false, 10, 3);
-//        //soeGen.addCourseTaken(getMultiVarCalcCourse());
-//        reqsTest.add(soeGen);
-
 
 
         // Progress bar
         url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumProgramFulfilledReqs?netID=" + netID + "&program=" + major_from_intent;
         JsonObjectRequest calcNumProgramFulfilledReqs = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
             try{
-                int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
-                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
+                //int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
+                //int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
+                Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+                String totalReqsString = response.getString("totalReqs");
+                String numFulfilledString = response.getString("numFulfilledReqs");
+
+                Log.d("JSON Parse", "totalReqsString: " + totalReqsString);
+                Log.d("JSON Parse", "numFulfilledString: " + numFulfilledString);
+
+
+                int totalRequirements = gson.fromJson(totalReqsString, Integer.class);
+                int completedRequirements = gson.fromJson(numFulfilledString, Integer.class);
+
+                Log.d("JSON Parse", "totalReqs: " + totalReqsString);
+                Log.d("JSON Parse", "numFulfilledString: " + numFulfilledString);
+
                 ProgressBar progressBar = findViewById(R.id.overall_progress_bar);
                 progressBar.setProgress(completedRequirements);
                 progressBar.setMax(totalRequirements);
+
             } catch (Exception e) {
                 System.out.println(e.toString());
             }

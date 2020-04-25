@@ -18,7 +18,7 @@ public class IntegerTypeAdapter extends TypeAdapter<Integer> {
     @Override
     public Integer read(final JsonReader in) throws IOException {
         in.beginObject();
-        assert "$numberInt".equals(in.nextName());
+        assert ("$numberInt".equals(in.nextName()) || "$numberLong".equals(in.nextName()) || ("$numberDouble".equals(in.nextName())));
         in.nextName();
         String integer = in.nextString();
         in.endObject();

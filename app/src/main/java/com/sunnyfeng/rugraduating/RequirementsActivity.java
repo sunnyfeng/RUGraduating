@@ -92,7 +92,7 @@ public class RequirementsActivity extends AppCompatActivity {
         completedRecyclerView = findViewById(R.id.completed_courses_recyclerView);
         completedRecyclerView.setHasFixedSize(true);
         completedRecyclerView.setLayoutManager(completedLayoutManager);
-        completedAdapter = new StringListAdapter(currentReq.getCoursesTaken());
+        completedAdapter = new CourseItemListAdapter(currentReq.getCoursesTaken());
         completedRecyclerView.setAdapter(completedAdapter);
 
         // Set up fulfill recycler view
@@ -100,7 +100,7 @@ public class RequirementsActivity extends AppCompatActivity {
         fulfillRecyclerView = findViewById(R.id.remaining_recyclerView);
         fulfillRecyclerView.setHasFixedSize(true);
         fulfillRecyclerView.setLayoutManager(fulfillLayoutManager);
-        fulfillAdapter = new StringListAdapter(currentReq.getUntakenCourses());
+        fulfillAdapter = new CourseItemListAdapter(currentReq.getUntakenCourses());
         fulfillRecyclerView.setAdapter(fulfillAdapter);
     }
 
