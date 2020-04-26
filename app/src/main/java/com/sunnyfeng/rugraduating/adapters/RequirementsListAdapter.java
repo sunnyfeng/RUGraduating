@@ -2,6 +2,9 @@ package com.sunnyfeng.rugraduating.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +60,16 @@ public class RequirementsListAdapter extends RecyclerView.Adapter<RequirementsLi
         holder.titleView.setText(curReq.name);
         holder.progressBar.setMax(curReq.numTotalCourses);
         holder.progressBar.setProgress(curReq.numTakenCourses);
-
+        if (curReq.numTakenCourses == curReq.numTotalCourses) {
+            holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+            //holder.progressBar.getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+        } else if (curReq.numTakenCourses >= 0.5*curReq.numTotalCourses) {
+            holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(245, 194, 66)));
+            //holder.progressBar.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+        } else {
+            holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+            //holder.progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+        }
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(holder.context, RequirementsActivity.class);
             Bundle bundle = new Bundle();

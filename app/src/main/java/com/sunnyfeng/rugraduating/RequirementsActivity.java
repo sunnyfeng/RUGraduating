@@ -1,6 +1,9 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -58,6 +61,17 @@ public class RequirementsActivity extends AppCompatActivity {
         ProgressBar progBar = findViewById(R.id.progressBar);
         progBar.setMax(requirement.numTotalCourses);
         progBar.setProgress(requirement.numTakenCourses);
+        if (requirement.numTakenCourses == requirement.numTotalCourses) {
+            progBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+        } else if (requirement.numTakenCourses >= 0.5*requirement.numTotalCourses) {
+            progBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(245, 194, 66)));
+            //progBar.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.MULTIPLY);
+
+        } else {
+            progBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+            //progBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+
+        }
 
         //TODO: get from database how many student has completed and how many more they need to
         // complete

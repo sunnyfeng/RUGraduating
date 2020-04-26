@@ -1,6 +1,9 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -113,12 +116,13 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
 //                Log.d("Total Requirements", "Total Requirements: " + totalRequirements);
 //                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
 //                Log.d("Completed Requirements", "Completed Requirements: " + completedRequirements);
-
+                completedRequirements = 2;
                 float percentage = ((float)completedRequirements)/totalRequirements * 100;
                 int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
                 ProgressWheel progressWheel = findViewById(R.id.progress_wheel);
                 progressWheel.setPercentage(wheelPercentage);
                 progressWheel.setStepCountText((int)percentage + "%"); //sets text in the middle
+                // TODO: try to get progress wheel to change color, but this will require modifying the K
 
                 // Set encouraging words based on percentage done
                 TextView encouragingWords = findViewById(R.id.encouraging_words);

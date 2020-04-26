@@ -1,6 +1,9 @@
 package com.sunnyfeng.rugraduating;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -304,13 +307,22 @@ public class MajorActivity extends AppCompatActivity {
 
                 int totalRequirements = gson.fromJson(totalReqsString, Integer.class);
                 int completedRequirements = gson.fromJson(numFulfilledString, Integer.class);
-
                 Log.d("JSON Parse", "totalReqs: " + totalReqsString);
                 Log.d("JSON Parse", "numFulfilledString: " + numFulfilledString);
+
 
                 ProgressBar progressBar = findViewById(R.id.overall_progress_bar);
                 progressBar.setProgress(completedRequirements);
                 progressBar.setMax(totalRequirements);
+
+                // Set color based on progress level: red if less than halfway there, yellow if more than halfway, green if complete
+                if (completedRequirements == totalRequirements) {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                } else if (completedRequirements >= 0.5*totalRequirements) {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.rgb(245, 194, 66)));
+                } else {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                }
 
             } catch (Exception e) {
                 System.out.println(e.toString());
