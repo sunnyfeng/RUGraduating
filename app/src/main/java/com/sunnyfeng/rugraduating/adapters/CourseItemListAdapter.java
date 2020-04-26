@@ -101,6 +101,7 @@ public class CourseItemListAdapter extends
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
+        if(courses == null) return 0;
         return courses.size();
     }
 }

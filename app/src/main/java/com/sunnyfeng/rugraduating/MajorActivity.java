@@ -1,5 +1,6 @@
 package com.sunnyfeng.rugraduating;
 
+import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -39,7 +42,12 @@ import com.sunnyfeng.rugraduating.objects.CourseItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class MajorActivity extends AppCompatActivity {
 
@@ -81,17 +89,103 @@ public class MajorActivity extends AppCompatActivity {
 
         // Switch for withPlan
         Switch sw = findViewById(R.id.withPlanSwitch);
-        sw.setOnCheckedChangeListener((buttonView, withPlan) -> {
-            if (withPlan) {
-                // The toggle is enabled
-                // TODO: add function with plan
-                Toast.makeText(MajorActivity.this, "Including plan.", Toast.LENGTH_SHORT).show();
-            } else {
-                // The toggle is disabled
-                // TODO: add function without plan
-                Toast.makeText(MajorActivity.this, "Not including plan.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //get value from mongodb
+        RequestQueue queue = Volley.newRequestQueue(this);
+        User mUser = (User)getApplicationContext();
+        String netID = mUser.getNetID();
+        String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getIncludePlanned?netID="+netID;
+
+        android.widget.CompoundButton.OnCheckedChangeListener mListener = (buttonView, withPlan) -> {
+            // start progress overlay
+            View progress_layout = findViewById(R.id.plan_progress_layout);
+            progress_layout.setClickable(false);
+            progress_layout.setVisibility(View.VISIBLE);
+
+            TextView view = findViewById(R.id.plan_progress_message);
+            List<String> phrases = Arrays.asList("fasten your seatbelt", "sit tight", "fire up the engines", "prepare for liftoff", "saddle up",
+                    "let's get ready to RUUMMBBLE","don't change the channel","don't blink or you'll miss it", "before you ask","watch and learn");
+            Random rand = new Random();
+            int randomIndex = rand.nextInt(phrases.size());
+            view.setText("Hey " + mUser.getFirstName() + ", " + phrases.get(randomIndex) + ":\nWe're updating your info!");
+
+            String url2 = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/togglePlannedCourses?netID="+netID;
+
+            JsonObjectRequest togglePlanned = new JsonObjectRequest
+                    (Request.Method.POST, url2, null, response -> {
+                        //get values from json
+                        try{
+                            //refresh buildFulfilled
+                            String url3 = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/insertTakenCourses?courses={}&netID="+netID;
+                            JsonObjectRequest buildFulfilled = new JsonObjectRequest
+                                    (Request.Method.POST, url3, null, response2 -> {
+                                        //get values from json
+                                        try{
+                                            //end progress overlay
+                                            progress_layout.setClickable(true);
+                                            progress_layout.setVisibility(View.INVISIBLE);
+                                            //refresh requirements list by recreating activity
+                                            recreate();
+                                        } catch(Exception e){
+                                            Toast.makeText(MajorActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }, error -> {
+                                        progress_layout.setClickable(true);
+                                        progress_layout.setVisibility(View.GONE);
+
+                                        Toast.makeText(MajorActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                    });
+
+                            buildFulfilled.setRetryPolicy(new DefaultRetryPolicy(
+                                    20000,
+                                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+                            queue.add(buildFulfilled);
+
+                        } catch(Exception e){
+                            progress_layout.setClickable(true);
+                            progress_layout.setVisibility(View.GONE);
+
+                            Toast.makeText(MajorActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }, error -> {
+                        // end progress overlay
+                        progress_layout.setClickable(true);
+                        progress_layout.setVisibility(View.INVISIBLE);
+                        try {
+                            if(error.networkResponse != null) {
+                                String res = new String(error.networkResponse.data, "utf-8");
+                                Toast.makeText(MajorActivity.this, res, Toast.LENGTH_SHORT).show();
+                            } else Toast.makeText(MajorActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MajorActivity.this, "Unsupported encoding.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            queue.add(togglePlanned);
+        };
+
+        JsonObjectRequest getPlannedVal = new JsonObjectRequest
+                (Request.Method.POST, url, null, response -> {
+                    //get values from json
+                    try{
+                        sw.setChecked(response.getBoolean("0"));
+                        sw.setOnCheckedChangeListener (mListener);
+                    } catch(Exception e){
+                        Toast.makeText(MajorActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }, error -> {
+                    try {
+                        if(error.networkResponse != null) {
+                            String res = new String(error.networkResponse.data, "utf-8");
+                            Toast.makeText(MajorActivity.this, res, Toast.LENGTH_SHORT).show();
+                        } else Toast.makeText(MajorActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        Toast.makeText(MajorActivity.this, "Unsupported encoding.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        queue.add(getPlannedVal);
 
         // Go to suggested courses button
         Button suggestedButton = findViewById(R.id.go_to_suggested_button);
