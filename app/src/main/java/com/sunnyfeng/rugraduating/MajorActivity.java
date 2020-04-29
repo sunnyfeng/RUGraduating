@@ -136,7 +136,7 @@ public class MajorActivity extends AppCompatActivity {
                                     });
 
                             buildFulfilled.setRetryPolicy(new DefaultRetryPolicy(
-                                    20000,
+                                    120000,
                                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -162,6 +162,10 @@ public class MajorActivity extends AppCompatActivity {
                             Toast.makeText(MajorActivity.this, "Unsupported encoding.", Toast.LENGTH_SHORT).show();
                         }
                     });
+            togglePlanned.setRetryPolicy(new DefaultRetryPolicy(
+                    120000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             queue.add(togglePlanned);
         };
 
@@ -387,6 +391,10 @@ public class MajorActivity extends AppCompatActivity {
                                     // TODO: Handle error
                                     System.out.println(error);
                                 });
+                        untakenCoursesCERORequest.setRetryPolicy(new DefaultRetryPolicy(
+                                120000,
+                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                         requests.add(untakenCoursesCERORequest);
                     }
 
@@ -408,7 +416,7 @@ public class MajorActivity extends AppCompatActivity {
             System.out.println(error);
         });
         getReqsProgress.setRetryPolicy(new DefaultRetryPolicy(
-                20000,
+                120000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requests.add(getReqsProgress);

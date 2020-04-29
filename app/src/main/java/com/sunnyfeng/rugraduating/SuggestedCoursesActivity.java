@@ -113,7 +113,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                         progress_layout.setClickable(true);
                         progress_layout.setVisibility(View.INVISIBLE);
                     } catch(Exception e){
-                        System.out.println(e.toString());
+                        Toast.makeText(SuggestedCoursesActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }, error -> {
                     // end progress overlay
@@ -131,7 +131,7 @@ public class SuggestedCoursesActivity extends AppCompatActivity implements Adapt
                 });
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                20000,
+                120000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
