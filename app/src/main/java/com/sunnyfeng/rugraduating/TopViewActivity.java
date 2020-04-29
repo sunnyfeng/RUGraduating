@@ -65,8 +65,6 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
         RequestQueue requests = Volley.newRequestQueue(this);
 
         User mUser = ((User)getApplicationContext());
-        String firstName = mUser.getFirstName();
-        String lastName = mUser.getLastName();
         String netID = mUser.getNetID();
 
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getStudentPrograms?netID=" + netID;
@@ -115,7 +113,7 @@ public class TopViewActivity extends AppCompatActivity implements AdapterView.On
 //                Log.d("Total Requirements", "Total Requirements: " + totalRequirements);
 //                int completedRequirements = response.getJSONObject("numFulfilledReqs").getInt("$numberDouble");
 //                Log.d("Completed Requirements", "Completed Requirements: " + completedRequirements);
-                completedRequirements = 2;
+
                 float percentage = ((float)completedRequirements)/totalRequirements * 100;
                 int wheelPercentage = (int)((percentage * 358)/100); // For some reason, it goes up to 358% ?
                 ProgressWheel progressWheel = findViewById(R.id.progress_wheel);

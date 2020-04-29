@@ -212,12 +212,39 @@ public class MajorActivity extends AppCompatActivity {
         //String firstName = mUser.getFirstName();
         //String lastName = mUser.getLastName();
         String netID = mUser.getNetID();
-
-        //ArrayList<String[]> reqCourses = new ArrayList<String[]>();
-
+        final boolean isSchool;
         String url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getRequirementProgress?netID=" + netID + "&program=" + major_from_intent;
+        if (major_from_intent.contains("School")) {
+            url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/getSchoolRequirementProgress?netID=" + netID + "&school=" + major_from_intent;
+            isSchool = true;
+        } else {
+            isSchool = false;
+        }
         JsonObjectRequest getReqsProgress = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
             try{
+                // Before parsing out the requirements, extract the residency req, which should definitely be included in the first
+                // object if it's not a school.
+                if (!isSchool) {
+                    JSONObject firstReq = response.getJSONObject(Integer.toString(0));
+                    StringBuilder residencyName = new StringBuilder("Departmental Residency");
+                    JSONObject completedResidencyObj = firstReq.getJSONObject("completedResidency");
+                    JSONObject requiredResidencyObj = firstReq.getJSONObject("requiredResidency");
+
+                    if (requiredResidencyObj.getBoolean("type")) {
+                        residencyName.append(" (in credits)");
+                    } else {
+                        residencyName.append(" (in number of department courses)");
+                    }
+
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, new IntegerTypeAdapter()).create();
+                    int completedResidency = gson.fromJson(completedResidencyObj.getString("num"), Integer.class);
+                    int requiredResidency = gson.fromJson(requiredResidencyObj.getString("num"), Integer.class);
+
+                    // First requirement to be displayed will be the progress on meeting departmental residency.
+                    reqsTest.add(new Requirement(residencyName.toString(), completedResidency, requiredResidency));
+                }
+
+                // Now, begin adding actual requirements that are needed for the program iteratively.
                 int count = 0;
                 while (count < response.length()) {
                     JSONObject reqInfo = response.getJSONObject(Integer.toString(count));
@@ -247,6 +274,8 @@ public class MajorActivity extends AppCompatActivity {
 
                     reqInfo.remove("courses");
                     reqInfo.remove("untakenCourses");
+                    reqInfo.remove("completedResidency");
+                    reqInfo.remove("requiredResidency");
 
                     String reqJSONString = reqInfo.toString();
 
@@ -386,7 +415,10 @@ public class MajorActivity extends AppCompatActivity {
 
 
         // Progress bar
-        url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumProgramFulfilledReqs?netID=" + netID + "&program=" + major_from_intent;
+        if (isSchool)
+            url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumSchoolFulfilledReqs?netID=" + netID + "&school=" + major_from_intent;
+        else
+            url = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/degreenav-uuidd/service/webhookTest/incoming_webhook/calcNumProgramFulfilledReqs?netID=" + netID + "&program=" + major_from_intent;
         JsonObjectRequest calcNumProgramFulfilledReqs = new JsonObjectRequest(Request.Method.POST, url, null, response -> {
             try{
                 //int totalRequirements = response.getJSONObject("totalReqs").getInt("$numberDouble");
